@@ -50,6 +50,38 @@
 
 Score ranges from 0 (C) to 5 (Rust, Swift, Haskell, Elixir). Half-points for languages with opt-in mechanisms (e.g., C++ smart pointers = 0.5 for memory, Java `Optional` = 0.5 for null). This is a language-level property — it doesn't vary per solution.
 
+#### Full breakdown
+
+<div class="guardrail-table">
+
+| | Memory | Null | Race | Overflow | Coercion | **Total** |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Rust** | 1 | 1 | 1 | 1 | 1 | **5** |
+| **Swift** | 1 | 1 | 1 | 1 | 1 | **5** |
+| **Haskell** | 1 | 1 | 1 | 1 | 1 | **5** |
+| **Elixir** | 1 | 1 | 1 | 1 | 1 | **5** |
+| **Kotlin** | 1 | 1 | 0 | 0 | 1 | **3** |
+| **Milo** | 1 | 1 | 0 | 0 | 1 | **3** |
+| **Python** | 1 | 0 | 0 | 1 | 1 | **3** |
+| **Ruby** | 1 | 0 | 0 | 1 | 1 | **3** |
+| **Zig** | 0.5 | 0.5 | 0 | 1 | 1 | **3** |
+| **TypeScript** | 1 | 0.5 | 0 | 0 | 1 | **2.5** |
+| **Go** | 1 | 0 | 0 | 0 | 1 | **2** |
+| **Java** | 1 | 0.5 | 0 | 0 | 0.5 | **2** |
+| **C++** | 0.5 | 0.5 | 0 | 0 | 0 | **1** |
+| **JavaScript** | 1 | 0 | 0 | 0 | 0 | **1** |
+| **C** | 0 | 0 | 0 | 0 | 0 | **0** |
+
+</div>
+
+**0** = not available. **0.5** = opt-in (e.g., C++ `unique_ptr`, Java `Optional`, TS `strictNullChecks`). **1** = enforced by default.
+
+**Notes:**
+- **Memory 0.5** (C++, Zig): Smart pointers / safety-checked allocators exist but don't prevent all categories — dangling references, iterator invalidation, and use-after-move still compile without error.
+- **Race 1** (Haskell, Elixir): Haskell's purity prevents shared mutable state; `IORef` is unguarded but rarely accidental. Elixir's actor model with immutable data prevents shared-memory races by construction.
+- **Overflow 1** (Python, Ruby): Core integers use arbitrary precision. `float` arithmetic can silently overflow to `inf`; numpy integers wrap.
+- **Swift Race 1**: Swift 6 (2024) enforces compile-time data race safety via strict concurrency checking and `Sendable`.
+
 ### Ceremony
 **Ceremony ratio** — proportion of lines that are language overhead rather than algorithm logic. Counts: import/use/include statements, main function signatures, class/module wrappers, `return 0`, lone braces/end keywords, defer statements, type-only declarations, and preprocessor directives. Lower = less boilerplate.
 
