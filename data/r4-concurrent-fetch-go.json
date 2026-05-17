@@ -1,0 +1,21 @@
+{
+  "file": "r4-concurrent-fetch.go",
+  "conciseness": {
+    "loc": 35,
+    "tokens": 84,
+    "chars": 560,
+    "halsteadVolume": 508,
+    "compressionRatio": 0.59
+  },
+  "sigils": {
+    "sigilsPerLine": 4.49,
+    "uniqueSigilTypes": 17,
+    "totalSigils": 157
+  },
+  "readability": {
+    "avgLineLength": 19,
+    "maxNesting": 2,
+    "avgIdentifierLength": 3.9,
+    "visualDensity": 0.795
+  }
+}

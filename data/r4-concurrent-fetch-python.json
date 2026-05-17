@@ -1,0 +1,21 @@
+{
+  "file": "r4-concurrent-fetch.py",
+  "conciseness": {
+    "loc": 19,
+    "tokens": 48,
+    "chars": 480,
+    "halsteadVolume": 259,
+    "compressionRatio": 0.544
+  },
+  "sigils": {
+    "sigilsPerLine": 5.11,
+    "uniqueSigilTypes": 12,
+    "totalSigils": 97
+  },
+  "readability": {
+    "avgLineLength": 31,
+    "maxNesting": 4,
+    "avgIdentifierLength": 5.1,
+    "visualDensity": 0.801
+  }
+}
