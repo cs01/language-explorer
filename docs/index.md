@@ -58,16 +58,16 @@ const dynamicData = filterByGroup(['python', 'ruby', 'javascript', 'elixir'])
 
 # langmetrics
 
-**How much does your language cost you?** Same programs, measured automatically. Lower is better.
+**How much does your language cost you?** Same programs, measured automatically. Lower is better (except Guardrails).
 
 - **Lines** — non-blank lines of code
-- **Tokens** — whitespace-separated tokens
-- **Tok/Line** — information density per line
-- **Complexity** — Halstead Volume (total information content)
-- **Sym/Line** — special characters per line (punctuation tax)
-- **Concepts** — distinct language constructs used (keywords + syntax patterns)
-- **Guardrails** — language-level safety guarantees out of 5 (memory, null, race, overflow, coercion)
-- **Ceremony** — ratio of boilerplate lines (imports, main wrappers, type decls) to total LOC
+- **Tokens** — words and symbols in the code
+- **Tok/Line** — how much information is packed into each line
+- **Complexity** — total information your brain processes ([Halstead Volume](https://en.wikipedia.org/wiki/Halstead_complexity_measures))
+- **Sym/Line** — special characters per line (`{`, `->`, `&`, etc.)
+- **Concepts** — how many different language features you need to know
+- **Guardrails** — how many bugs the language prevents for you (0–5, [details](/methodology#guardrails))
+- **Ceremony** — what fraction of code is overhead (imports, setup, boilerplate) vs actual logic
 
 <MetricsTable :data="avgData" :columns="columns" />
 

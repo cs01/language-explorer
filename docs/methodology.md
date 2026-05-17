@@ -17,25 +17,25 @@
 ## Metrics
 
 ### Code Size
-**Lines of code (LOC)** — non-blank, non-comment lines. The most intuitive measure, but affected by formatting choices.
+**Lines of code (LOC)** — non-blank lines. The most intuitive measure, but affected by formatting choices.
 
-**Tokens** — whitespace-separated words. More stable than LOC (not affected by line breaks).
+**Tokens** — words and symbols in the code. More stable than lines because it's not affected by where you put line breaks.
 
 **Characters** — all non-whitespace characters. Measures raw typing volume.
 
 ### Symbol Noise
-**Symbols per line** — count of non-alphanumeric, non-whitespace characters divided by LOC. Higher = more visual noise.
+**Symbols per line** — special characters (`{`, `->`, `&`, `::`, etc.) divided by lines. Higher = more visual clutter to parse when reading.
 
-**Unique symbol types** — how many distinct symbol characters appear. Measures vocabulary size — how many different squiggles you need to learn.
+**Unique symbol types** — how many *different* special characters appear. Fewer types = less to memorize when learning the language.
 
 ### Complexity
-**[Halstead Volume](https://en.wikipedia.org/wiki/Halstead_complexity_measures)** — `N × log₂(n)` where `N` = total tokens, `n` = unique tokens. Measures total information content. Invented by Maurice Halstead in 1977. Widely used in software engineering research. Our implementation uses whitespace-delimited tokens as a proxy for Halstead's operator/operand decomposition — a simplification that preserves relative ranking across languages while avoiding the need for language-specific parsers.
+**[Halstead Volume](https://en.wikipedia.org/wiki/Halstead_complexity_measures)** — a classic software metric (1977) that measures total information content: how many things are in the code (`N` = total tokens) times how diverse they are (`log₂(n)` where `n` = unique tokens). More unique operations and variables = higher complexity. We use whitespace-delimited tokens as an approximation — this preserves relative ranking across languages without needing language-specific parsers.
 
 ### Compression ratio
-**gzip ratio** — `compressed_size / original_size`. A practical proxy for [Kolmogorov complexity](https://en.wikipedia.org/wiki/Kolmogorov_complexity). Low ratio = repetitive/predictable code. High ratio = dense/novel code.
+**gzip ratio** — `compressed_size / original_size`. How much the code shrinks when compressed. Repetitive, formulaic code compresses well (low ratio). Dense, novel code doesn't (high ratio). A practical measure of how predictable the code is.
 
 ### Concept Count
-**Keywords** — distinct language keywords used in the solution (e.g., `fn`, `let`, `match`, `async`). **Syntax patterns** — distinct constructs like generics, closures, pattern matching, channels. **Concept count** = keywords + patterns. Measures how many distinct language features the programmer must know.
+**Keywords** — distinct language keywords used in the solution (`fn`, `let`, `match`, `async`, etc.). **Syntax patterns** — distinct features like generics, closures, pattern matching, channels. **Concept count** = keywords + patterns. Measures how many different language features you need to know to read the code.
 
 ### Guardrails
 **Guardrail score** — rates 5 safety guarantees on a 3-point scale: **0** = not available, **0.5** = available but opt-in, **1** = enforced by default.
@@ -83,13 +83,13 @@ Score ranges from 0 (C) to 5 (Rust, Swift, Haskell, Elixir). Half-points for lan
 **0** = not available. **0.5** = opt-in (e.g., C++ `unique_ptr`, Java `Optional`, TS `strictNullChecks`). **1** = enforced by default.
 
 **Notes:**
-- **Memory 0.5** (C++, Zig): Smart pointers / safety-checked allocators exist but don't prevent all categories — dangling references, iterator invalidation, and use-after-move still compile without error.
-- **Race 1** (Haskell, Elixir): Haskell's purity prevents shared mutable state; `IORef` is unguarded but rarely accidental. Elixir's actor model with immutable data prevents shared-memory races by construction.
-- **Overflow 1** (Python, Ruby): Core integers use arbitrary precision. `float` arithmetic can silently overflow to `inf`; numpy integers wrap.
-- **Swift Race 1**: Swift 6 (2024) enforces compile-time data race safety via strict concurrency checking and `Sendable`.
+- **Memory 0.5** (C++, Zig): Tools like smart pointers exist, but you can still create dangling references, invalidate iterators, or use objects after moving them — the compiler won't stop you.
+- **Race 1** (Haskell, Elixir): Haskell prevents shared mutable state by design — functions can't have side effects. Elixir uses isolated processes with immutable data, so threads can't accidentally access the same memory.
+- **Overflow 1** (Python, Ruby): Integers grow as large as needed (arbitrary precision), so overflow is impossible. Note: `float` arithmetic can still silently produce `inf`, and numpy arrays wrap.
+- **Swift Race 1**: Swift 6 (2024) checks for data races at compile time. New projects enforce this by default.
 
 ### Ceremony
-**Ceremony ratio** — proportion of lines that are language overhead rather than algorithm logic. Counts: import/use/include statements, main function signatures, class/module wrappers, `return 0`, lone braces/end keywords, defer statements, type-only declarations, and preprocessor directives. Lower = less boilerplate.
+**Ceremony ratio** — what fraction of your code is overhead rather than problem-solving logic. Counts: imports, main function wrappers, class/module boilerplate, `return 0`, lone braces, type-only declarations, and preprocessor directives. Lower = less boilerplate standing between you and the algorithm.
 
 ## Dimensions not yet automated
 

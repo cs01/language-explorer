@@ -31,11 +31,11 @@ Pick 2-4 languages to see them head-to-head. Bars show relative performance — 
 ## How to read this
 
 - **Lines** — average non-blank lines of code across all problems
-- **Tokens** — whitespace-separated tokens (measures information density)
-- **Complexity** — Halstead Volume (total information content your brain processes)
-- **Sym/Line** — special characters per line (punctuation tax)
-- **Sym Types** — unique symbol varieties (learning curve)
-- **Guardrails** — language-level safety guarantees out of 5 (memory, null, race, overflow, coercion)
-- **Ceremony** — ratio of boilerplate lines to total LOC (lower = less overhead)
+- **Tokens** — words and symbols in the code
+- **Complexity** — total information your brain processes ([Halstead Volume](https://en.wikipedia.org/wiki/Halstead_complexity_measures))
+- **Sym/Line** — special characters per line (`{`, `->`, `&`, etc.)
+- **Sym Types** — how many different special characters you need to recognize
+- **Guardrails** — how many bugs the language prevents for you (0–5, [details](/methodology#guardrails))
+- **Ceremony** — what fraction of code is overhead vs actual logic
 
-Lower is better for most metrics except Guardrails. A language with shorter bars across the board gives you more expressive power per keystroke.
+Lower is better for most metrics except Guardrails.

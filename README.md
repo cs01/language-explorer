@@ -1,79 +1,28 @@
 # langmetrics
 
+**How much does your language cost you?**
+
+Same programs, 15 languages, measured automatically. Compares conciseness, complexity, symbol noise, concept count, safety guardrails, and ceremony.
+
 **[View the dashboard →](https://cs01.github.io/langmetrics)**
-
-Quantitative framework for comparing programming language design across expressiveness, cognitive load, and ergonomics.
-
-No existing tool does this. Academic literature has fragments (Halstead, Cognitive Dimensions, Buse-Weimer) but no unified scorecard. This repo is that scorecard.
-
-## What This Measures
-
-| Metric | Formal Basis | What It Captures |
-|--------|-------------|-----------------|
-| **Conciseness** | Halstead Volume, Kolmogorov (gzip proxy) | How much code to express a concept |
-| **Sigil Density** | Halstead Vocabulary (n1) | Symbol/operator visual noise |
-| **Concept Count** | Cognitive Dimensions framework | Mental models needed to be productive |
-| **Type Burden** | Ore et al. (ASE 2018) | Annotation ceremony vs inference |
-| **Error Ceremony** | (novel) | LOC spent on error handling vs happy path |
-| **Readability** | Buse-Weimer metric | Composite readability score |
 
 ## Languages
 
-Rust, TypeScript, Python, Go, C, C++ — with room to add more.
+C, C++, Rust, Zig, Milo, Go, Java, Kotlin, Swift, Haskell, Elixir, Python, Ruby, JavaScript, TypeScript
 
-## Structure
-
-```
-langmetrics/
-├── README.md
-├── methodology/          # how each metric is defined and measured
-│   ├── conciseness.md
-│   ├── sigils.md
-│   ├── concepts.md
-│   ├── type-burden.md
-│   ├── error-ceremony.md
-│   └── readability.md
-├── benchmarks/
-│   ├── problems/         # problem definitions (input/output contracts)
-│   └── solutions/        # implementations per language
-│       ├── rust/
-│       ├── typescript/
-│       ├── python/
-│       ├── go/
-│       ├── c/
-│       └── cpp/
-├── scripts/              # scoring + analysis tools
-│   └── score.ts          # bun script: compute all metrics for a source file
-├── data/                 # raw results (JSON), one file per problem×language
-└── docs/                 # VitePress site (deployed to GitHub Pages)
-    └── .vitepress/
-```
-
-## Workflow
-
-1. **Define** a benchmark problem in `benchmarks/problems/`
-2. **Implement** idiomatic solutions in each language
-3. **Score** with `bun run scripts/score.ts <file>` → outputs JSON to `data/`
-4. **View** results on the dashboard (`bun run docs:dev`)
-
-## Running
+## Quick start
 
 ```bash
-# score a single file
-bun run scripts/score.ts benchmarks/solutions/rust/two-sum.rs
-
-# score all solutions for a problem
-bun run scripts/score-all.ts two-sum
-
-# dev server
-bun run docs:dev
+bun run score benchmarks/solutions/rust/a1-two-sum.rs   # score one file
+bun run score:all                                        # rescore everything
+bun run docs:dev                                         # local dev server
 ```
 
-## References
+## How it works
 
-- Halstead (1977) — Elements of Software Science
-- Green & Petre (1996) — Cognitive Dimensions of Notations
-- Buse & Weimer (2010) — Learning a Metric for Code Readability (IEEE TSE)
-- Ore et al. (2018) — Assessing the Type Annotation Burden (ASE)
-- Nanz & Furia (2015) — Comparative Study of Programming Languages in Rosetta Code (ICSE)
-- Kolmogorov conciseness via compression — arxiv.org/pdf/2111.09728 (2021)
+1. Define a problem in `benchmarks/problems/`
+2. Write an idiomatic solution per language in `benchmarks/solutions/{lang}/`
+3. `score.ts` computes metrics automatically → JSON in `data/`
+4. VitePress site reads the JSON and renders tables, radar charts, and comparisons
+
+See [Methodology](https://cs01.github.io/langmetrics/methodology) for how each metric is defined.
