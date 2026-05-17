@@ -1,2 +1,5 @@
 node_modules/
 .DS_Store
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+bun.lockb
