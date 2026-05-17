@@ -17,16 +17,20 @@ const props = defineProps<{
 const colors = ['#06b6d4', '#f97316', '#a78bfa', '#22c55e']
 const allLangs = computed(() => props.languages.map(l => l.language).sort())
 const selected = ref<string[]>([allLangs.value[0] || '', allLangs.value[1] || ''])
+const showPicker = ref(false)
 
-function addLang() {
-  if (selected.value.length < 4) {
-    const unused = allLangs.value.find(l => !selected.value.includes(l))
-    if (unused) selected.value.push(unused)
+function toggleLang(lang: string) {
+  const idx = selected.value.indexOf(lang)
+  if (idx >= 0) {
+    if (selected.value.length > 2) selected.value.splice(idx, 1)
+  } else if (selected.value.length < 4) {
+    selected.value.push(lang)
   }
 }
 
-function removeLang(idx: number) {
-  if (selected.value.length > 2) selected.value.splice(idx, 1)
+function langColor(lang: string): string | null {
+  const idx = selected.value.indexOf(lang)
+  return idx >= 0 ? colors[idx] : null
 }
 
 const maxVals = computed(() => ({
@@ -106,15 +110,20 @@ function langRadarPath(lang: string): string {
 
 <template>
   <div class="comparison">
-    <div class="comparison-selectors">
-      <div v-for="(lang, idx) in selected" :key="idx" class="selector-row">
-        <span class="color-dot" :style="{ background: colors[idx] }"></span>
-        <select v-model="selected[idx]">
-          <option v-for="l in allLangs" :key="l" :value="l">{{ l }}</option>
-        </select>
-        <button v-if="selected.length > 2" class="remove-btn" @click="removeLang(idx)">×</button>
+    <div class="lang-picker">
+      <div class="picker-label">Languages <span class="picker-hint">· pick 2–4</span></div>
+      <div class="lang-grid">
+        <button
+          v-for="lang in allLangs"
+          :key="lang"
+          :class="['lang-chip', { active: selected.includes(lang), maxed: !selected.includes(lang) && selected.length >= 4 }]"
+          :style="selected.includes(lang) ? { borderColor: langColor(lang)!, color: langColor(lang)!, background: langColor(lang) + '18' } : {}"
+          @click="toggleLang(lang)"
+        >
+          <span class="chip-dot" :style="{ background: selected.includes(lang) ? langColor(lang)! : 'transparent' }"></span>
+          {{ lang }}
+        </button>
       </div>
-      <button v-if="selected.length < 4" class="add-btn" @click="addLang">+ Add language</button>
     </div>
 
     <div class="radar-overlay">
@@ -156,18 +165,13 @@ function langRadarPath(lang: string): string {
           {{ axis.label }}
         </text>
       </svg>
-      <div class="radar-legend">
-        <div v-for="(lang, idx) in selected" :key="'legend-' + lang" class="legend-item">
-          <span class="color-dot" :style="{ background: colors[idx] }"></span>
-          <span>{{ lang }}</span>
-        </div>
-      </div>
     </div>
 
     <div class="comparison-bars">
       <div v-for="metric in metrics" :key="metric" class="bar-group">
         <div class="bar-label">{{ metricLabels[metric] }}</div>
         <div v-for="(lang, idx) in selected" :key="lang + metric" class="bar-row">
+          <span class="bar-lang" :style="{ color: colors[idx] }">{{ lang }}</span>
           <div class="bar-track">
             <div
               class="bar-fill"
@@ -183,52 +187,64 @@ function langRadarPath(lang: string): string {
 
 <style scoped>
 .comparison { margin: 1.5rem 0; }
-.comparison-selectors {
+.lang-picker {
+  margin-bottom: 1.5rem;
+}
+.picker-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--vp-c-text-2);
+  margin-bottom: 0.5rem;
+}
+.lang-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  align-items: center;
-}
-.selector-row {
-  display: flex;
-  align-items: center;
   gap: 0.4rem;
 }
-.color-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
-.selector-row select {
-  padding: 0.3rem 0.6rem;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 6px;
+.lang-chip {
+  padding: 0.35rem 0.75rem;
+  border: 1.5px solid var(--vp-c-divider);
+  border-radius: 20px;
   background: var(--vp-c-bg-soft);
-  color: var(--vp-c-text-1);
-  font-size: 0.85rem;
-}
-.remove-btn {
-  border: none;
-  background: none;
-  color: var(--vp-c-text-3);
-  cursor: pointer;
-  font-size: 1.2rem;
-  padding: 0 0.3rem;
-}
-.add-btn {
-  padding: 0.3rem 0.8rem;
-  border: 1px dashed var(--vp-c-divider);
-  border-radius: 6px;
-  background: none;
   color: var(--vp-c-text-2);
-  cursor: pointer;
   font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  user-select: none;
 }
-.add-btn:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
+.lang-chip:hover:not(.maxed) {
+  border-color: var(--vp-c-brand-1);
+  color: var(--vp-c-text-1);
+}
+.lang-chip.active {
+  font-weight: 600;
+}
+.lang-chip.maxed {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.picker-hint {
+  font-weight: 400;
+  color: var(--vp-c-text-3);
+}
 .bar-group { margin-bottom: 1rem; }
 .bar-label { font-weight: 600; font-size: 0.82rem; margin-bottom: 0.3rem; color: var(--vp-c-text-2); }
 .bar-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem; }
+.bar-lang {
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 5.5rem;
+  text-align: right;
+}
 .bar-track {
   flex: 1;
   height: 20px;
@@ -258,17 +274,5 @@ function langRadarPath(lang: string): string {
 .radar-label {
   font-size: 10px;
   fill: var(--vp-c-text-2);
-}
-.radar-legend {
-  display: flex;
-  gap: 1rem;
-  margin-top: 0.5rem;
-  font-size: 0.82rem;
-  color: var(--vp-c-text-2);
-}
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
 }
 </style>
