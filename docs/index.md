@@ -29,7 +29,7 @@ const columns = [
 
 const groupDefs = [
   { label: 'Systems', languages: ['c', 'cpp', 'rust', 'zig', 'milo'] },
-  { label: 'Scripting', languages: ['python', 'ruby', 'javascript'] },
+  { label: 'Scripting', languages: ['python', 'ruby', 'javascript', 'typescript'] },
   { label: 'JVM', languages: ['java', 'kotlin'] },
   { label: 'Functional', languages: ['haskell', 'elixir'] },
   { label: 'Static', languages: ['typescript', 'rust', 'go', 'c', 'cpp', 'swift', 'zig', 'java', 'kotlin', 'haskell', 'milo'] },
@@ -42,7 +42,7 @@ function filterByGroup(langs: string[]) {
 }
 
 const systemsData = filterByGroup(['c', 'cpp', 'rust', 'zig', 'milo'])
-const scriptingData = filterByGroup(['python', 'ruby', 'javascript'])
+const scriptingData = filterByGroup(['python', 'ruby', 'javascript', 'typescript'])
 const jvmData = filterByGroup(['java', 'kotlin'])
 const functionalData = filterByGroup(['haskell', 'elixir'])
 const gcData = filterByGroup(['python', 'ruby', 'javascript', 'typescript', 'java', 'kotlin', 'go', 'haskell', 'elixir', 'swift'])
@@ -53,6 +53,14 @@ const dynamicData = filterByGroup(['python', 'ruby', 'javascript', 'elixir'])
 # langmetrics
 
 **How much does your language cost you?** Quantitative comparison of 14 programming languages — same programs, measured automatically.
+
+Every language solves the same 7 problems. We measure what you actually type: how many lines, how many tokens, how much symbolic noise, and how much total information your brain has to process. Lower is better across the board.
+
+- **Lines** — average non-blank lines of code
+- **Tokens** — whitespace-separated tokens (information density)
+- **Complexity** — Halstead Volume (total information content your brain processes)
+- **Sym/Line** — special characters per line (punctuation tax)
+- **Sym Types** — unique symbol varieties (learning curve)
 
 <MetricsTable :data="avgData" :columns="columns" />
 
@@ -68,9 +76,9 @@ Does modern systems design save code? Rust is 44% fewer lines than C — while a
 
 ---
 
-### Scripting — Python, Ruby, JavaScript
+### Scripting — Python, Ruby, JavaScript, TypeScript
 
-The dynamic trio. Ruby edges Python on symbol noise and complexity. JavaScript is close but loses on tokens — `const`/`let`/`function` add up vs Python's minimal keywords.
+Ruby edges Python on symbol noise and complexity. JavaScript is close but loses on tokens — `const`/`let`/`function` add up vs Python's minimal keywords. TypeScript adds type annotations on top, pushing symbols and complexity higher.
 
 <MetricsTable :data="scriptingData" :columns="columns" />
 

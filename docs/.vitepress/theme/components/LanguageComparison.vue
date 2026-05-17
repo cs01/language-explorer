@@ -14,7 +14,7 @@ const props = defineProps<{
   languages: LangData[]
 }>()
 
-const colors = ['#3b82f6', '#8b5cf6', '#06b6d4', '#f59e0b']
+const colors = ['#06b6d4', '#f97316', '#a78bfa', '#22c55e']
 const allLangs = computed(() => props.languages.map(l => l.language).sort())
 const selected = ref<string[]>([allLangs.value[0] || '', allLangs.value[1] || ''])
 
@@ -240,7 +240,7 @@ function langRadarPath(lang: string): string {
   height: 100%;
   border-radius: 4px;
   transition: width 0.3s ease;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 .bar-value {
   font-size: 0.8rem;
