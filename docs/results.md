@@ -31,13 +31,13 @@ const columns = [
 
 # Key Findings
 
-We implemented 4 programs in 14 languages and measured everything. Here's what the data says.
+We implemented 7 programs in 14 languages and measured everything. Here's what the data says.
 
 ## The headline numbers
 
 <MetricsTable :data="avgData" :columns="columns" />
 
-<small>Averages across 4 benchmark problems (2 algorithmic, 2 real-world). Click columns to sort.</small>
+<small>Averages across 7 benchmark problems (2 algorithmic, 4 real-world, 1 systems). Click columns to sort.</small>
 
 ## 2.9× : The conciseness gap
 

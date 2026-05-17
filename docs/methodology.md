@@ -29,7 +29,7 @@
 **Unique symbol types** — how many distinct symbol characters appear. Measures vocabulary size — how many different squiggles you need to learn.
 
 ### Complexity
-**[Halstead Volume](https://en.wikipedia.org/wiki/Halstead_complexity_measures)** — `N × log₂(n)` where `N` = total tokens, `n` = unique tokens. Measures total information content. Invented by Maurice Halstead in 1977. Widely used in software engineering research.
+**[Halstead Volume](https://en.wikipedia.org/wiki/Halstead_complexity_measures)** — `N × log₂(n)` where `N` = total tokens, `n` = unique tokens. Measures total information content. Invented by Maurice Halstead in 1977. Widely used in software engineering research. Our implementation uses whitespace-delimited tokens as a proxy for Halstead's operator/operand decomposition — a simplification that preserves relative ranking across languages while avoiding the need for language-specific parsers.
 
 ### Compression ratio
 **gzip ratio** — `compressed_size / original_size`. A practical proxy for [Kolmogorov complexity](https://en.wikipedia.org/wiki/Kolmogorov_complexity). Low ratio = repetitive/predictable code. High ratio = dense/novel code.

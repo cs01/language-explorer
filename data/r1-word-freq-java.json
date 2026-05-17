@@ -14,7 +14,7 @@
   },
   "readability": {
     "avgLineLength": 33,
-    "maxNesting": 8,
+    "maxNesting": 4,
     "avgIdentifierLength": 5.2,
     "visualDensity": 0.702
   }

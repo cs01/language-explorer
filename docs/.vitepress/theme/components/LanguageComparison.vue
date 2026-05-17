@@ -56,6 +56,52 @@ function getValue(lang: string, metric: string): number {
   if (!entry) return 0
   return entry[metric as keyof LangData] as number
 }
+
+// Radar overlay
+const radarSize = 280
+const radarCx = radarSize / 2
+const radarCy = radarSize / 2
+const radarR = radarSize / 2 - 35
+
+function polarToCart(angle: number, r: number): [number, number] {
+  const rad = (angle - 90) * (Math.PI / 180)
+  return [radarCx + r * Math.cos(rad), radarCy + r * Math.sin(rad)]
+}
+
+const radarAxes = computed(() => {
+  const n = metrics.length
+  return metrics.map((m, i) => {
+    const angle = (360 / n) * i
+    const [x, y] = polarToCart(angle, radarR)
+    const [lx, ly] = polarToCart(angle, radarR + 20)
+    return { metric: m, label: metricLabels[m], angle, x, y, lx, ly }
+  })
+})
+
+const gridLevels = [0.25, 0.5, 0.75, 1.0]
+
+function gridPath(level: number): string {
+  const n = metrics.length
+  const points = Array.from({ length: n }, (_, i) => {
+    const angle = (360 / n) * i
+    return polarToCart(angle, radarR * level)
+  })
+  return points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p[0]},${p[1]}`).join(' ') + ' Z'
+}
+
+function langRadarPath(lang: string): string {
+  const entry = props.languages.find(l => l.language === lang)
+  if (!entry) return ''
+  const n = metrics.length
+  const points = metrics.map((m, i) => {
+    const val = entry[m as keyof LangData] as number
+    const max = maxVals.value[m as keyof typeof maxVals.value]
+    const r = radarR * Math.min(val / max, 1)
+    const angle = (360 / n) * i
+    return polarToCart(angle, r)
+  })
+  return points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p[0]},${p[1]}`).join(' ') + ' Z'
+}
 </script>
 
 <template>
@@ -69,6 +115,53 @@ function getValue(lang: string, metric: string): number {
         <button v-if="selected.length > 2" class="remove-btn" @click="removeLang(idx)">×</button>
       </div>
       <button v-if="selected.length < 4" class="add-btn" @click="addLang">+ Add language</button>
+    </div>
+
+    <div class="radar-overlay">
+      <svg :width="radarSize" :height="radarSize" :viewBox="`0 0 ${radarSize} ${radarSize}`">
+        <path
+          v-for="level in gridLevels"
+          :key="level"
+          :d="gridPath(level)"
+          fill="none"
+          stroke="var(--vp-c-divider)"
+          :stroke-width="level === 1 ? 1.5 : 0.5"
+        />
+        <line
+          v-for="axis in radarAxes"
+          :key="axis.metric"
+          :x1="radarCx" :y1="radarCy"
+          :x2="axis.x" :y2="axis.y"
+          stroke="var(--vp-c-divider)"
+          stroke-width="0.5"
+        />
+        <path
+          v-for="(lang, idx) in selected"
+          :key="'radar-' + lang"
+          :d="langRadarPath(lang)"
+          :fill="colors[idx]"
+          fill-opacity="0.12"
+          :stroke="colors[idx]"
+          stroke-width="2"
+        />
+        <text
+          v-for="axis in radarAxes"
+          :key="'rl-' + axis.metric"
+          :x="axis.lx"
+          :y="axis.ly"
+          text-anchor="middle"
+          dominant-baseline="middle"
+          class="radar-label"
+        >
+          {{ axis.label }}
+        </text>
+      </svg>
+      <div class="radar-legend">
+        <div v-for="(lang, idx) in selected" :key="'legend-' + lang" class="legend-item">
+          <span class="color-dot" :style="{ background: colors[idx] }"></span>
+          <span>{{ lang }}</span>
+        </div>
+      </div>
     </div>
 
     <div class="comparison-bars">
@@ -155,5 +248,27 @@ function getValue(lang: string, metric: string): number {
   min-width: 3rem;
   text-align: right;
   color: var(--vp-c-text-2);
+}
+.radar-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.radar-label {
+  font-size: 10px;
+  fill: var(--vp-c-text-2);
+}
+.radar-legend {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--vp-c-text-2);
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 </style>
