@@ -86,6 +86,14 @@ function isBest(value: number, key: string): boolean {
   return lowerBetter ? value === Math.min(...vals) : value === Math.max(...vals)
 }
 
+function isWorst(value: number, key: string): boolean {
+  const col = props.columns.find(c => c.key === key)
+  if (!col) return false
+  const vals = filtered.value.map(r => r[key] as number)
+  const lowerBetter = col.lower !== false
+  return lowerBetter ? value === Math.max(...vals) : value === Math.min(...vals)
+}
+
 function sortArrow(key: string): string {
   if (sortKey.value !== key) return '↕'
   return sortAsc.value ? '↑' : '↓'
@@ -130,8 +138,9 @@ function sortArrow(key: string): string {
             class="metric-cell"
             :style="{ backgroundColor: getColor(row[col.key] as number, col.key) }"
           >
-            {{ row[col.key] }}
-            <span v-if="isBest(row[col.key] as number, col.key)" class="best-badge">best</span>
+            <span class="best-badge" :class="{ visible: isBest(row[col.key] as number, col.key) }">★</span>
+            <span class="metric-value">{{ row[col.key] }}</span>
+            <span class="worst-badge" :class="{ visible: isWorst(row[col.key] as number, col.key) }">▼</span>
           </td>
         </tr>
       </tbody>

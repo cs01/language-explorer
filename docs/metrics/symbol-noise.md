@@ -1,3 +1,27 @@
+---
+outline: deep
+---
+
+<script setup lang="ts">
+import { data } from '../data/metrics.data'
+
+const languages = [...new Set(data.metrics.map(m => m.language))]
+const avgData = languages.map(lang => {
+  const entries = data.metrics.filter(m => m.language === lang)
+  const avg = (key: string) => +(entries.reduce((s, e) => s + e[key], 0) / entries.length).toFixed(1)
+  return {
+    language: lang.charAt(0).toUpperCase() + lang.slice(1),
+    'symbols/line': avg('sigilsPerLine'),
+    'symbol types': Math.round(entries.reduce((s, e) => s + e.uniqueSigilTypes, 0) / entries.length),
+  }
+})
+
+const columns = [
+  { key: 'symbols/line', label: 'Avg Symbols/Line' },
+  { key: 'symbol types', label: 'Avg Unique Symbol Types' },
+]
+</script>
+
 # Symbol Noise
 
 **How many special characters clutter each line of code?**
@@ -8,35 +32,29 @@
 
 Every special character is a micro-decision for the reader: *what does this symbol mean in this context?* Languages that overload symbols (`&` means reference AND bitwise-AND AND pattern-binding in Rust) impose more cognitive work per character.
 
-## Results: symbols per line
+## Results
 
-| Problem | Python | TypeScript | Rust | Go | C |
-|---------|--------|------------|------|-----|---|
-| Two Sum | 4.4 | 5.7 | 5.3 | **3.3** | 5.2 |
-| Valid Parens | **5.1** | 6.2 | 7.9 | 5.3 | 6.3 |
-| Word Frequency | 4.7 | 7.3 | 6.7 | **4.3** | 6.0 |
-| Concurrent Fetch | 5.1 | 6.3 | 5.8 | **4.5** | 5.3 |
-| **Average** | 4.8 | **6.4** | **6.4** | **4.3** | 5.7 |
+<MetricsTable :data="avgData" :columns="columns" />
 
-## Results: unique symbol types
+## The two dimensions of noise
 
-This measures **how many different symbols you need to learn** — the vocabulary of squiggles.
+**Symbols per line** (density) — how cluttered does each line look?
 
-| Language | Avg Unique Symbol Types |
-|----------|----------------------|
-| Python | **12** |
-| Go | 15 |
-| Rust | 17 |
-| TypeScript | 18 |
-| C | 21 |
+**Unique symbol types** (vocabulary) — how many different squiggles do you need to learn?
 
-## The two kinds of noise
+These don't always correlate. Haskell has low density (4.6/line) AND low vocabulary (14 types) — few symbols used sparsely. Elixir has high density (6.4/line) but moderate vocabulary (15 types) — a few symbols (`|>`, `&`) used heavily.
 
-**Rust's noise is safety-related.** The `&`, `mut`, `Some()`, `unwrap()`, lifetime annotations — they encode ownership and borrowing information. You're paying for compile-time memory safety. Each symbol carries real semantic weight.
+## Why each language is noisy (or not)
 
-**TypeScript's noise is syntactic.** Generics (`<number, number>`), non-null assertion (`!`), optional chaining (`?.`), type assertions (`: Type`) — these serve the type checker, not runtime behavior. The symbols don't prevent bugs at the same rate.
+**Rust's noise is safety-related.** The `&`, `mut`, `Some()`, `unwrap()`, lifetime annotations — they encode ownership and borrowing. Each symbol carries real semantic weight.
 
-**Go avoids symbols by using words.** `make()` instead of `{}`, `append()` instead of `.push()`, explicit `if err != nil` instead of `?`. Lower symbol density, but more lines of code.
+**TypeScript's noise is syntactic.** Generics (`<number, number>`), non-null assertion (`!`), optional chaining (`?.`) — these serve the type checker, not runtime behavior.
+
+**Elixir's noise is pipeline-driven.** The `|>` operator, pattern matching (`{:ok, val}`), anonymous functions (`&(&1 + 1)`) — dense but consistent.
+
+**Go avoids symbols by using words.** `make()` instead of `{}`, `append()` instead of `.push()`. Lower symbol density, but more lines of code.
+
+**Ruby minimizes both.** Blocks (`do |x| ... end`), English-like methods (`empty?`, `puts`, `each`), implicit returns — code reads almost like prose.
 
 ::: tip Key insight
 Cognitive load scales with symbol **variety** (how many different symbols to learn), not symbol **frequency** (how often they appear). Seeing `&&&` is fine if `&` always means one thing. Seeing `& &mut &'a *const *mut` is five concepts in similar-looking syntax — that's expensive.

@@ -20,7 +20,7 @@ const columns = [
   { key: 'lines', label: 'Lines' },
   { key: 'tokens', label: 'Tokens' },
   { key: 'complexity', label: 'Complexity' },
-  { key: 'symbols/line', label: 'Symbols/Line' },
+  { key: 'symbols/line', label: 'Sym/Line' },
 ]
 
 const langLabels = {

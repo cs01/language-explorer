@@ -1,42 +1,62 @@
+---
+outline: deep
+---
+
+<script setup lang="ts">
+import { data } from '../data/metrics.data'
+
+const languages = [...new Set(data.metrics.map(m => m.language))]
+const avgData = languages.map(lang => {
+  const entries = data.metrics.filter(m => m.language === lang)
+  const avg = (key: string) => +(entries.reduce((s, e) => s + e[key], 0) / entries.length).toFixed(1)
+  return {
+    language: lang.charAt(0).toUpperCase() + lang.slice(1),
+    lines: avg('loc'),
+    tokens: avg('tokens'),
+    'compression ratio': avg('compressionRatio'),
+  }
+})
+
+const columns = [
+  { key: 'lines', label: 'Avg Lines' },
+  { key: 'tokens', label: 'Avg Tokens' },
+  { key: 'compression ratio', label: 'Compression Ratio' },
+]
+</script>
+
 # Code Size
 
 **How much code does it take to express the same idea?**
 
-We count three things: lines of code (LOC), tokens (whitespace-separated words), and characters. Each tells a slightly different story.
+We count three things: lines of code (LOC), tokens (whitespace-separated words), and compression ratio (gzip size / raw size — lower means more repetitive/boilerplate-y code).
 
 ## Results
 
-| Problem | Python | TypeScript | Rust | Go | C |
-|---------|--------|------------|------|-----|---|
-| Two Sum | **7** | 11 | 12 | 12 | 12 |
-| Valid Parens | **11** | 12 | 13 | 16 | 17 |
-| Word Frequency | **14** | 21 | 25 | 42 | 56 |
-| Concurrent Fetch | **19** | 25 | 32 | 35 | 61 |
-| **Average** | **12.8** | 17.3 | 20.5 | 26.3 | 36.5 |
+<MetricsTable :data="avgData" :columns="columns" />
 
 ## What drives the differences?
 
-**Python** wins because:
+**Ruby/Python** win because:
 - No boilerplate (no main function, no imports for builtins, no type annotations required)
-- Rich standard library (`Counter`, `ThreadPoolExecutor` — one-liners for complex operations)
-- Whitespace-delimited blocks (no `{}` to close)
+- Rich standard library (`Counter`, `tally`, `ThreadPoolExecutor` — one-liners for complex operations)
+- Minimal syntax (whitespace blocks, implicit returns)
 
-**C** loses because:
+**C/Zig** lose because:
 - No built-in collections (no HashMap, no dynamic array without manual allocation)
-- Manual memory management (malloc/free/realloc)
+- Manual memory management
 - No string operations (character-by-character parsing)
-- Manual threading (pthread_create, pthread_join, semaphore management)
+- Manual threading/concurrency infrastructure
 
-**The interesting middle**: Rust (20.5) vs Go (26.3). Rust is more concise despite being more complex — iterator chains and `?` propagation eliminate boilerplate that Go writes explicitly.
+**The interesting middle**: Kotlin (18.5) matches JavaScript despite being statically typed. Extension functions and expression-bodied syntax eliminate the ceremony you'd expect from a JVM language.
 
 ## The gap widens with complexity
 
-On simple algorithmic problems, languages cluster within 2× of each other. On real-world problems with I/O, errors, and concurrency, the gap stretches to 3-4×. This is because real programs exercise the standard library, error model, and concurrency primitives — and that's where languages diverge most.
+On simple algorithmic problems, languages cluster within 2× of each other. On real-world problems with I/O, JSON, HTTP, and concurrency, the gap stretches to 3-5×. Real programs exercise the standard library, error model, and concurrency primitives — that's where languages diverge most.
 
 ::: details How we count
-**LOC**: Non-blank, non-comment lines. Includes imports and main function boilerplate.
+**LOC**: Non-blank lines. Includes imports and main function boilerplate.
 
 **Tokens**: Whitespace-separated words. `let x: i32 = 5;` = 5 tokens.
 
-**Characters**: All non-whitespace characters. Measures raw typing volume.
+**Compression Ratio**: gzip(source) / len(source). Lower means more repetitive code (boilerplate). Higher means more information-dense code.
 :::

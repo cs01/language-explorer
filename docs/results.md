@@ -21,11 +21,11 @@ const avgData = languages.map(lang => {
 })
 
 const columns = [
-  { key: 'lines', label: 'Avg Lines' },
-  { key: 'tokens', label: 'Avg Tokens' },
+  { key: 'lines', label: 'Lines' },
+  { key: 'tokens', label: 'Tokens' },
   { key: 'complexity', label: 'Complexity' },
-  { key: 'symbols/line', label: 'Symbols/Line' },
-  { key: 'symbol types', label: 'Symbol Types' },
+  { key: 'symbols/line', label: 'Sym/Line' },
+  { key: 'symbol types', label: 'Sym Types' },
 ]
 </script>
 
