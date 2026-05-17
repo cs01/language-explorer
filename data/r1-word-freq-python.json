@@ -1,0 +1,21 @@
+{
+  "file": "r1-word-freq.py",
+  "conciseness": {
+    "loc": 14,
+    "tokens": 45,
+    "chars": 326,
+    "halsteadVolume": 238,
+    "compressionRatio": 0.658
+  },
+  "sigils": {
+    "sigilsPerLine": 4.71,
+    "uniqueSigilTypes": 11,
+    "totalSigils": 66
+  },
+  "readability": {
+    "avgLineLength": 30,
+    "maxNesting": 4,
+    "avgIdentifierLength": 4.6,
+    "visualDensity": 0.765
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "file": "r1-word-freq.c",
+  "conciseness": {
+    "loc": 56,
+    "tokens": 263,
+    "chars": 1218,
+    "halsteadVolume": 1790,
+    "compressionRatio": 0.365
+  },
+  "sigils": {
+    "sigilsPerLine": 5.98,
+    "uniqueSigilTypes": 23,
+    "totalSigils": 335
+  },
+  "readability": {
+    "avgLineLength": 32,
+    "maxNesting": 8,
+    "avgIdentifierLength": 3.8,
+    "visualDensity": 0.662
+  }
+}
