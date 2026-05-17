@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>langmetrics — Language Design Scorecard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>langmetrics</h1>
+    <p class="subtitle">Quantitative comparison of programming language design</p>
+  </header>
+
+  <nav>
+    <a href="#overview" class="active">Overview</a>
+    <a href="#conciseness">Conciseness</a>
+    <a href="#sigils">Sigils</a>
+    <a href="#concepts">Concepts</a>
+    <a href="#type-burden">Type Burden</a>
+    <a href="#error-ceremony">Error Ceremony</a>
+    <a href="#readability">Readability</a>
+  </nav>
+
+  <main>
+    <section id="overview">
+      <h2>Overview</h2>
+      <p>How do programming languages compare on dimensions that matter for developer experience?</p>
+      <div id="radar-chart" class="chart-container">
+        <!-- Radar/spider chart: one axis per metric, one line per language -->
+        <p class="placeholder">Radar chart — awaiting data</p>
+      </div>
+      <div id="summary-table" class="table-container">
+        <p class="placeholder">Summary table — awaiting data</p>
+      </div>
+    </section>
+
+    <section id="conciseness">
+      <h2>Conciseness</h2>
+      <p>Lines, tokens, and characters to express equivalent programs.</p>
+      <div class="chart-container" id="conciseness-chart">
+        <p class="placeholder">Bar chart — LOC per problem per language</p>
+      </div>
+    </section>
+
+    <section id="sigils">
+      <h2>Sigil Density</h2>
+      <p>Non-alphanumeric symbol load. Cognitive cost scales with variety, not frequency.</p>
+      <div class="chart-container" id="sigils-chart">
+        <p class="placeholder">Grouped bar — sigils/line per language</p>
+      </div>
+    </section>
+
+    <section id="concepts">
+      <h2>Concept Count</h2>
+      <p>Distinct mental models needed at each proficiency level.</p>
+      <div class="chart-container" id="concepts-chart">
+        <p class="placeholder">Stacked bar — concepts per level per language</p>
+      </div>
+    </section>
+
+    <section id="type-burden">
+      <h2>Type Annotation Burden</h2>
+      <p>How much ceremony does the type system demand?</p>
+      <div class="chart-container" id="type-burden-chart">
+        <p class="placeholder">Chart — annotation ratio per language</p>
+      </div>
+    </section>
+
+    <section id="error-ceremony">
+      <h2>Error Handling Ceremony</h2>
+      <p>LOC dedicated to error handling vs. happy path.</p>
+      <div class="chart-container" id="error-chart">
+        <p class="placeholder">Chart — error LOC ratio per language</p>
+      </div>
+    </section>
+
+    <section id="readability">
+      <h2>Readability</h2>
+      <p>Composite score: line length, nesting, entropy, density.</p>
+      <div class="chart-container" id="readability-chart">
+        <p class="placeholder">Chart — composite readability score</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>langmetrics — data-driven language design</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
