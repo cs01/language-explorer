@@ -8,7 +8,7 @@ interface LangData {
   complexity: number
   sigilsPerLine: number
   symbolTypes: number
-  safety: number
+  guardrails: number
   ceremony: number
 }
 
@@ -41,15 +41,15 @@ const maxVals = computed(() => ({
   complexity: Math.max(...props.languages.map(l => l.complexity)),
   sigilsPerLine: Math.max(...props.languages.map(l => l.sigilsPerLine)),
   symbolTypes: Math.max(...props.languages.map(l => l.symbolTypes)),
-  safety: Math.max(...props.languages.map(l => l.safety)),
+  guardrails: Math.max(...props.languages.map(l => l.guardrails)),
   ceremony: Math.max(...props.languages.map(l => l.ceremony)),
 }))
 
-const metrics = ['lines', 'tokens', 'complexity', 'sigilsPerLine', 'symbolTypes', 'safety', 'ceremony'] as const
+const metrics = ['lines', 'tokens', 'complexity', 'sigilsPerLine', 'symbolTypes', 'guardrails', 'ceremony'] as const
 const metricLabels: Record<string, string> = {
   lines: 'Lines', tokens: 'Tokens', complexity: 'Complexity',
   sigilsPerLine: 'Sym/Line', symbolTypes: 'Sym Types',
-  safety: 'Safety', ceremony: 'Ceremony',
+  guardrails: 'Guardrails', ceremony: 'Ceremony',
 }
 
 function getBarWidth(lang: string, metric: string): number {

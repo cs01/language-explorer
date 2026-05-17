@@ -16,7 +16,7 @@ const langData = languages.map(lang => {
     complexity: Math.round(entries.reduce((s, e) => s + e.halsteadVolume, 0) / entries.length),
     sigilsPerLine: avg('sigilsPerLine'),
     symbolTypes: Math.round(entries.reduce((s, e) => s + e.uniqueSigilTypes, 0) / entries.length),
-    safety: avg('safetyPerLine'),
+    guardrails: entries[0]?.guardrailScore ?? 0,
     ceremony: avg('ceremonyRatio'),
   }
 })
@@ -35,7 +35,7 @@ Pick 2-4 languages to see them head-to-head. Bars show relative performance — 
 - **Complexity** — Halstead Volume (total information content your brain processes)
 - **Sym/Line** — special characters per line (punctuation tax)
 - **Sym Types** — unique symbol varieties (learning curve)
-- **Safety** — explicit error handling + type safety constructs per line (higher = safer)
+- **Guardrails** — language-level safety guarantees out of 5 (memory, null, race, overflow, coercion)
 - **Ceremony** — ratio of boilerplate lines to total LOC (lower = less overhead)
 
-Lower is better for most metrics except Safety. A language with shorter bars across the board gives you more expressive power per keystroke.
+Lower is better for most metrics except Guardrails. A language with shorter bars across the board gives you more expressive power per keystroke.

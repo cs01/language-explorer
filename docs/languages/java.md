@@ -22,8 +22,10 @@ const stats = {
   complexity: Math.round(entries.reduce((s, e) => s + e.halsteadVolume, 0) / entries.length),
   sigilsPerLine: avg('sigilsPerLine'),
   symbolTypes: Math.round(entries.reduce((s, e) => s + e.uniqueSigilTypes, 0) / entries.length),
-  safety: avg('safetyPerLine'),
+  guardrails: entries[0]?.guardrailScore ?? 0,
   ceremony: avg('ceremonyRatio'),
+  concepts: Math.round(entries.reduce((s, e) => s + e.conceptCount, 0) / entries.length),
+  tokensPerLine: avg('tokensPerLine'),
 }
 
 const maxVals = {
@@ -38,18 +40,23 @@ const maxVals = {
     const e = data.metrics.filter(m => m.language === l)
     return e.reduce((s, x) => s + x.uniqueSigilTypes, 0) / e.length
   })),
-  safety: Math.max(...allLangs.map(l => avgAll('safetyPerLine', l))),
+  guardrails: 5,
   ceremony: Math.max(...allLangs.map(l => avgAll('ceremonyRatio', l))),
+  concepts: Math.max(...allLangs.map(l => {
+    const e = data.metrics.filter(m => m.language === l)
+    return e.reduce((s, x) => s + x.conceptCount, 0) / e.length
+  })),
+  tokensPerLine: Math.max(...allLangs.map(l => avgAll('tokensPerLine', l))),
 }
 
+// Radar: bigger polygon = better. Cost metrics inverted so high = good.
 const radarData = [
-  { label: 'Lines', value: stats.lines, max: maxVals.lines },
-  { label: 'Tokens', value: stats.tokens, max: maxVals.tokens },
-  { label: 'Complexity', value: stats.complexity, max: maxVals.complexity },
-  { label: 'Sym/Line', value: stats.sigilsPerLine, max: maxVals.sigilsPerLine },
-  { label: 'Sym Types', value: stats.symbolTypes, max: maxVals.symbolTypes },
-  { label: 'Safety', value: stats.safety, max: maxVals.safety },
-  { label: 'Ceremony', value: stats.ceremony, max: maxVals.ceremony },
+  { label: 'Concise', value: maxVals.lines - stats.lines, max: maxVals.lines },
+  { label: 'Simple', value: maxVals.concepts - stats.concepts, max: maxVals.concepts },
+  { label: 'Clear', value: maxVals.sigilsPerLine - stats.sigilsPerLine, max: maxVals.sigilsPerLine },
+  { label: 'Guardrails', value: stats.guardrails, max: maxVals.guardrails },
+  { label: 'Efficient', value: maxVals.ceremony - stats.ceremony, max: maxVals.ceremony },
+  { label: 'Dense', value: stats.tokensPerLine, max: maxVals.tokensPerLine },
 ]
 
 const perProblem = entries.map(e => ({
@@ -58,7 +65,7 @@ const perProblem = entries.map(e => ({
   tokens: e.tokens,
   complexity: e.halsteadVolume,
   'symbols/line': e.sigilsPerLine,
-  safety: e.safetyPerLine,
+  guardrails: e.guardrailScore,
   ceremony: e.ceremonyRatio,
 }))
 
@@ -67,7 +74,7 @@ const columns = [
   { key: 'tokens', label: 'Tokens' },
   { key: 'complexity', label: 'Complexity' },
   { key: 'symbols/line', label: 'Sym/Line' },
-  { key: 'safety', label: 'Safety', lower: false },
+  { key: 'guardrails', label: 'Guardrails', lower: false },
   { key: 'ceremony', label: 'Ceremony' },
 ]
 
@@ -94,7 +101,7 @@ const rank = rankings.findIndex(r => r.lang === lang) + 1
 | Complexity | {{ stats.complexity }} |
 | Symbols/Line | {{ stats.sigilsPerLine }} |
 | Symbol Types | {{ stats.symbolTypes }} |
-| Safety/Line | {{ stats.safety }} |
+| Guardrails | {{ stats.guardrails }} / 5 |
 | Ceremony | {{ stats.ceremony }} |
 
 </div>

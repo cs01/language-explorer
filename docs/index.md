@@ -17,7 +17,7 @@ const avgData = languages.map(lang => {
     complexity: Math.round(entries.reduce((s, e) => s + e.halsteadVolume, 0) / entries.length),
     'symbols/line': avg('sigilsPerLine'),
     concepts: Math.round(entries.reduce((s, e) => s + e.conceptCount, 0) / entries.length),
-    safety: avg('safetyPerLine'),
+    guardrails: entries[0]?.guardrailScore ?? 0,
     ceremony: avg('ceremonyRatio'),
   }
 })
@@ -29,7 +29,7 @@ const columns = [
   { key: 'complexity', label: 'Complexity' },
   { key: 'symbols/line', label: 'Sym/Line' },
   { key: 'concepts', label: 'Concepts' },
-  { key: 'safety', label: 'Safety', lower: false },
+  { key: 'guardrails', label: 'Guardrails', lower: false },
   { key: 'ceremony', label: 'Ceremony' },
 ]
 
@@ -66,7 +66,7 @@ const dynamicData = filterByGroup(['python', 'ruby', 'javascript', 'elixir'])
 - **Complexity** — Halstead Volume (total information content)
 - **Sym/Line** — special characters per line (punctuation tax)
 - **Concepts** — distinct language constructs used (keywords + syntax patterns)
-- **Safety** — explicit error handling + type safety constructs per line (higher = safer)
+- **Guardrails** — language-level safety guarantees out of 5 (memory, null, race, overflow, coercion)
 - **Ceremony** — ratio of boilerplate lines (imports, main wrappers, type decls) to total LOC
 
 <MetricsTable :data="avgData" :columns="columns" />

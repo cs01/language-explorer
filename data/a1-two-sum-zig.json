@@ -25,9 +25,13 @@
     "apiCalls": 5,
     "conceptCount": 13
   },
-  "safety": {
-    "safetyScore": 2,
-    "safetyPerLine": 0.15
+  "guardrails": {
+    "memory": false,
+    "null": false,
+    "race": false,
+    "overflow": true,
+    "coercion": true,
+    "guardrailScore": 2
   },
   "ceremony": {
     "ceremonyLines": 5,

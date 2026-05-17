@@ -37,8 +37,18 @@
 ### Concept Count
 **Keywords** — distinct language keywords used in the solution (e.g., `fn`, `let`, `match`, `async`). **Syntax patterns** — distinct constructs like generics, closures, pattern matching, channels. **Concept count** = keywords + patterns. Measures how many distinct language features the programmer must know.
 
-### Safety
-**Safety score per line** — counts explicit error handling and type safety constructs normalized by LOC. Includes: Result/Option/Maybe/Either types, error propagation operators (`?`, `!`), try/catch blocks, Go `if err != nil` checks, Elixir `:ok`/`:error` tuples, Haskell `Just`/`Nothing` matches, typed function signatures, and return type annotations. Higher = more safety infrastructure in the code.
+### Guardrails
+**Guardrail score** — counts how many of 5 safety guarantees a language provides **by default**, without opt-in flags or libraries. Each is binary (yes/no):
+
+| Guardrail | What it prevents |
+|-----------|-----------------|
+| **Memory safe** | Use-after-free, double-free, buffer overflow, uninitialized reads |
+| **Null safe** | Null/nil pointer dereference (requires Option/Maybe to represent absence) |
+| **Race safe** | Data races prevented at compile time (not just detected at runtime) |
+| **Overflow safe** | Integer overflow trapped, not silently wrapped |
+| **Coercion safe** | No implicit type coercions (e.g., `"5" + 3` doesn't silently produce `"53"`) |
+
+Score ranges from 0 (C, C++) to 5 (Rust, Haskell, Elixir). This is a language-level property — it doesn't vary per solution.
 
 ### Ceremony
 **Ceremony ratio** — proportion of lines that are language overhead rather than algorithm logic. Counts: import/use/include statements, main function signatures, class/module wrappers, `return 0`, lone braces/end keywords, defer statements, type-only declarations, and preprocessor directives. Lower = less boilerplate.

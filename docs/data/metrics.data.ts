@@ -21,8 +21,7 @@ export interface MetricsEntry {
   keywords: number
   syntaxPatterns: number
   apiCalls: number
-  safetyScore: number
-  safetyPerLine: number
+  guardrailScore: number
   ceremonyLines: number
   ceremonyRatio: number
 }
@@ -57,8 +56,7 @@ function loadMetrics(): MetricsEntry[] {
       keywords: raw.concepts?.keywords ?? 0,
       syntaxPatterns: raw.concepts?.syntaxPatterns ?? 0,
       apiCalls: raw.concepts?.apiCalls ?? 0,
-      safetyScore: raw.safety?.safetyScore ?? 0,
-      safetyPerLine: raw.safety?.safetyPerLine ?? 0,
+      guardrailScore: raw.guardrails?.guardrailScore ?? 0,
       ceremonyLines: raw.ceremony?.ceremonyLines ?? 0,
       ceremonyRatio: raw.ceremony?.ceremonyRatio ?? 0,
     }

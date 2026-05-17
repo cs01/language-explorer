@@ -134,48 +134,44 @@ function scoreConcepts(src: string, nonBlankLines: string[]) {
   };
 }
 
-function scoreSafety(src: string, nonBlankLines: string[]) {
-  let score = 0;
+// Static language-level safety guardrails (not per-file — inherent to the language).
+// Each category is binary: does the language prevent this class of bug by default?
+//   memory:   use-after-free, double-free, buffer overflow, uninitialized reads
+//   null:     null/nil pointer dereference (Option/Maybe required)
+//   race:     data races prevented at compile time
+//   overflow: integer overflow trapped (not silent wrap)
+//   coercion: no implicit type coercions
+const guardrails: Record<string, { memory: boolean; null: boolean; race: boolean; overflow: boolean; coercion: boolean }> = {
+  c:          { memory: false, null: false, race: false, overflow: false, coercion: false },
+  cpp:        { memory: false, null: false, race: false, overflow: false, coercion: false },
+  zig:        { memory: false, null: false, race: false, overflow: true,  coercion: true },
+  rust:       { memory: true,  null: true,  race: true,  overflow: true,  coercion: true },
+  milo:       { memory: true,  null: true,  race: false, overflow: false, coercion: true },
+  go:         { memory: true,  null: false, race: false, overflow: false, coercion: true },
+  java:       { memory: true,  null: false, race: false, overflow: false, coercion: false },
+  kotlin:     { memory: true,  null: true,  race: false, overflow: false, coercion: true },
+  swift:      { memory: true,  null: true,  race: false, overflow: true,  coercion: true },
+  haskell:    { memory: true,  null: true,  race: true,  overflow: true,  coercion: true },
+  elixir:     { memory: true,  null: true,  race: true,  overflow: true,  coercion: true },
+  python:     { memory: true,  null: false, race: false, overflow: true,  coercion: true },
+  ruby:       { memory: true,  null: false, race: false, overflow: true,  coercion: true },
+  javascript: { memory: true,  null: false, race: false, overflow: false, coercion: false },
+  typescript: { memory: true,  null: false, race: false, overflow: false, coercion: true },
+}
 
-  // Sum/option types used as values: Result, Option, Maybe, Either
-  score += (src.match(/\b(Result|Option|Maybe|Either)\b/g) || []).length;
+const extToLang: Record<string, string> = {
+  py: 'python', ts: 'typescript', rs: 'rust', js: 'javascript',
+  rb: 'ruby', kt: 'kotlin', hs: 'haskell', exs: 'elixir',
+  c: 'c', cpp: 'cpp', go: 'go', swift: 'swift', zig: 'zig',
+  java: 'java', milo: 'milo',
+}
 
-  // Rust ? operator, Milo ! operator (error propagation)
-  score += (src.match(/\w[?!]\s*[;,\n)}]/g) || []).length;
-  score += (src.match(/\w\)\s*[?!]/g) || []).length;
-
-  // unwrap/expect calls (explicit error acknowledgment)
-  score += (src.match(/\.(unwrap|unwrap_or|unwrap_or_else|unwrap_or_default|expect)\s*\(/g) || []).length;
-
-  // try/catch/except/rescue/errdefer blocks
-  score += (src.match(/\b(try|catch|except|rescue|errdefer)\b/g) || []).length;
-
-  // Go-style if err != nil
-  score += (src.match(/if\s+err\s*!=\s*nil/g) || []).length;
-
-  // Go err return patterns (_, err :=)
-  score += (src.match(/,\s*err\s*:?=/g) || []).length;
-
-  // Elixir/Erlang :ok/:error tuple matching
-  score += (src.match(/:ok\b/g) || []).length;
-  score += (src.match(/:error\b/g) || []).length;
-
-  // Haskell Just/Nothing/Left/Right pattern matches
-  score += (src.match(/\b(Just|Nothing|Left|Right)\b/g) || []).length;
-
-  // match/case on Err/Error/Failure variants
-  score += (src.match(/\b(Err|Ok)\s*\(/g) || []).length;
-  score += (src.match(/Result\.(Ok|Err|Error)\b/g) || []).length;
-  score += (src.match(/Option\.(Some|None)\b/g) || []).length;
-
-  // Type annotations on function params
-  score += (src.match(/(fn|func|fun)\s+\w+\s*\([^)]*:\s*[A-Z&\[*]\w*/g) || []).length;
-
-  // Return type annotations (-> Type or ): Type)
-  score += (src.match(/(->\s*[A-Z(&\[]\w*|\):\s*[A-Z]\w*)/g) || []).length;
-
-  const safetyPerLine = +(score / nonBlankLines.length).toFixed(2);
-  return { safetyScore: score, safetyPerLine };
+function scoreGuardrails(filename: string) {
+  const ext = filename.split('.').pop() || ''
+  const lang = extToLang[ext] || ext
+  const g = guardrails[lang] || { memory: false, null: false, race: false, overflow: false, coercion: false }
+  const score = [g.memory, g.null, g.race, g.overflow, g.coercion].filter(Boolean).length
+  return { ...g, guardrailScore: score }
 }
 
 function scoreCeremony(src: string, nonBlankLines: string[]) {
@@ -213,7 +209,7 @@ const conciseness = scoreConciseness(source, lines);
 const sigils = scoreSigils(lines);
 const readability = scoreReadability(lines);
 const concepts = scoreConcepts(source, lines);
-const safety = scoreSafety(source, lines);
+const guardrailResult = scoreGuardrails(basename(file));
 const ceremony = scoreCeremony(source, lines);
 
 const result = {
@@ -222,7 +218,7 @@ const result = {
   sigils,
   readability,
   concepts,
-  safety,
+  guardrails: guardrailResult,
   ceremony,
 };
 
