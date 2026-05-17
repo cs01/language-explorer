@@ -1,0 +1,21 @@
+{
+  "file": "a3-valid-parens.py",
+  "conciseness": {
+    "loc": 11,
+    "tokens": 40,
+    "chars": 176,
+    "halsteadVolume": 203,
+    "compressionRatio": 0.607
+  },
+  "sigils": {
+    "sigilsPerLine": 5.09,
+    "uniqueSigilTypes": 14,
+    "totalSigils": 56
+  },
+  "readability": {
+    "avgLineLength": 26,
+    "maxNesting": 8,
+    "avgIdentifierLength": 3.6,
+    "visualDensity": 0.589
+  }
+}
