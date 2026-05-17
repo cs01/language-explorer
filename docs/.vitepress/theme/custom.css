@@ -1,0 +1,112 @@
+:root {
+  --metrics-best: #22c55e;
+  --metrics-worst: #ef4444;
+  --metrics-mid: #eab308;
+}
+
+.metrics-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin: 1.5rem 0;
+}
+
+.metrics-table th {
+  cursor: pointer;
+  user-select: none;
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+  border-bottom: 2px solid var(--vp-c-divider);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.metrics-table th:hover {
+  color: var(--vp-c-brand-1);
+}
+
+.metrics-table th .sort-arrow {
+  margin-left: 0.3rem;
+  opacity: 0.5;
+}
+
+.metrics-table th .sort-arrow.active {
+  opacity: 1;
+  color: var(--vp-c-brand-1);
+}
+
+.metrics-table td {
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid var(--vp-c-divider);
+  font-variant-numeric: tabular-nums;
+}
+
+.metrics-table td.lang-cell {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.metrics-table td.metric-cell {
+  text-align: right;
+  border-radius: 4px;
+}
+
+.metrics-table tr:hover {
+  background: var(--vp-c-bg-soft);
+}
+
+.metrics-table .best-badge {
+  display: inline-block;
+  background: var(--metrics-best);
+  color: white;
+  font-size: 0.7rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  margin-left: 0.4rem;
+  font-weight: 700;
+}
+
+/* Solution tabs */
+.solution-tabs {
+  margin: 1.5rem 0;
+}
+
+.solution-tabs-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  border-bottom: 2px solid var(--vp-c-divider);
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.solution-tabs-nav button {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--vp-c-text-2);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+}
+
+.solution-tabs-nav button:hover {
+  color: var(--vp-c-text-1);
+}
+
+.solution-tabs-nav button.active {
+  color: var(--vp-c-brand-1);
+  border-bottom-color: var(--vp-c-brand-1);
+}
+
+.solution-code {
+  margin-top: 0;
+}
+
+.solution-code pre {
+  margin: 0;
+  border-radius: 0 0 8px 8px;
+}

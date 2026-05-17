@@ -1,0 +1,21 @@
+{
+  "file": "a1-two-sum.hs",
+  "conciseness": {
+    "loc": 10,
+    "tokens": 58,
+    "chars": 245,
+    "halsteadVolume": 320,
+    "compressionRatio": 0.701
+  },
+  "sigils": {
+    "sigilsPerLine": 4.7,
+    "uniqueSigilTypes": 11,
+    "totalSigils": 47
+  },
+  "readability": {
+    "avgLineLength": 33,
+    "maxNesting": 4,
+    "avgIdentifierLength": 3.7,
+    "visualDensity": 0.731
+  }
+}

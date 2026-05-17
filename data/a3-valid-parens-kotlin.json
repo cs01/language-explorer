@@ -1,0 +1,21 @@
+{
+  "file": "a3-valid-parens.kt",
+  "conciseness": {
+    "loc": 12,
+    "tokens": 46,
+    "chars": 216,
+    "halsteadVolume": 230,
+    "compressionRatio": 0.664
+  },
+  "sigils": {
+    "sigilsPerLine": 4.92,
+    "uniqueSigilTypes": 14,
+    "totalSigils": 59
+  },
+  "readability": {
+    "avgLineLength": 27,
+    "maxNesting": 6,
+    "avgIdentifierLength": 4.2,
+    "visualDensity": 0.657
+  }
+}

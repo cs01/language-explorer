@@ -13,11 +13,11 @@ hero:
       link: /methodology
 features:
   - title: Code Size
-    details: How many lines, tokens, and characters does it take to express the same idea? Python needs 13 lines on average. C needs 37.
+    details: How many lines, tokens, and characters does it take to express the same idea? Ruby needs 15 lines on average. Zig needs 37. That's 2.5× more surface area for bugs.
   - title: Symbol Noise
-    details: How many special characters clutter each line? Rust averages 6.4 symbols/line. Go gets by with 4.3. More symbol variety means more to learn.
+    details: How many special characters clutter each line? Rust averages 6.4 symbols/line. Ruby gets by with 4.1. More symbol variety means more to learn.
   - title: Complexity Score
-    details: Halstead Volume measures total information density. C's score is 5× Python's — every operation is manual, nothing is free.
-  - title: 4 Problems, 6 Languages
-    details: Same programs implemented idiomatically in Python, TypeScript, Rust, Go, C, and C++. Algorithmic + real-world tasks. Automated scoring.
+    details: Halstead Volume measures total information density. C's score is 5× Ruby's — every operation is manual, nothing is free.
+  - title: 4 Problems, 14 Languages
+    details: Same programs implemented idiomatically in Python, TypeScript, Rust, Go, C, C++, Swift, Zig, JavaScript, Ruby, Java, Kotlin, Haskell, and Elixir. Automated scoring.
 ---

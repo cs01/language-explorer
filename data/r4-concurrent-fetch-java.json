@@ -1,0 +1,21 @@
+{
+  "file": "r4-concurrent-fetch.java",
+  "conciseness": {
+    "loc": 34,
+    "tokens": 107,
+    "chars": 1032,
+    "halsteadVolume": 660,
+    "compressionRatio": 0.431
+  },
+  "sigils": {
+    "sigilsPerLine": 6.03,
+    "uniqueSigilTypes": 17,
+    "totalSigils": 205
+  },
+  "readability": {
+    "avgLineLength": 39,
+    "maxNesting": 8,
+    "avgIdentifierLength": 5.8,
+    "visualDensity": 0.758
+  }
+}

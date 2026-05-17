@@ -1,0 +1,21 @@
+{
+  "file": "r4-concurrent-fetch.kt",
+  "conciseness": {
+    "loc": 32,
+    "tokens": 80,
+    "chars": 782,
+    "halsteadVolume": 454,
+    "compressionRatio": 0.46
+  },
+  "sigils": {
+    "sigilsPerLine": 4.88,
+    "uniqueSigilTypes": 14,
+    "totalSigils": 156
+  },
+  "readability": {
+    "avgLineLength": 32,
+    "maxNesting": 8,
+    "avgIdentifierLength": 5.7,
+    "visualDensity": 0.74
+  }
+}

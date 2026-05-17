@@ -1,0 +1,21 @@
+{
+  "file": "a1-two-sum.kt",
+  "conciseness": {
+    "loc": 9,
+    "tokens": 39,
+    "chars": 196,
+    "halsteadVolume": 193,
+    "compressionRatio": 0.724
+  },
+  "sigils": {
+    "sigilsPerLine": 4.67,
+    "uniqueSigilTypes": 15,
+    "totalSigils": 42
+  },
+  "readability": {
+    "avgLineLength": 30,
+    "maxNesting": 4,
+    "avgIdentifierLength": 4.2,
+    "visualDensity": 0.715
+  }
+}

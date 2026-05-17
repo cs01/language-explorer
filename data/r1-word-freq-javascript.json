@@ -1,0 +1,21 @@
+{
+  "file": "r1-word-freq.js",
+  "conciseness": {
+    "loc": 21,
+    "tokens": 73,
+    "chars": 477,
+    "halsteadVolume": 426,
+    "compressionRatio": 0.636
+  },
+  "sigils": {
+    "sigilsPerLine": 6.67,
+    "uniqueSigilTypes": 21,
+    "totalSigils": 140
+  },
+  "readability": {
+    "avgLineLength": 26,
+    "maxNesting": 1,
+    "avgIdentifierLength": 4.6,
+    "visualDensity": 0.841
+  }
+}

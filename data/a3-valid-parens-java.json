@@ -1,0 +1,21 @@
+{
+  "file": "a3-valid-parens.java",
+  "conciseness": {
+    "loc": 17,
+    "tokens": 56,
+    "chars": 374,
+    "halsteadVolume": 304,
+    "compressionRatio": 0.521
+  },
+  "sigils": {
+    "sigilsPerLine": 5.59,
+    "uniqueSigilTypes": 16,
+    "totalSigils": 95
+  },
+  "readability": {
+    "avgLineLength": 31,
+    "maxNesting": 8,
+    "avgIdentifierLength": 5,
+    "visualDensity": 0.686
+  }
+}

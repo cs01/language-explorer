@@ -1,25 +1,53 @@
+---
+outline: deep
+---
+
+<script setup>
+import { data } from './data/metrics.data'
+
+// Compute averages per language
+const languages = [...new Set(data.metrics.map(m => m.language))]
+const avgData = languages.map(lang => {
+  const entries = data.metrics.filter(m => m.language === lang)
+  const avg = (key) => +(entries.reduce((s, e) => s + e[key], 0) / entries.length).toFixed(1)
+  return {
+    language: lang.charAt(0).toUpperCase() + lang.slice(1),
+    lines: avg('loc'),
+    tokens: avg('tokens'),
+    complexity: Math.round(entries.reduce((s, e) => s + e.halsteadVolume, 0) / entries.length),
+    'symbols/line': avg('sigilsPerLine'),
+    'symbol types': Math.round(entries.reduce((s, e) => s + e.uniqueSigilTypes, 0) / entries.length),
+  }
+})
+
+const columns = [
+  { key: 'lines', label: 'Avg Lines' },
+  { key: 'tokens', label: 'Avg Tokens' },
+  { key: 'complexity', label: 'Complexity' },
+  { key: 'symbols/line', label: 'Symbols/Line' },
+  { key: 'symbol types', label: 'Symbol Types' },
+]
+</script>
+
 # Key Findings
 
-We implemented 4 programs in 6 languages and measured everything. Here's what the data says.
+We implemented 4 programs in 14 languages and measured everything. Here's what the data says.
 
 ## The headline numbers
 
-| Language | Avg Lines | Avg Tokens | Complexity | Symbols/Line | Symbol Types |
-|----------|-----------|------------|------------|-------------|-------------|
-| **Python** | **12.8** | **41** | **212** | 4.8 | **12** |
-| TypeScript | 17.3 | 64 | 360 | 6.4 | 18 |
-| Rust | 20.5 | 66 | 364 | 6.4 | 17 |
-| Go | 26.3 | 79 | 463 | **4.3** | 15 |
-| C | 36.5 | 157 | 1033 | 5.7 | 21 |
-| C++ | 25.3 | 87 | 514 | 6.2 | 19 |
+<MetricsTable :data="avgData" :columns="columns" />
 
-<small>Averages across 4 benchmark problems (2 algorithmic, 2 real-world). Green = best in column.</small>
+<small>Averages across 4 benchmark problems (2 algorithmic, 2 real-world). Click columns to sort.</small>
 
-## 2.8× : The conciseness gap
+## 2.9× : The conciseness gap
 
-C requires **2.8× more code** than Python for equivalent programs. On real-world tasks the gap widens — concurrent HTTP fetching takes 61 lines of C vs 19 lines of Python. That's not just convenience; it's surface area for bugs.
+Zig and C require **~3× more code** than Python/Ruby for equivalent programs. On real-world tasks the gap widens — concurrent HTTP fetching takes 59-61 lines of Zig/C vs 19 lines of Python.
 
-Rust stays surprisingly compact (20.5 avg) despite being a systems language. Go pays for simplicity with verbosity — sorting a map takes 15 lines of boilerplate.
+**Ruby** ties Python for fewest tokens (41 avg) and actually beats Python on complexity (205 vs 212). Its regex-powered `scan` + `tally` idioms are remarkably dense.
+
+**Kotlin** surprises at 18.5 lines avg — same as JavaScript, far less than Java (24.8). Extension functions and scope functions eliminate ceremony.
+
+**Zig** lands where you'd expect for a "better C" — same LOC as C (37 vs 36.5) but with explicit error handling and allocator management baked in.
 
 ::: info Why this matters
 Every line of code is a line that can contain a bug, needs to be read, and needs to be maintained. Language design directly affects how much code you write for the same outcome.
@@ -27,40 +55,46 @@ Every line of code is a line that can contain a bug, needs to be read, and needs
 
 ## 6.4 : The symbol tax
 
-Rust and TypeScript tie for highest **symbol noise** at 6.4 symbols per line. But the *reasons* are different:
+Rust, TypeScript, Elixir, and Zig tie for highest **symbol noise** at 6.3-6.4 symbols per line. But the *reasons* differ:
 
-- **Rust's symbols** are mostly safety-related: `&`, `mut`, `Some()`, lifetime annotations, pattern matching sigils. You're paying for memory safety.
-- **TypeScript's symbols** are syntactic: generics (`<>`), optional chaining (`?.`), non-null assertion (`!`), type annotations (`: Type`). You're paying for the type system.
+- **Rust's symbols** — safety: `&`, `mut`, `Some()`, lifetime annotations, pattern matching sigils.
+- **TypeScript's symbols** — type system: generics (`<>`), optional chaining (`?.`), non-null assertion (`!`).
+- **Elixir's symbols** — pipeline-heavy: `|>`, pattern matching, `fn ->`, atoms (`:ok`).
+- **Zig's symbols** — explicitness: `|captures|`, `orelse`, `.{}` struct literals, error unions.
 
-**Go** has the lowest symbol noise (4.3/line) — its simplicity philosophy shows. But it pays in LOC instead.
+**Ruby** has the lowest symbol noise (4.1/line) — beating even Go (4.3). Blocks, implicit returns, and English-like methods (`each`, `puts`, `empty?`) keep syntax minimal.
 
 ::: tip The tradeoff
-Low symbols + high LOC (Go) vs high symbols + low LOC (Rust). Python manages both low symbols AND low LOC — but gives up compile-time safety.
+Low symbols + high LOC (Go) vs high symbols + low LOC (Rust). Ruby manages both low symbols AND low LOC. Python is close behind. Both give up compile-time safety for it.
 :::
 
 ## 5× : The complexity explosion
 
 [Halstead Volume](https://en.wikipedia.org/wiki/Halstead_complexity_measures) measures how much total information a program contains — think of it as "how much stuff does your brain have to process?"
 
-C's complexity is **5× Python's**. On the word-frequency problem, C scores 1790 vs Python's 238. Why? No hash map in the standard library means manual linear search. No string splitting means character-by-character parsing. Every abstraction the language doesn't provide, you build by hand.
+C and Zig are **5× Python/Ruby**. On word-frequency: C scores 1790, Zig scores 1627, vs Python's 238 and Ruby's 227. No hash map in the standard library means manual data structures. No string splitting means character-by-character parsing.
 
-Rust and TypeScript cluster together (~360) — remarkably similar information density despite very different syntax and safety models.
+**Haskell** is a surprise at 626 — high token count from pattern matching, guards, and qualified imports drives up Halstead volume despite moderate LOC (20.5).
 
-## 12 vs 21 : Symbol vocabulary
+**Kotlin and Elixir** cluster with Python/Ruby (~280-294) despite being typed/functional — their standard libraries do the heavy lifting.
 
-Python uses only **12 unique symbol types** on average. C uses **21**. This is the "how many different squiggles do I need to learn?" metric.
+## 12 vs 20 : Symbol vocabulary
 
-More symbol variety = steeper learning curve. It's not about how *often* symbols appear (frequency), but how many *different* symbols you encounter (variety). The cognitive cost is in the variety.
+Python uses only **12 unique symbol types** on average. C uses **20**. This is the "how many different squiggles do I need to learn?" metric.
+
+**Haskell** surprises with only **14 symbol types** — fewer than most languages. Its vocabulary is small but *dense*: fewer symbols used more frequently. Contrast with C++/TypeScript/Zig at 18 — wide variety of punctuation across generics, templates, captures, and format specifiers.
+
+More symbol variety = steeper learning curve. It's not about how *often* symbols appear (frequency), but how many *different* symbols you encounter (variety).
 
 ## By problem type
 
 The gaps tell different stories for different problem types:
 
 ### Algorithmic problems (Two Sum, Valid Parens)
-Languages cluster tightly — 7-17 LOC. The logic is simple enough that language overhead is small. Even C is only 2× Python here.
+Languages cluster tightly — 7-26 LOC. Ruby (8 lines) and Kotlin (9 lines) edge out Python (7 lines) for two-sum. Zig balloons to 26 lines on valid-parens due to explicit stack management.
 
 ### Real-world problems (Word Freq, Concurrent Fetch)
-Languages **diverge dramatically**. C explodes to 56-61 LOC. Go's sorting ceremony adds 15 lines of boilerplate. These problems expose what the standard library gives you for free vs what you build by hand.
+Languages **diverge dramatically**. Zig explodes to 50-59 LOC (rivaling C). Swift's concurrent-fetch is 46 lines — the actor-based semaphore adds overhead vs languages with built-in bounded concurrency. Elixir stays compact (19-20 lines) thanks to `Task.async_stream` and `Enum.frequencies`.
 
 ::: warning The real lesson
 For simple algorithms, language choice barely matters. For real programs with I/O, errors, and concurrency — **the language you pick determines how much code you write, how many symbols you juggle, and how much complexity you carry.**

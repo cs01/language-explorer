@@ -1,3 +1,44 @@
+---
+outline: deep
+---
+
+<script setup>
+import { data } from '../data/metrics.data'
+
+const problem = 'r4-concurrent-fetch'
+const metrics = data.metrics
+  .filter(m => m.problem === problem)
+  .map(m => ({
+    language: m.language.charAt(0).toUpperCase() + m.language.slice(1),
+    lines: m.loc,
+    tokens: m.tokens,
+    complexity: m.halsteadVolume,
+    'symbols/line': m.sigilsPerLine,
+  }))
+
+const columns = [
+  { key: 'lines', label: 'Lines' },
+  { key: 'tokens', label: 'Tokens' },
+  { key: 'complexity', label: 'Complexity' },
+  { key: 'symbols/line', label: 'Symbols/Line' },
+]
+
+const langLabels = {
+  python: 'Python', typescript: 'TypeScript', rust: 'Rust', go: 'Go',
+  c: 'C', cpp: 'C++', swift: 'Swift', zig: 'Zig', javascript: 'JavaScript',
+  ruby: 'Ruby', java: 'Java', kotlin: 'Kotlin', haskell: 'Haskell', elixir: 'Elixir',
+}
+
+const solutions = data.solutions
+  .filter(s => s.problem === problem)
+  .sort((a, b) => {
+    const aLoc = data.metrics.find(m => m.problem === problem && m.language === a.language)?.loc ?? 99
+    const bLoc = data.metrics.find(m => m.problem === problem && m.language === b.language)?.loc ?? 99
+    return aLoc - bLoc
+  })
+  .map(s => ({ lang: s.language, label: langLabels[s.language] || s.language, code: s.code }))
+</script>
+
 # Concurrent Fetch
 
 **Real-World** — Fetch 5 URLs concurrently (max 4 in-flight), print results, handle individual failures.
@@ -6,214 +47,31 @@ Tests: concurrency primitives, HTTP, error handling under parallelism, bounded c
 
 ## Results
 
-| Language | Lines | Tokens | Complexity | Symbols/Line |
-|----------|-------|--------|------------|-------------|
-| **Python** | **19** | **48** | **259** | 5.1 |
-| TypeScript | 25 | 80 | 463 | 6.3 |
-| Rust | 32 | 87 | 501 | 5.8 |
-| Go | 35 | 84 | 508 | 4.5 |
-| C | **61** | **225** | **1587** | 5.3 |
-| C++ | 32 | 92 | 543 | 6.5 |
+<MetricsTable :data="metrics" :columns="columns" />
 
 ## The concurrency tax
 
-This problem shows the cost of concurrency in each language:
+This problem reveals each language's concurrency cost:
 
-### Python (19 lines)
-`ThreadPoolExecutor(max_workers=4)` + `pool.map(fetch, urls)`. Two lines handle all concurrency. The rest is the fetch function.
+### The compact group (19-26 lines)
+**Python** (19) — `ThreadPoolExecutor(max_workers=4)` + `pool.map()`. Two lines handle all concurrency.
+**Elixir** (20) — `Task.async_stream_nolink(4, fn)` is built-in bounded concurrency. The BEAM was born for this.
+**TypeScript** (25) — `fetch()` + `Promise.all` with manual batching.
+**Ruby** (26) — Threads + Queue as semaphore. Simple and readable.
 
-### TypeScript (25 lines)
-`Promise.all(batch)` with manual batching. Native `fetch()` API means no HTTP library needed. Clean async/await.
+### The mid group (31-35 lines)
+**JavaScript** (31) — Promise.race pool pattern for bounded concurrency. More verbose than TS batching.
+**Rust** (32) — `tokio::spawn` + `Arc<Semaphore>` + `async move`. Five concepts for one task.
+**Kotlin** (32) — coroutines + Semaphore. Clean but verbose setup.
+**Haskell** (32) — `async` + `QSem`. Elegant but needs library imports.
+**Go** (35) — goroutines + WaitGroup + channel semaphore. Go's strength, but ceremony adds up.
+**Java** (34) — `ExecutorService` + `HttpClient`. Enterprise patterns are wordy.
 
-### Rust (32 lines)
-`tokio::spawn` + `Arc<Semaphore>` + `async move` blocks. Each concept is powerful but you need to understand: async runtime, Arc (shared ownership), Semaphore (bounded concurrency), move semantics in closures, and `.await` chaining. Five concepts for one task.
-
-### Go (35 lines)
-`go func()` + `sync.WaitGroup` + channel-based semaphore. Go's concurrency is its strength, but the ceremony is still 35 lines: `wg.Add(1)`, `defer wg.Done()`, `defer func() { <-sem }()`, anonymous goroutine with captured variable.
-
-### C (61 lines)
-`pthread_create` + `libcurl` + manual write callback + buffer management. 61 lines, 225 tokens. The write callback alone is 7 lines. Buffer reallocation is manual. Thread batching is manual. Everything is manual.
+### The verbose group (46-61 lines)
+**Swift** (46) — actor-based async semaphore adds 15 lines of boilerplate. TaskGroup alone doesn't bound concurrency.
+**Zig** (59) — Manual threads, manual HTTP, manual batching. Everything is explicit.
+**C** (61) — `pthread` + `libcurl` + manual buffer management. Peak verbosity.
 
 ## Solutions
 
-::: code-group
-```python [Python]
-from concurrent.futures import ThreadPoolExecutor
-import urllib.request
-
-urls = [
-    "https://httpbin.org/get",
-    "https://httpbin.org/status/404",
-    "https://httpbin.org/delay/1",
-    "https://httpbin.org/bytes/1024",
-    "https://invalid.example.test",
-]
-
-def fetch(url):
-    try:
-        resp = urllib.request.urlopen(url, timeout=5)
-        data = resp.read()
-        return f"{url}: {resp.status} ({len(data)} bytes)"
-    except Exception as e:
-        return f"{url}: error: {e}"
-
-with ThreadPoolExecutor(max_workers=4) as pool:
-    for result in pool.map(fetch, urls):
-        print(result)
-```
-
-```rust [Rust]
-use std::sync::Arc;
-use tokio::sync::Semaphore;
-
-#[tokio::main]
-async fn main() {
-    let urls = vec![
-        "https://httpbin.org/get",
-        "https://httpbin.org/status/404",
-        "https://httpbin.org/delay/1",
-        "https://httpbin.org/bytes/1024",
-        "https://invalid.example.test",
-    ];
-
-    let sem = Arc::new(Semaphore::new(4));
-    let mut handles = Vec::new();
-
-    for url in urls {
-        let sem = sem.clone();
-        let handle = tokio::spawn(async move {
-            let _permit = sem.acquire().await.unwrap();
-            match reqwest::get(url).await {
-                Ok(resp) => {
-                    let status = resp.status().as_u16();
-                    let bytes = resp.bytes().await
-                        .map(|b| b.len()).unwrap_or(0);
-                    println!("{url}: {status} ({bytes} bytes)");
-                }
-                Err(e) => println!("{url}: error: {e}"),
-            }
-        });
-        handles.push(handle);
-    }
-
-    for h in handles {
-        let _ = h.await;
-    }
-}
-```
-
-```typescript [TypeScript]
-const urls = [
-  "https://httpbin.org/get",
-  "https://httpbin.org/status/404",
-  "https://httpbin.org/delay/1",
-  "https://httpbin.org/bytes/1024",
-  "https://invalid.example.test",
-];
-
-async function fetchUrl(url: string): Promise<string> {
-  try {
-    const resp = await fetch(url);
-    const body = await resp.arrayBuffer();
-    return `${url}: ${resp.status} (${body.byteLength} bytes)`;
-  } catch (e: any) {
-    return `${url}: error: ${e.message}`;
-  }
-}
-
-async function main() {
-  const results: string[] = [];
-  for (let i = 0; i < urls.length; i += 4) {
-    const batch = urls.slice(i, i + 4).map(fetchUrl);
-    results.push(...(await Promise.all(batch)));
-  }
-  results.forEach((r) => console.log(r));
-}
-
-main();
-```
-
-```go [Go]
-package main
-
-import (
-	"fmt"
-	"io"
-	"net/http"
-	"sync"
-)
-
-func main() {
-	urls := []string{
-		"https://httpbin.org/get",
-		"https://httpbin.org/status/404",
-		"https://httpbin.org/delay/1",
-		"https://httpbin.org/bytes/1024",
-		"https://invalid.example.test",
-	}
-
-	sem := make(chan struct{}, 4)
-	var wg sync.WaitGroup
-
-	for _, url := range urls {
-		wg.Add(1)
-		sem <- struct{}{}
-		go func(u string) {
-			defer wg.Done()
-			defer func() { <-sem }()
-
-			resp, err := http.Get(u)
-			if err != nil {
-				fmt.Printf("%s: error: %v\n", u, err)
-				return
-			}
-			defer resp.Body.Close()
-			body, _ := io.ReadAll(resp.Body)
-			fmt.Printf("%s: %d (%d bytes)\n",
-				u, resp.StatusCode, len(body))
-		}(url)
-	}
-	wg.Wait()
-}
-```
-
-```cpp [C++]
-#include <cpr/cpr.h>
-#include <future>
-#include <iostream>
-#include <semaphore>
-#include <string>
-#include <vector>
-
-int main() {
-    std::vector<std::string> urls = {
-        "https://httpbin.org/get",
-        "https://httpbin.org/status/404",
-        "https://httpbin.org/delay/1",
-        "https://httpbin.org/bytes/1024",
-        "https://invalid.example.test",
-    };
-
-    std::counting_semaphore<4> sem(4);
-    std::vector<std::future<void>> futures;
-
-    for (const auto& url : urls) {
-        futures.push_back(std::async(std::launch::async, [&sem, url]() {
-            sem.acquire();
-            auto resp = cpr::Get(cpr::Url{url}, cpr::Timeout{5000});
-            sem.release();
-
-            if (resp.error) {
-                std::cout << url << ": error: " << resp.error.message << "\n";
-            } else {
-                std::cout << url << ": " << resp.status_code
-                          << " (" << resp.text.size() << " bytes)\n";
-            }
-        }));
-    }
-
-    for (auto& f : futures) f.get();
-    return 0;
-}
-```
-:::
+<SolutionTabs :solutions="solutions" />

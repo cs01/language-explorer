@@ -1,0 +1,21 @@
+{
+  "file": "a1-two-sum.java",
+  "conciseness": {
+    "loc": 15,
+    "tokens": 53,
+    "chars": 337,
+    "halsteadVolume": 282,
+    "compressionRatio": 0.556
+  },
+  "sigils": {
+    "sigilsPerLine": 4.67,
+    "uniqueSigilTypes": 15,
+    "totalSigils": 70
+  },
+  "readability": {
+    "avgLineLength": 32,
+    "maxNesting": 8,
+    "avgIdentifierLength": 4.8,
+    "visualDensity": 0.684
+  }
+}

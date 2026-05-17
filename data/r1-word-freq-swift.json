@@ -1,0 +1,21 @@
+{
+  "file": "r1-word-freq.swift",
+  "conciseness": {
+    "loc": 22,
+    "tokens": 88,
+    "chars": 552,
+    "halsteadVolume": 522,
+    "compressionRatio": 0.582
+  },
+  "sigils": {
+    "sigilsPerLine": 4.86,
+    "uniqueSigilTypes": 17,
+    "totalSigils": 107
+  },
+  "readability": {
+    "avgLineLength": 30,
+    "maxNesting": 4,
+    "avgIdentifierLength": 5,
+    "visualDensity": 0.806
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "file": "a1-two-sum.js",
+  "conciseness": {
+    "loc": 10,
+    "tokens": 36,
+    "chars": 187,
+    "halsteadVolume": 173,
+    "compressionRatio": 0.689
+  },
+  "sigils": {
+    "sigilsPerLine": 4.6,
+    "uniqueSigilTypes": 13,
+    "totalSigils": 46
+  },
+  "readability": {
+    "avgLineLength": 24,
+    "maxNesting": 3,
+    "avgIdentifierLength": 4.1,
+    "visualDensity": 0.748
+  }
+}

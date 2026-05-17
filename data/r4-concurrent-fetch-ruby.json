@@ -1,0 +1,21 @@
+{
+  "file": "r4-concurrent-fetch.rb",
+  "conciseness": {
+    "loc": 26,
+    "tokens": 57,
+    "chars": 478,
+    "halsteadVolume": 309,
+    "compressionRatio": 0.556
+  },
+  "sigils": {
+    "sigilsPerLine": 4.27,
+    "uniqueSigilTypes": 17,
+    "totalSigils": 111
+  },
+  "readability": {
+    "avgLineLength": 22,
+    "maxNesting": 3,
+    "avgIdentifierLength": 4.7,
+    "visualDensity": 0.799
+  }
+}

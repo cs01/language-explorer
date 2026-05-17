@@ -1,0 +1,21 @@
+{
+  "file": "r4-concurrent-fetch.swift",
+  "conciseness": {
+    "loc": 46,
+    "tokens": 136,
+    "chars": 889,
+    "halsteadVolume": 855,
+    "compressionRatio": 0.439
+  },
+  "sigils": {
+    "sigilsPerLine": 3.78,
+    "uniqueSigilTypes": 19,
+    "totalSigils": 174
+  },
+  "readability": {
+    "avgLineLength": 28,
+    "maxNesting": 8,
+    "avgIdentifierLength": 5.7,
+    "visualDensity": 0.665
+  }
+}

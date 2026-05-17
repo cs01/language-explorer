@@ -1,0 +1,21 @@
+{
+  "file": "a1-two-sum.swift",
+  "conciseness": {
+    "loc": 11,
+    "tokens": 46,
+    "chars": 189,
+    "halsteadVolume": 240,
+    "compressionRatio": 0.661
+  },
+  "sigils": {
+    "sigilsPerLine": 4.27,
+    "uniqueSigilTypes": 13,
+    "totalSigils": 47
+  },
+  "readability": {
+    "avgLineLength": 26,
+    "maxNesting": 6,
+    "avgIdentifierLength": 3.7,
+    "visualDensity": 0.643
+  }
+}

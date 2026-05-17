@@ -1,3 +1,44 @@
+---
+outline: deep
+---
+
+<script setup>
+import { data } from '../data/metrics.data'
+
+const problem = 'a1-two-sum'
+const metrics = data.metrics
+  .filter(m => m.problem === problem)
+  .map(m => ({
+    language: m.language.charAt(0).toUpperCase() + m.language.slice(1),
+    lines: m.loc,
+    tokens: m.tokens,
+    complexity: m.halsteadVolume,
+    'symbols/line': m.sigilsPerLine,
+  }))
+
+const columns = [
+  { key: 'lines', label: 'Lines' },
+  { key: 'tokens', label: 'Tokens' },
+  { key: 'complexity', label: 'Complexity' },
+  { key: 'symbols/line', label: 'Symbols/Line' },
+]
+
+const langLabels = {
+  python: 'Python', typescript: 'TypeScript', rust: 'Rust', go: 'Go',
+  c: 'C', cpp: 'C++', swift: 'Swift', zig: 'Zig', javascript: 'JavaScript',
+  ruby: 'Ruby', java: 'Java', kotlin: 'Kotlin', haskell: 'Haskell', elixir: 'Elixir',
+}
+
+const solutions = data.solutions
+  .filter(s => s.problem === problem)
+  .sort((a, b) => {
+    const aLoc = data.metrics.find(m => m.problem === problem && m.language === a.language)?.loc ?? 99
+    const bLoc = data.metrics.find(m => m.problem === problem && m.language === b.language)?.loc ?? 99
+    return aLoc - bLoc
+  })
+  .map(s => ({ lang: s.language, label: langLabels[s.language] || s.language, code: s.code }))
+</script>
+
 # Two Sum
 
 **Algorithmic** — Given an array and a target sum, find two numbers that add up to it.
@@ -6,111 +47,16 @@ Tests: HashMap, iteration, returning a compound value.
 
 ## Results
 
-| Language | Lines | Tokens | Complexity | Symbols/Line |
-|----------|-------|--------|------------|-------------|
-| **Python** | **7** | **31** | **146** | 4.4 |
-| TypeScript | 11 | 45 | 233 | 5.7 |
-| Rust | 12 | 43 | 219 | 5.3 |
-| Go | 12 | 44 | 216 | 3.3 |
-| C | 12 | 60 | 310 | 5.2 |
-| C++ | 15 | 54 | 289 | 5.6 |
+<MetricsTable :data="metrics" :columns="columns" />
 
 ## Observations
 
-This is a simple problem — all languages cluster near 7-12 LOC. C can't use a hash map (no stdlib support) so it falls back to O(n²) nested loops, which is actually *shorter* in code but has 2× the complexity score.
+Simple problem — all languages cluster near 7-15 LOC. **Ruby** wins on tokens and complexity: `each_with_index` + implicit return + no type annotations = minimal syntax.
 
-Python's `enumerate()` + dictionary lookup is hard to beat for elegance.
+**Haskell** is interesting — only 10 lines but highest token count (58) due to pattern matching verbosity and qualified `Map.lookup`.
+
+Python's `enumerate()` + dictionary lookup remains the gold standard for clarity.
 
 ## Solutions
 
-::: code-group
-```python [Python]
-def two_sum(nums: list[int], target: int) -> tuple[int, int]:
-    seen = {}
-    for i, n in enumerate(nums):
-        complement = target - n
-        if complement in seen:
-            return (seen[complement], i)
-        seen[n] = i
-```
-
-```typescript [TypeScript]
-function twoSum(nums: number[], target: number): [number, number] {
-  const seen = new Map<number, number>();
-  for (let i = 0; i < nums.length; i++) {
-    const complement = target - nums[i];
-    if (seen.has(complement)) {
-      return [seen.get(complement)!, i];
-    }
-    seen.set(nums[i], i);
-  }
-  throw new Error("no solution");
-}
-```
-
-```rust [Rust]
-use std::collections::HashMap;
-
-fn two_sum(nums: &[i32], target: i32) -> (usize, usize) {
-    let mut seen = HashMap::new();
-    for (i, &n) in nums.iter().enumerate() {
-        let complement = target - n;
-        if let Some(&j) = seen.get(&complement) {
-            return (j, i);
-        }
-        seen.insert(n, i);
-    }
-    unreachable!()
-}
-```
-
-```go [Go]
-func twoSum(nums []int, target int) (int, int) {
-	seen := make(map[int]int)
-	for i, n := range nums {
-		complement := target - n
-		if j, ok := seen[complement]; ok {
-			return j, i
-		}
-		seen[n] = i
-	}
-	return -1, -1
-}
-```
-
-```c [C]
-#include <stdlib.h>
-
-struct Result { int i; int j; };
-
-struct Result two_sum(int *nums, int len, int target) {
-    for (int i = 0; i < len; i++) {
-        for (int j = i + 1; j < len; j++) {
-            if (nums[i] + nums[j] == target) {
-                return (struct Result){i, j};
-            }
-        }
-    }
-    return (struct Result){-1, -1};
-}
-```
-
-```cpp [C++]
-#include <unordered_map>
-#include <vector>
-#include <utility>
-
-std::pair<int, int> two_sum(const std::vector<int>& nums, int target) {
-    std::unordered_map<int, int> seen;
-    for (int i = 0; i < static_cast<int>(nums.size()); i++) {
-        int complement = target - nums[i];
-        auto it = seen.find(complement);
-        if (it != seen.end()) {
-            return {it->second, i};
-        }
-        seen[nums[i]] = i;
-    }
-    return {-1, -1};
-}
-```
-:::
+<SolutionTabs :solutions="solutions" />

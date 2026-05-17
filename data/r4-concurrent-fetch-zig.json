@@ -1,0 +1,21 @@
+{
+  "file": "r4-concurrent-fetch.zig",
+  "conciseness": {
+    "loc": 59,
+    "tokens": 268,
+    "chars": 1788,
+    "halsteadVolume": 1873,
+    "compressionRatio": 0.331
+  },
+  "sigils": {
+    "sigilsPerLine": 7.81,
+    "uniqueSigilTypes": 21,
+    "totalSigils": 461
+  },
+  "readability": {
+    "avgLineLength": 39,
+    "maxNesting": 8,
+    "avgIdentifierLength": 4.8,
+    "visualDensity": 0.752
+  }
+}

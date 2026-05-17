@@ -1,0 +1,21 @@
+{
+  "file": "a3-valid-parens.rb",
+  "conciseness": {
+    "loc": 12,
+    "tokens": 35,
+    "chars": 159,
+    "halsteadVolume": 172,
+    "compressionRatio": 0.724
+  },
+  "sigils": {
+    "sigilsPerLine": 4.33,
+    "uniqueSigilTypes": 13,
+    "totalSigils": 52
+  },
+  "readability": {
+    "avgLineLength": 18,
+    "maxNesting": 3,
+    "avgIdentifierLength": 3.7,
+    "visualDensity": 0.7
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "file": "a1-two-sum.zig",
+  "conciseness": {
+    "loc": 13,
+    "tokens": 48,
+    "chars": 283,
+    "halsteadVolume": 255,
+    "compressionRatio": 0.645
+  },
+  "sigils": {
+    "sigilsPerLine": 5.08,
+    "uniqueSigilTypes": 15,
+    "totalSigils": 66
+  },
+  "readability": {
+    "avgLineLength": 29,
+    "maxNesting": 6,
+    "avgIdentifierLength": 4.5,
+    "visualDensity": 0.718
+  }
+}

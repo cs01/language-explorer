@@ -1,0 +1,21 @@
+{
+  "file": "r1-word-freq.java",
+  "conciseness": {
+    "loc": 33,
+    "tokens": 86,
+    "chars": 792,
+    "halsteadVolume": 512,
+    "compressionRatio": 0.446
+  },
+  "sigils": {
+    "sigilsPerLine": 5.39,
+    "uniqueSigilTypes": 18,
+    "totalSigils": 178
+  },
+  "readability": {
+    "avgLineLength": 33,
+    "maxNesting": 8,
+    "avgIdentifierLength": 5.2,
+    "visualDensity": 0.702
+  }
+}

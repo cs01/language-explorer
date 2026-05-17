@@ -1,0 +1,21 @@
+{
+  "file": "r1-word-freq.zig",
+  "conciseness": {
+    "loc": 50,
+    "tokens": 231,
+    "chars": 1555,
+    "halsteadVolume": 1627,
+    "compressionRatio": 0.384
+  },
+  "sigils": {
+    "sigilsPerLine": 7.28,
+    "uniqueSigilTypes": 21,
+    "totalSigils": 364
+  },
+  "readability": {
+    "avgLineLength": 41,
+    "maxNesting": 6,
+    "avgIdentifierLength": 4.6,
+    "visualDensity": 0.74
+  }
+}

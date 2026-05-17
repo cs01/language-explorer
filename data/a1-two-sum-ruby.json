@@ -1,0 +1,21 @@
+{
+  "file": "a1-two-sum.rb",
+  "conciseness": {
+    "loc": 8,
+    "tokens": 25,
+    "chars": 140,
+    "halsteadVolume": 111,
+    "compressionRatio": 0.792
+  },
+  "sigils": {
+    "sigilsPerLine": 3,
+    "uniqueSigilTypes": 12,
+    "totalSigils": 24
+  },
+  "readability": {
+    "avgLineLength": 22,
+    "maxNesting": 2,
+    "avgIdentifierLength": 4.5,
+    "visualDensity": 0.769
+  }
+}

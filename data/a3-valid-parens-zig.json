@@ -1,0 +1,21 @@
+{
+  "file": "a3-valid-parens.zig",
+  "conciseness": {
+    "loc": 26,
+    "tokens": 90,
+    "chars": 331,
+    "halsteadVolume": 520,
+    "compressionRatio": 0.422
+  },
+  "sigils": {
+    "sigilsPerLine": 5.04,
+    "uniqueSigilTypes": 18,
+    "totalSigils": 131
+  },
+  "readability": {
+    "avgLineLength": 26,
+    "maxNesting": 10,
+    "avgIdentifierLength": 4,
+    "visualDensity": 0.468
+  }
+}

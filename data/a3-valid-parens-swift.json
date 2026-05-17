@@ -1,0 +1,21 @@
+{
+  "file": "a3-valid-parens.swift",
+  "conciseness": {
+    "loc": 13,
+    "tokens": 65,
+    "chars": 284,
+    "halsteadVolume": 341,
+    "compressionRatio": 0.511
+  },
+  "sigils": {
+    "sigilsPerLine": 5.85,
+    "uniqueSigilTypes": 13,
+    "totalSigils": 76
+  },
+  "readability": {
+    "avgLineLength": 31,
+    "maxNesting": 4,
+    "avgIdentifierLength": 4.6,
+    "visualDensity": 0.676
+  }
+}
