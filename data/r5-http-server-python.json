@@ -1,0 +1,21 @@
+{
+  "file": "r5-http-server.py",
+  "conciseness": {
+    "loc": 20,
+    "tokens": 50,
+    "chars": 648,
+    "halsteadVolume": 270,
+    "compressionRatio": 0.461
+  },
+  "sigils": {
+    "sigilsPerLine": 6.25,
+    "uniqueSigilTypes": 15,
+    "totalSigils": 125
+  },
+  "readability": {
+    "avgLineLength": 41,
+    "maxNesting": 6,
+    "avgIdentifierLength": 6.1,
+    "visualDensity": 0.767
+  }
+}

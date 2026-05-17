@@ -56,7 +56,7 @@ const dynamicData = filterByGroup(['python', 'ruby', 'javascript', 'elixir'])
 
 <MetricsTable :data="avgData" :columns="columns" />
 
-<small>Averages across 4 benchmark problems. Click any column to sort. Green = best, red = worst.</small>
+<small>Averages across 7 benchmark problems. Click any column to sort. Green = best, red = worst.</small>
 
 ---
 
@@ -133,7 +133,10 @@ Python uses 12 unique symbol types. C uses 20. More variety = steeper learning c
 - [Two Sum](/problems/two-sum) — HashMap + iteration (algorithmic)
 - [Valid Parentheses](/problems/valid-parens) — Stack + pattern matching (algorithmic)
 - [Word Frequency](/problems/word-freq) — File I/O + sorting (real-world)
+- [JSON Transform](/problems/json-transform) — Parse, filter, reshape (real-world)
+- [HTTP Server](/problems/http-server) — Routing + JSON responses (real-world)
 - [Concurrent Fetch](/problems/concurrent-fetch) — HTTP + bounded parallelism (real-world)
+- [Channel Pipeline](/problems/channel-pipeline) — Producer/filter/consumer (systems)
 
 ## What's next
 

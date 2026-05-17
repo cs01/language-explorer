@@ -1,0 +1,21 @@
+{
+  "file": "r2-json-transform.rb",
+  "conciseness": {
+    "loc": 11,
+    "tokens": 40,
+    "chars": 228,
+    "halsteadVolume": 202,
+    "compressionRatio": 0.769
+  },
+  "sigils": {
+    "sigilsPerLine": 5.36,
+    "uniqueSigilTypes": 16,
+    "totalSigils": 59
+  },
+  "readability": {
+    "avgLineLength": 24,
+    "maxNesting": 1,
+    "avgIdentifierLength": 4.3,
+    "visualDensity": 0.823
+  }
+}

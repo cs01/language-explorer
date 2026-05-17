@@ -37,7 +37,10 @@ export default defineConfig({
           { text: 'Two Sum', link: '/problems/two-sum' },
           { text: 'Valid Parens', link: '/problems/valid-parens' },
           { text: 'Word Frequency', link: '/problems/word-freq' },
+          { text: 'JSON Transform', link: '/problems/json-transform' },
+          { text: 'HTTP Server', link: '/problems/http-server' },
           { text: 'Concurrent Fetch', link: '/problems/concurrent-fetch' },
+          { text: 'Channel Pipeline', link: '/problems/channel-pipeline' },
         ]
       },
       {

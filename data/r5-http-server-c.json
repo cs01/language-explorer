@@ -1,0 +1,21 @@
+{
+  "file": "r5-http-server.c",
+  "conciseness": {
+    "loc": 36,
+    "tokens": 120,
+    "chars": 981,
+    "halsteadVolume": 763,
+    "compressionRatio": 0.503
+  },
+  "sigils": {
+    "sigilsPerLine": 4.86,
+    "uniqueSigilTypes": 22,
+    "totalSigils": 175
+  },
+  "readability": {
+    "avgLineLength": 34,
+    "maxNesting": 6,
+    "avgIdentifierLength": 6.6,
+    "visualDensity": 0.776
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "file": "s1-channel-pipeline.exs",
+  "conciseness": {
+    "loc": 26,
+    "tokens": 64,
+    "chars": 377,
+    "halsteadVolume": 336,
+    "compressionRatio": 0.489
+  },
+  "sigils": {
+    "sigilsPerLine": 3.31,
+    "uniqueSigilTypes": 12,
+    "totalSigils": 86
+  },
+  "readability": {
+    "avgLineLength": 19,
+    "maxNesting": 4,
+    "avgIdentifierLength": 4.5,
+    "visualDensity": 0.728
+  }
+}

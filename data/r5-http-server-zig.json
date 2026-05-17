@@ -1,0 +1,21 @@
+{
+  "file": "r5-http-server.zig",
+  "conciseness": {
+    "loc": 36,
+    "tokens": 142,
+    "chars": 1124,
+    "halsteadVolume": 905,
+    "compressionRatio": 0.416
+  },
+  "sigils": {
+    "sigilsPerLine": 7.14,
+    "uniqueSigilTypes": 21,
+    "totalSigils": 257
+  },
+  "readability": {
+    "avgLineLength": 43,
+    "maxNesting": 8,
+    "avgIdentifierLength": 5.3,
+    "visualDensity": 0.715
+  }
+}

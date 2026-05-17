@@ -1,0 +1,21 @@
+{
+  "file": "s1-channel-pipeline.go",
+  "conciseness": {
+    "loc": 25,
+    "tokens": 75,
+    "chars": 280,
+    "halsteadVolume": 396,
+    "compressionRatio": 0.596
+  },
+  "sigils": {
+    "sigilsPerLine": 2.72,
+    "uniqueSigilTypes": 14,
+    "totalSigils": 68
+  },
+  "readability": {
+    "avgLineLength": 14,
+    "maxNesting": 1,
+    "avgIdentifierLength": 3.5,
+    "visualDensity": 0.743
+  }
+}

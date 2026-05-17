@@ -1,0 +1,21 @@
+{
+  "file": "s1-channel-pipeline.zig",
+  "conciseness": {
+    "loc": 64,
+    "tokens": 213,
+    "chars": 1336,
+    "halsteadVolume": 1466,
+    "compressionRatio": 0.333
+  },
+  "sigils": {
+    "sigilsPerLine": 5.56,
+    "uniqueSigilTypes": 22,
+    "totalSigils": 356
+  },
+  "readability": {
+    "avgLineLength": 31,
+    "maxNesting": 8,
+    "avgIdentifierLength": 4.3,
+    "visualDensity": 0.644
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "file": "r2-json-transform.ts",
+  "conciseness": {
+    "loc": 18,
+    "tokens": 57,
+    "chars": 357,
+    "halsteadVolume": 313,
+    "compressionRatio": 0.683
+  },
+  "sigils": {
+    "sigilsPerLine": 5.11,
+    "uniqueSigilTypes": 18,
+    "totalSigils": 92
+  },
+  "readability": {
+    "avgLineLength": 23,
+    "maxNesting": 1,
+    "avgIdentifierLength": 4.8,
+    "visualDensity": 0.828
+  }
+}

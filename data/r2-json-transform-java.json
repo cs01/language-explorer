@@ -1,0 +1,21 @@
+{
+  "file": "r2-json-transform.java",
+  "conciseness": {
+    "loc": 29,
+    "tokens": 81,
+    "chars": 795,
+    "halsteadVolume": 478,
+    "compressionRatio": 0.435
+  },
+  "sigils": {
+    "sigilsPerLine": 5.38,
+    "uniqueSigilTypes": 16,
+    "totalSigils": 156
+  },
+  "readability": {
+    "avgLineLength": 37,
+    "maxNesting": 8,
+    "avgIdentifierLength": 6,
+    "visualDensity": 0.713
+  }
+}

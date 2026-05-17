@@ -1,0 +1,21 @@
+{
+  "file": "r2-json-transform.swift",
+  "conciseness": {
+    "loc": 21,
+    "tokens": 78,
+    "chars": 478,
+    "halsteadVolume": 440,
+    "compressionRatio": 0.581
+  },
+  "sigils": {
+    "sigilsPerLine": 3.76,
+    "uniqueSigilTypes": 17,
+    "totalSigils": 79
+  },
+  "readability": {
+    "avgLineLength": 27,
+    "maxNesting": 2,
+    "avgIdentifierLength": 5.4,
+    "visualDensity": 0.803
+  }
+}

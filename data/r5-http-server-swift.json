@@ -1,0 +1,21 @@
+{
+  "file": "r5-http-server.swift",
+  "conciseness": {
+    "loc": 23,
+    "tokens": 75,
+    "chars": 541,
+    "halsteadVolume": 417,
+    "compressionRatio": 0.504
+  },
+  "sigils": {
+    "sigilsPerLine": 5.35,
+    "uniqueSigilTypes": 18,
+    "totalSigils": 123
+  },
+  "readability": {
+    "avgLineLength": 29,
+    "maxNesting": 4,
+    "avgIdentifierLength": 5.1,
+    "visualDensity": 0.783
+  }
+}

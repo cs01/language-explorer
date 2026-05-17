@@ -1,0 +1,21 @@
+{
+  "file": "s1-channel-pipeline.kt",
+  "conciseness": {
+    "loc": 17,
+    "tokens": 56,
+    "chars": 309,
+    "halsteadVolume": 282,
+    "compressionRatio": 0.549
+  },
+  "sigils": {
+    "sigilsPerLine": 3.29,
+    "uniqueSigilTypes": 11,
+    "totalSigils": 56
+  },
+  "readability": {
+    "avgLineLength": 23,
+    "maxNesting": 4,
+    "avgIdentifierLength": 5.3,
+    "visualDensity": 0.757
+  }
+}

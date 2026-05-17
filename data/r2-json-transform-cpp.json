@@ -1,0 +1,21 @@
+{
+  "file": "r2-json-transform.cpp",
+  "conciseness": {
+    "loc": 23,
+    "tokens": 74,
+    "chars": 463,
+    "halsteadVolume": 422,
+    "compressionRatio": 0.544
+  },
+  "sigils": {
+    "sigilsPerLine": 6.26,
+    "uniqueSigilTypes": 18,
+    "totalSigils": 144
+  },
+  "readability": {
+    "avgLineLength": 27,
+    "maxNesting": 6,
+    "avgIdentifierLength": 4.3,
+    "visualDensity": 0.733
+  }
+}

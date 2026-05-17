@@ -1,0 +1,21 @@
+{
+  "file": "r5-http-server.js",
+  "conciseness": {
+    "loc": 13,
+    "tokens": 46,
+    "chars": 383,
+    "halsteadVolume": 240,
+    "compressionRatio": 0.668
+  },
+  "sigils": {
+    "sigilsPerLine": 7.85,
+    "uniqueSigilTypes": 17,
+    "totalSigils": 102
+  },
+  "readability": {
+    "avgLineLength": 34,
+    "maxNesting": 2,
+    "avgIdentifierLength": 5.2,
+    "visualDensity": 0.836
+  }
+}

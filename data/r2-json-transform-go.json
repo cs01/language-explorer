@@ -1,0 +1,21 @@
+{
+  "file": "r2-json-transform.go",
+  "conciseness": {
+    "loc": 33,
+    "tokens": 94,
+    "chars": 533,
+    "halsteadVolume": 568,
+    "compressionRatio": 0.582
+  },
+  "sigils": {
+    "sigilsPerLine": 3.64,
+    "uniqueSigilTypes": 19,
+    "totalSigils": 120
+  },
+  "readability": {
+    "avgLineLength": 19,
+    "maxNesting": 1,
+    "avgIdentifierLength": 4.1,
+    "visualDensity": 0.798
+  }
+}

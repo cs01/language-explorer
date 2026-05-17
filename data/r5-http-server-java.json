@@ -1,0 +1,21 @@
+{
+  "file": "r5-http-server.java",
+  "conciseness": {
+    "loc": 33,
+    "tokens": 103,
+    "chars": 1017,
+    "halsteadVolume": 629,
+    "compressionRatio": 0.376
+  },
+  "sigils": {
+    "sigilsPerLine": 6.82,
+    "uniqueSigilTypes": 19,
+    "totalSigils": 225
+  },
+  "readability": {
+    "avgLineLength": 42,
+    "maxNesting": 10,
+    "avgIdentifierLength": 6.5,
+    "visualDensity": 0.713
+  }
+}

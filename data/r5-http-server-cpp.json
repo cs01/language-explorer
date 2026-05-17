@@ -1,0 +1,21 @@
+{
+  "file": "r5-http-server.cpp",
+  "conciseness": {
+    "loc": 20,
+    "tokens": 67,
+    "chars": 620,
+    "halsteadVolume": 376,
+    "compressionRatio": 0.503
+  },
+  "sigils": {
+    "sigilsPerLine": 7.9,
+    "uniqueSigilTypes": 21,
+    "totalSigils": 158
+  },
+  "readability": {
+    "avgLineLength": 37,
+    "maxNesting": 4,
+    "avgIdentifierLength": 5.7,
+    "visualDensity": 0.809
+  }
+}

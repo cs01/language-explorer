@@ -1,0 +1,21 @@
+{
+  "file": "r5-http-server.rb",
+  "conciseness": {
+    "loc": 14,
+    "tokens": 47,
+    "chars": 402,
+    "halsteadVolume": 235,
+    "compressionRatio": 0.598
+  },
+  "sigils": {
+    "sigilsPerLine": 6.29,
+    "uniqueSigilTypes": 16,
+    "totalSigils": 88
+  },
+  "readability": {
+    "avgLineLength": 32,
+    "maxNesting": 1,
+    "avgIdentifierLength": 5,
+    "visualDensity": 0.874
+  }
+}

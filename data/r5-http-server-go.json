@@ -1,0 +1,21 @@
+{
+  "file": "r5-http-server.go",
+  "conciseness": {
+    "loc": 23,
+    "tokens": 56,
+    "chars": 531,
+    "halsteadVolume": 298,
+    "compressionRatio": 0.543
+  },
+  "sigils": {
+    "sigilsPerLine": 5.87,
+    "uniqueSigilTypes": 16,
+    "totalSigils": 135
+  },
+  "readability": {
+    "avgLineLength": 26,
+    "maxNesting": 1,
+    "avgIdentifierLength": 5.1,
+    "visualDensity": 0.861
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "file": "s1-channel-pipeline.java",
+  "conciseness": {
+    "loc": 25,
+    "tokens": 84,
+    "chars": 579,
+    "halsteadVolume": 483,
+    "compressionRatio": 0.415
+  },
+  "sigils": {
+    "sigilsPerLine": 5.2,
+    "uniqueSigilTypes": 15,
+    "totalSigils": 130
+  },
+  "readability": {
+    "avgLineLength": 34,
+    "maxNesting": 10,
+    "avgIdentifierLength": 5.9,
+    "visualDensity": 0.653
+  }
+}

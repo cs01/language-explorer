@@ -1,0 +1,21 @@
+{
+  "file": "r2-json-transform.zig",
+  "conciseness": {
+    "loc": 31,
+    "tokens": 119,
+    "chars": 889,
+    "halsteadVolume": 741,
+    "compressionRatio": 0.424
+  },
+  "sigils": {
+    "sigilsPerLine": 7,
+    "uniqueSigilTypes": 18,
+    "totalSigils": 217
+  },
+  "readability": {
+    "avgLineLength": 37,
+    "maxNesting": 6,
+    "avgIdentifierLength": 4.8,
+    "visualDensity": 0.751
+  }
+}

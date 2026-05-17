@@ -1,0 +1,21 @@
+{
+  "file": "r5-http-server.kt",
+  "conciseness": {
+    "loc": 28,
+    "tokens": 53,
+    "chars": 511,
+    "halsteadVolume": 272,
+    "compressionRatio": 0.413
+  },
+  "sigils": {
+    "sigilsPerLine": 4.21,
+    "uniqueSigilTypes": 16,
+    "totalSigils": 118
+  },
+  "readability": {
+    "avgLineLength": 30,
+    "maxNesting": 12,
+    "avgIdentifierLength": 5.9,
+    "visualDensity": 0.589
+  }
+}
