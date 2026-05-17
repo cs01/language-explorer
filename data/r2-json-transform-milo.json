@@ -1,21 +1,21 @@
 {
   "file": "r2-json-transform.milo",
   "conciseness": {
-    "loc": 40,
-    "tokens": 144,
-    "chars": 591,
-    "halsteadVolume": 883,
-    "compressionRatio": 0.354
+    "loc": 24,
+    "tokens": 96,
+    "chars": 456,
+    "halsteadVolume": 555,
+    "compressionRatio": 0.489
   },
   "sigils": {
-    "sigilsPerLine": 4.1,
-    "uniqueSigilTypes": 19,
-    "totalSigils": 164
+    "sigilsPerLine": 5.25,
+    "uniqueSigilTypes": 18,
+    "totalSigils": 126
   },
   "readability": {
-    "avgLineLength": 31,
-    "maxNesting": 8,
-    "avgIdentifierLength": 3.9,
-    "visualDensity": 0.458
+    "avgLineLength": 28,
+    "maxNesting": 3,
+    "avgIdentifierLength": 4.1,
+    "visualDensity": 0.66
   }
 }

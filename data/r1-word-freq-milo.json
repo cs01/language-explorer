@@ -1,21 +1,21 @@
 {
   "file": "r1-word-freq.milo",
   "conciseness": {
-    "loc": 90,
-    "tokens": 342,
-    "chars": 1381,
-    "halsteadVolume": 2398,
-    "compressionRatio": 0.33
+    "loc": 39,
+    "tokens": 145,
+    "chars": 705,
+    "halsteadVolume": 922,
+    "compressionRatio": 0.469
   },
   "sigils": {
-    "sigilsPerLine": 3.81,
-    "uniqueSigilTypes": 20,
-    "totalSigils": 343
+    "sigilsPerLine": 3.97,
+    "uniqueSigilTypes": 16,
+    "totalSigils": 155
   },
   "readability": {
     "avgLineLength": 26,
-    "maxNesting": 5,
-    "avgIdentifierLength": 3.8,
-    "visualDensity": 0.577
+    "maxNesting": 3,
+    "avgIdentifierLength": 4.2,
+    "visualDensity": 0.677
   }
 }

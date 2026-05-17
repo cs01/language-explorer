@@ -1,21 +1,21 @@
 {
   "file": "a1-two-sum.milo",
   "conciseness": {
-    "loc": 20,
-    "tokens": 78,
-    "chars": 343,
-    "halsteadVolume": 445,
-    "compressionRatio": 0.573
+    "loc": 18,
+    "tokens": 85,
+    "chars": 368,
+    "halsteadVolume": 482,
+    "compressionRatio": 0.571
   },
   "sigils": {
-    "sigilsPerLine": 4.4,
-    "uniqueSigilTypes": 17,
-    "totalSigils": 88
+    "sigilsPerLine": 5,
+    "uniqueSigilTypes": 16,
+    "totalSigils": 90
   },
   "readability": {
-    "avgLineLength": 25,
+    "avgLineLength": 28,
     "maxNesting": 3,
-    "avgIdentifierLength": 3.7,
-    "visualDensity": 0.665
+    "avgIdentifierLength": 3.6,
+    "visualDensity": 0.697
   }
 }

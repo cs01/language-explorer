@@ -1,21 +1,21 @@
 {
   "file": "a3-valid-parens.milo",
   "conciseness": {
-    "loc": 33,
-    "tokens": 114,
-    "chars": 390,
-    "halsteadVolume": 640,
-    "compressionRatio": 0.377
+    "loc": 22,
+    "tokens": 101,
+    "chars": 359,
+    "halsteadVolume": 545,
+    "compressionRatio": 0.436
   },
   "sigils": {
-    "sigilsPerLine": 4.33,
-    "uniqueSigilTypes": 18,
-    "totalSigils": 143
+    "sigilsPerLine": 6.18,
+    "uniqueSigilTypes": 16,
+    "totalSigils": 136
   },
   "readability": {
-    "avgLineLength": 23,
-    "maxNesting": 4,
-    "avgIdentifierLength": 3.4,
-    "visualDensity": 0.503
+    "avgLineLength": 26,
+    "maxNesting": 3,
+    "avgIdentifierLength": 3.5,
+    "visualDensity": 0.603
   }
 }

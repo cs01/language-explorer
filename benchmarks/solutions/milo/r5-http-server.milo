@@ -1,31 +1,17 @@
-from "std/http" import { Request, Response, serve }
-
-fn handleRequest(req: &Request): Response {
-    if req.method == "GET" && req.path == "/hello" {
-        var name: string = "World"
-        var i: i64 = 0
-        while i < req.queryParams.len {
-            if req.queryParams[i].name == "name" {
-                name = req.queryParams[i].value.clone()
-                break
-            }
-            i = i + 1
-        }
-        return Response.Json($"{{\"greeting\": \"Hello, {name}!\"}}")
-    }
-    return Response.Status(404, "application/json", "{\"error\": \"not found\"}")
-}
+from "std/http" import { Router, Context, Response, serveRouter }
 
 fn main(): i32 {
-    let result = serve(8080, (req: &Request) => {
-        return handleRequest(req)
+    var router = Router.new()
+    router.get("/hello", (ctx: &mut Context): Response => {
+        var name = ctx.query("name")
+        if name.len == 0 { name = "World" }
+        return Response.Json($"\{\"greeting\": \"Hello, {name}!\"}")
     })
-    match result {
-        Result.Err(msg) => {
-            print($"error: {msg}")
-            return 1
-        }
-        _ => {}
+
+    let result = serveRouter(8080, router)
+    if let Result.Err(msg) = result {
+        print($"error: {msg}")
+        return 1
     }
     return 0
 }

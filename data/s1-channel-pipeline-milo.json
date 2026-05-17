@@ -1,21 +1,21 @@
 {
   "file": "s1-channel-pipeline.milo",
   "conciseness": {
-    "loc": 41,
-    "tokens": 131,
-    "chars": 633,
-    "halsteadVolume": 806,
-    "compressionRatio": 0.375
+    "loc": 35,
+    "tokens": 123,
+    "chars": 580,
+    "halsteadVolume": 729,
+    "compressionRatio": 0.38
   },
   "sigils": {
-    "sigilsPerLine": 3.05,
-    "uniqueSigilTypes": 16,
-    "totalSigils": 125
+    "sigilsPerLine": 3.23,
+    "uniqueSigilTypes": 15,
+    "totalSigils": 113
   },
   "readability": {
-    "avgLineLength": 25,
+    "avgLineLength": 26,
     "maxNesting": 4,
-    "avgIdentifierLength": 5.3,
-    "visualDensity": 0.602
+    "avgIdentifierLength": 5.1,
+    "visualDensity": 0.621
   }
 }

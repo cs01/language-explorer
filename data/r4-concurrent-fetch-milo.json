@@ -1,21 +1,21 @@
 {
   "file": "r4-concurrent-fetch.milo",
   "conciseness": {
-    "loc": 46,
-    "tokens": 161,
-    "chars": 906,
-    "halsteadVolume": 1060,
-    "compressionRatio": 0.397
+    "loc": 35,
+    "tokens": 98,
+    "chars": 679,
+    "halsteadVolume": 588,
+    "compressionRatio": 0.421
   },
   "sigils": {
-    "sigilsPerLine": 4.46,
+    "sigilsPerLine": 4.86,
     "uniqueSigilTypes": 16,
-    "totalSigils": 205
+    "totalSigils": 170
   },
   "readability": {
-    "avgLineLength": 30,
+    "avgLineLength": 29,
     "maxNesting": 5,
     "avgIdentifierLength": 4.7,
-    "visualDensity": 0.639
+    "visualDensity": 0.65
   }
 }

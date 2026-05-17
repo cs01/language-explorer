@@ -1,16 +1,7 @@
 from "std/args" import { args }
 from "std/io" import { readFile }
-
-fn isAlpha(c: u8): bool {
-    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
-}
-
-fn toLower(c: u8): u8 {
-    if c >= 'A' && c <= 'Z' {
-        return c + 32
-    }
-    return c
-}
+from "std/string" import { strSplitWords }
+from "std/sort" import { sortStringsByFreq }
 
 fn main(): i32 {
     let argv = args()
@@ -19,80 +10,35 @@ fn main(): i32 {
         return 1
     }
 
-    let result = readFile(argv[1])
     var data: string = ""
-    match result {
-        Result.Ok(content) => {
-            data = content
-        }
+    match readFile(argv[1]) {
+        Result.Ok(content) => { data = content }
         Result.Err(e) => {
-            print("error: file not found")
+            print($"error: {e}")
             return 1
         }
     }
 
+    let words = strSplitWords(data)
     var counts: HashMap<string, i64> = HashMap.new()
-    var word: string = ""
-    var i: i64 = 0
-    while i < data.len {
-        if isAlpha(data[i]) {
-            word.push(toLower(data[i]))
-        } else {
-            if word.len > 0 {
-                let existing = counts.get(word.clone())
-                if let Option.Some(c) = existing {
-                    counts.insert(word.clone(), c + 1)
-                } else {
-                    counts.insert(word.clone(), 1)
-                }
-                word = ""
-            }
-        }
-        i = i + 1
-    }
-    if word.len > 0 {
-        let existing = counts.get(word.clone())
-        if let Option.Some(c) = existing {
-            counts.insert(word.clone(), c + 1)
-        } else {
-            counts.insert(word.clone(), 1)
-        }
+    for i in 0..words.len {
+        let w = words[i].clone()
+        let c = counts.getOrDefault(w.clone(), 0 as i64)
+        counts.insert(w, c + 1)
     }
 
-    var words: Vec<string> = []
-    var freqs: Vec<i64> = []
+    var keys: Vec<string> = []
+    var vals: Vec<i64> = []
     for k, v in counts {
-        words.push(k)
-        freqs.push(v)
+        keys.push(k)
+        vals.push(v)
     }
+    sortStringsByFreq(keys, vals)
 
-    // selection sort top 10 by freq desc, then alpha asc
-    var n: i64 = words.len
-    var sorted: i64 = 0
-    while sorted < 10 && sorted < n {
-        var best: i64 = sorted
-        var j: i64 = sorted + 1
-        while j < n {
-            if freqs[j] > freqs[best] || (freqs[j] == freqs[best] && words[j] < words[best]) {
-                best = j
-            }
-            j = j + 1
-        }
-        if best != sorted {
-            let tw = words[sorted].clone()
-            let tf = freqs[sorted]
-            words[sorted] = words[best].clone()
-            freqs[sorted] = freqs[best]
-            words[best] = tw
-            freqs[best] = tf
-        }
-        sorted = sorted + 1
-    }
-
-    var k: i64 = 0
-    while k < 10 && k < n {
-        print($"{words[k]}: {freqs[k]}")
-        k = k + 1
+    var limit: i64 = 10
+    if keys.len < 10 { limit = keys.len }
+    for i in 0..limit {
+        print($"{keys[i]}: {vals[i]}")
     }
     return 0
 }

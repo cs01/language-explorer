@@ -3,39 +3,23 @@ from "std/json" import { jsonParse }
 
 fn main(): i32 {
     let input = readStdin()
-    let parsed = jsonParse(input)
-    match parsed {
-        Result.Ok(arr) => {
-            var out: string = "["
-            var first: bool = true
-            var i: i64 = 0
-            while i < arr.len() {
-                let user = arr.at(i)!
-                let active = user.bool("active")
-                let age = user.i64("age")
-                if let Option.Some(a) = active {
-                    if let Option.Some(n) = age {
-                        if a && n > 18 {
-                            let name = user.str("name")!
-                            let email = user.str("email")!
-                            if !first {
-                                out = out + ","
-                            }
-                            out = out + "{\"name\":\"" + name + "\",\"email\":\"" + email + "\"}"
-                            first = false
-                        }
-                    }
-                }
-                i = i + 1
-            }
-            out = out + "]"
-            writeStdout(out)
-            print("")
-        }
-        Result.Err(e) => {
-            print($"error: {e}")
-            return 1
+    let arr = jsonParse(input)!
+    var out: string = "["
+    var first: bool = true
+    for i in 0..arr.len() {
+        let user = arr.at(i)!
+        let active = user.bool("active")!
+        let age = user.i64("age")!
+        if active && age > 18 {
+            let name = user.str("name")!
+            let email = user.str("email")!
+            if !first { out = out + "," }
+            out = out + $"\{\"name\":\"{name}\",\"email\":\"{email}\"}"
+            first = false
         }
     }
+    out = out + "]"
+    writeStdout(out)
+    print("")
     return 0
 }

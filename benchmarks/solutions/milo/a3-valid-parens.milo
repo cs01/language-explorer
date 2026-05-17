@@ -1,27 +1,16 @@
 fn isValid(s: &string): bool {
     var stack: Vec<u8> = []
-    var i: i64 = 0
-    while i < s.len {
+    for i in 0..s.len {
         let c = s[i]
         if c == '(' || c == '[' || c == '{' {
             stack.push(c)
         } else {
-            if stack.len == 0 {
-                return false
-            }
-            let top = stack[stack.len - 1]
-            stack.pop()
-            if c == ')' && top != '(' {
-                return false
-            }
-            if c == ']' && top != '[' {
-                return false
-            }
-            if c == '}' && top != '{' {
-                return false
-            }
+            if stack.len == 0 { return false }
+            let top = stack.pop()
+            if c == ')' && top != '(' { return false }
+            if c == ']' && top != '[' { return false }
+            if c == '}' && top != '{' { return false }
         }
-        i = i + 1
     }
     return stack.len == 0
 }
