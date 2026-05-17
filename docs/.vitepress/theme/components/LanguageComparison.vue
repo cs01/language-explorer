@@ -14,7 +14,7 @@ const props = defineProps<{
   languages: LangData[]
 }>()
 
-const colors = ['#3b82f6', '#ef4444', '#22c55e', '#eab308']
+const colors = ['#3b82f6', '#8b5cf6', '#06b6d4', '#f59e0b']
 const allLangs = computed(() => props.languages.map(l => l.language).sort())
 const selected = ref<string[]>([allLangs.value[0] || '', allLangs.value[1] || ''])
 
