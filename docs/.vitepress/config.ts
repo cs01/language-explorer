@@ -22,31 +22,7 @@ export default defineConfig({
         ]
       },
       {
-        text: 'Metrics',
-        items: [
-          { text: 'Code Size', link: '/metrics/code-size' },
-          { text: 'Symbol Noise', link: '/metrics/symbol-noise' },
-          { text: 'Complexity', link: '/metrics/complexity' },
-          { text: 'Concept Count', link: '/metrics/concept-count' },
-          { text: 'Type Ceremony', link: '/metrics/type-ceremony' },
-          { text: 'Error Overhead', link: '/metrics/error-overhead' },
-        ]
-      },
-      {
-        text: 'Problems',
-        items: [
-          { text: 'Two Sum', link: '/problems/two-sum' },
-          { text: 'Valid Parens', link: '/problems/valid-parens' },
-          { text: 'Word Frequency', link: '/problems/word-freq' },
-          { text: 'JSON Transform', link: '/problems/json-transform' },
-          { text: 'HTTP Server', link: '/problems/http-server' },
-          { text: 'Concurrent Fetch', link: '/problems/concurrent-fetch' },
-          { text: 'Channel Pipeline', link: '/problems/channel-pipeline' },
-        ]
-      },
-      {
         text: 'Languages',
-        collapsed: true,
         items: [
           { text: 'Python', link: '/languages/python' },
           { text: 'Ruby', link: '/languages/ruby' },
@@ -62,6 +38,17 @@ export default defineConfig({
           { text: 'C++', link: '/languages/cpp' },
           { text: 'C', link: '/languages/c' },
           { text: 'Zig', link: '/languages/zig' },
+        ]
+      },
+      {
+        text: 'Metrics',
+        items: [
+          { text: 'Code Size', link: '/metrics/code-size' },
+          { text: 'Symbol Noise', link: '/metrics/symbol-noise' },
+          { text: 'Complexity', link: '/metrics/complexity' },
+          { text: 'Concept Count', link: '/metrics/concept-count' },
+          { text: 'Type Ceremony', link: '/metrics/type-ceremony' },
+          { text: 'Error Overhead', link: '/metrics/error-overhead' },
         ]
       },
       {
