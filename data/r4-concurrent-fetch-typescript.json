@@ -1,0 +1,21 @@
+{
+  "file": "r4-concurrent-fetch.ts",
+  "conciseness": {
+    "loc": 25,
+    "tokens": 80,
+    "chars": 593,
+    "halsteadVolume": 463,
+    "compressionRatio": 0.547
+  },
+  "sigils": {
+    "sigilsPerLine": 6.32,
+    "uniqueSigilTypes": 18,
+    "totalSigils": 158
+  },
+  "readability": {
+    "avgLineLength": 28,
+    "maxNesting": 2,
+    "avgIdentifierLength": 4.8,
+    "visualDensity": 0.824
+  }
+}

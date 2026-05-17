@@ -1,0 +1,21 @@
+{
+  "file": "r4-concurrent-fetch.c",
+  "conciseness": {
+    "loc": 61,
+    "tokens": 225,
+    "chars": 1567,
+    "halsteadVolume": 1587,
+    "compressionRatio": 0.411
+  },
+  "sigils": {
+    "sigilsPerLine": 5.26,
+    "uniqueSigilTypes": 23,
+    "totalSigils": 321
+  },
+  "readability": {
+    "avgLineLength": 33,
+    "maxNesting": 6,
+    "avgIdentifierLength": 5.4,
+    "visualDensity": 0.763
+  }
+}

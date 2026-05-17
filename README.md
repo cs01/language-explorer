@@ -1,5 +1,7 @@
 # langmetrics
 
+**[View the dashboard →](https://cs01.github.io/langmetrics)**
+
 Quantitative framework for comparing programming language design across expressiveness, cognitive load, and ergonomics.
 
 No existing tool does this. Academic literature has fragments (Halstead, Cognitive Dimensions, Buse-Weimer) but no unified scorecard. This repo is that scorecard.
