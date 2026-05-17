@@ -13,6 +13,7 @@ Tests: Stack operations, string iteration, match/switch, early return.
 | Rust | 13 | 63 | 331 | **7.9** |
 | Go | 16 | 61 | 327 | 5.3 |
 | C | 17 | 81 | 445 | 6.3 |
+| C++ | 16 | 66 | 349 | 6.2 |
 
 ## Observations
 
@@ -106,6 +107,26 @@ bool is_valid(const char *s) {
         }
     }
     return top == -1;
+}
+```
+
+```cpp [C++]
+#include <stack>
+#include <string>
+
+bool is_valid(const std::string& s) {
+    std::stack<char> stk;
+    for (char c : s) {
+        if (c == '(' || c == '[' || c == '{') {
+            stk.push(c);
+        } else {
+            if (stk.empty()) return false;
+            char expected = c == ')' ? '(' : c == ']' ? '[' : '{';
+            if (stk.top() != expected) return false;
+            stk.pop();
+        }
+    }
+    return stk.empty();
 }
 ```
 :::

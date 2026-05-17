@@ -13,6 +13,7 @@ Tests: HashMap, iteration, returning a compound value.
 | Rust | 12 | 43 | 219 | 5.3 |
 | Go | 12 | 44 | 216 | 3.3 |
 | C | 12 | 60 | 310 | 5.2 |
+| C++ | 15 | 54 | 289 | 5.6 |
 
 ## Observations
 
@@ -91,6 +92,25 @@ struct Result two_sum(int *nums, int len, int target) {
         }
     }
     return (struct Result){-1, -1};
+}
+```
+
+```cpp [C++]
+#include <unordered_map>
+#include <vector>
+#include <utility>
+
+std::pair<int, int> two_sum(const std::vector<int>& nums, int target) {
+    std::unordered_map<int, int> seen;
+    for (int i = 0; i < static_cast<int>(nums.size()); i++) {
+        int complement = target - nums[i];
+        auto it = seen.find(complement);
+        if (it != seen.end()) {
+            return {it->second, i};
+        }
+        seen[nums[i]] = i;
+    }
+    return {-1, -1};
 }
 ```
 :::

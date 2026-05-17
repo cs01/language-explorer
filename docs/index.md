@@ -18,6 +18,6 @@ features:
     details: How many special characters clutter each line? Rust averages 6.4 symbols/line. Go gets by with 4.3. More symbol variety means more to learn.
   - title: Complexity Score
     details: Halstead Volume measures total information density. C's score is 5× Python's — every operation is manual, nothing is free.
-  - title: 4 Problems, 5 Languages
-    details: Same programs implemented idiomatically in Python, TypeScript, Rust, Go, and C. Algorithmic + real-world tasks. Automated scoring.
+  - title: 4 Problems, 6 Languages
+    details: Same programs implemented idiomatically in Python, TypeScript, Rust, Go, C, and C++. Algorithmic + real-world tasks. Automated scoring.
 ---

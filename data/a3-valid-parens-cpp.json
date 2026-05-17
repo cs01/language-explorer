@@ -1,0 +1,21 @@
+{
+  "file": "a3-valid-parens.cpp",
+  "conciseness": {
+    "loc": 16,
+    "tokens": 66,
+    "chars": 274,
+    "halsteadVolume": 349,
+    "compressionRatio": 0.526
+  },
+  "sigils": {
+    "sigilsPerLine": 6.19,
+    "uniqueSigilTypes": 18,
+    "totalSigils": 99
+  },
+  "readability": {
+    "avgLineLength": 27,
+    "maxNesting": 6,
+    "avgIdentifierLength": 3.8,
+    "visualDensity": 0.624
+  }
+}

@@ -19,7 +19,7 @@ No existing tool does this. Academic literature has fragments (Halstead, Cogniti
 
 ## Languages
 
-Rust, TypeScript, Python, Go, Milo — with room to add more.
+Rust, TypeScript, Python, Go, C, C++ — with room to add more.
 
 ## Structure
 
@@ -40,14 +40,13 @@ langmetrics/
 │       ├── typescript/
 │       ├── python/
 │       ├── go/
-│       └── milo/
+│       ├── c/
+│       └── cpp/
 ├── scripts/              # scoring + analysis tools
 │   └── score.ts          # bun script: compute all metrics for a source file
 ├── data/                 # raw results (JSON), one file per problem×language
-└── site/                 # static HTML/CSS/JS dashboard
-    ├── index.html
-    ├── style.css
-    └── app.js
+└── docs/                 # VitePress site (deployed to GitHub Pages)
+    └── .vitepress/
 ```
 
 ## Workflow
@@ -55,7 +54,7 @@ langmetrics/
 1. **Define** a benchmark problem in `benchmarks/problems/`
 2. **Implement** idiomatic solutions in each language
 3. **Score** with `bun run scripts/score.ts <file>` → outputs JSON to `data/`
-4. **View** results on the dashboard (`site/index.html`)
+4. **View** results on the dashboard (`bun run docs:dev`)
 
 ## Running
 
@@ -66,8 +65,8 @@ bun run scripts/score.ts benchmarks/solutions/rust/two-sum.rs
 # score all solutions for a problem
 bun run scripts/score-all.ts two-sum
 
-# serve the dashboard
-open site/index.html
+# dev server
+bun run docs:dev
 ```
 
 ## References

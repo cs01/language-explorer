@@ -1,6 +1,6 @@
 # Key Findings
 
-We implemented 4 programs in 5 languages and measured everything. Here's what the data says.
+We implemented 4 programs in 6 languages and measured everything. Here's what the data says.
 
 ## The headline numbers
 
@@ -11,6 +11,7 @@ We implemented 4 programs in 5 languages and measured everything. Here's what th
 | Rust | 20.5 | 66 | 364 | 6.4 | 17 |
 | Go | 26.3 | 79 | 463 | **4.3** | 15 |
 | C | 36.5 | 157 | 1033 | 5.7 | 21 |
+| C++ | 25.3 | 87 | 514 | 6.2 | 19 |
 
 <small>Averages across 4 benchmark problems (2 algorithmic, 2 real-world). Green = best in column.</small>
 

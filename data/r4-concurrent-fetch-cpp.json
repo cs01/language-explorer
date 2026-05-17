@@ -1,0 +1,21 @@
+{
+  "file": "r4-concurrent-fetch.cpp",
+  "conciseness": {
+    "loc": 32,
+    "tokens": 92,
+    "chars": 723,
+    "halsteadVolume": 543,
+    "compressionRatio": 0.436
+  },
+  "sigils": {
+    "sigilsPerLine": 6.53,
+    "uniqueSigilTypes": 18,
+    "totalSigils": 209
+  },
+  "readability": {
+    "avgLineLength": 31,
+    "maxNesting": 13,
+    "avgIdentifierLength": 4.7,
+    "visualDensity": 0.701
+  }
+}

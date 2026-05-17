@@ -1,0 +1,21 @@
+{
+  "file": "a1-two-sum.cpp",
+  "conciseness": {
+    "loc": 15,
+    "tokens": 54,
+    "chars": 331,
+    "halsteadVolume": 289,
+    "compressionRatio": 0.577
+  },
+  "sigils": {
+    "sigilsPerLine": 5.6,
+    "uniqueSigilTypes": 18,
+    "totalSigils": 84
+  },
+  "readability": {
+    "avgLineLength": 29,
+    "maxNesting": 6,
+    "avgIdentifierLength": 4.4,
+    "visualDensity": 0.732
+  }
+}
