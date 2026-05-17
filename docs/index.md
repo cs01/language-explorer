@@ -28,11 +28,11 @@ const columns = [
 ]
 
 const groupDefs = [
-  { label: 'Systems', languages: ['c', 'cpp', 'rust', 'zig'] },
+  { label: 'Systems', languages: ['c', 'cpp', 'rust', 'zig', 'milo'] },
   { label: 'Scripting', languages: ['python', 'ruby', 'javascript'] },
   { label: 'JVM', languages: ['java', 'kotlin'] },
   { label: 'Functional', languages: ['haskell', 'elixir'] },
-  { label: 'Static', languages: ['typescript', 'rust', 'go', 'c', 'cpp', 'swift', 'zig', 'java', 'kotlin', 'haskell'] },
+  { label: 'Static', languages: ['typescript', 'rust', 'go', 'c', 'cpp', 'swift', 'zig', 'java', 'kotlin', 'haskell', 'milo'] },
   { label: 'Dynamic', languages: ['python', 'ruby', 'javascript', 'elixir'] },
   { label: 'GC', languages: ['python', 'ruby', 'javascript', 'typescript', 'java', 'kotlin', 'go', 'haskell', 'elixir'] },
 ]
@@ -41,12 +41,12 @@ function filterByGroup(langs: string[]) {
   return avgData.filter(r => langs.includes(r.language.toLowerCase()))
 }
 
-const systemsData = filterByGroup(['c', 'cpp', 'rust', 'zig'])
+const systemsData = filterByGroup(['c', 'cpp', 'rust', 'zig', 'milo'])
 const scriptingData = filterByGroup(['python', 'ruby', 'javascript'])
 const jvmData = filterByGroup(['java', 'kotlin'])
 const functionalData = filterByGroup(['haskell', 'elixir'])
 const gcData = filterByGroup(['python', 'ruby', 'javascript', 'typescript', 'java', 'kotlin', 'go', 'haskell', 'elixir', 'swift'])
-const staticData = filterByGroup(['typescript', 'rust', 'go', 'c', 'cpp', 'swift', 'zig', 'java', 'kotlin', 'haskell'])
+const staticData = filterByGroup(['typescript', 'rust', 'go', 'c', 'cpp', 'swift', 'zig', 'java', 'kotlin', 'haskell', 'milo'])
 const dynamicData = filterByGroup(['python', 'ruby', 'javascript', 'elixir'])
 </script>
 

@@ -1,0 +1,31 @@
+from "std/http" import { Request, Response, serve }
+
+fn handleRequest(req: &Request): Response {
+    if req.method == "GET" && req.path == "/hello" {
+        var name: string = "World"
+        var i: i64 = 0
+        while i < req.queryParams.len {
+            if req.queryParams[i].name == "name" {
+                name = req.queryParams[i].value.clone()
+                break
+            }
+            i = i + 1
+        }
+        return Response.Json($"{{\"greeting\": \"Hello, {name}!\"}}")
+    }
+    return Response.Status(404, "application/json", "{\"error\": \"not found\"}")
+}
+
+fn main(): i32 {
+    let result = serve(8080, (req: &Request) => {
+        return handleRequest(req)
+    })
+    match result {
+        Result.Err(msg) => {
+            print($"error: {msg}")
+            return 1
+        }
+        _ => {}
+    }
+    return 0
+}

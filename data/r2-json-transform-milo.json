@@ -1,0 +1,21 @@
+{
+  "file": "r2-json-transform.milo",
+  "conciseness": {
+    "loc": 40,
+    "tokens": 144,
+    "chars": 591,
+    "halsteadVolume": 883,
+    "compressionRatio": 0.354
+  },
+  "sigils": {
+    "sigilsPerLine": 4.1,
+    "uniqueSigilTypes": 19,
+    "totalSigils": 164
+  },
+  "readability": {
+    "avgLineLength": 31,
+    "maxNesting": 16,
+    "avgIdentifierLength": 3.9,
+    "visualDensity": 0.458
+  }
+}

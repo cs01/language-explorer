@@ -1,0 +1,21 @@
+{
+  "file": "r5-http-server.milo",
+  "conciseness": {
+    "loc": 29,
+    "tokens": 98,
+    "chars": 547,
+    "halsteadVolume": 586,
+    "compressionRatio": 0.501
+  },
+  "sigils": {
+    "sigilsPerLine": 4.97,
+    "uniqueSigilTypes": 19,
+    "totalSigils": 144
+  },
+  "readability": {
+    "avgLineLength": 28,
+    "maxNesting": 8,
+    "avgIdentifierLength": 4.8,
+    "visualDensity": 0.651
+  }
+}

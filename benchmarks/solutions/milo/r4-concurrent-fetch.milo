@@ -1,0 +1,51 @@
+from "std/net" import { fetch }
+from "std/thread" import { spawn, threadJoin }
+from "std/sync" import { channelNew, channelSend, channelRecv, channelDestroy }
+
+fn main(): i32 {
+    let urls: Vec<string> = [
+        "https://httpbin.org/get",
+        "https://httpbin.org/status/404",
+        "https://httpbin.org/delay/1",
+        "https://httpbin.org/bytes/1024",
+        "https://invalid.example.test",
+    ]
+
+    // bounded concurrency: 4 at a time via channel as semaphore
+    let sem = channelNew(4)!
+    let results = channelNew(64)!
+    var threads: Vec<Thread> = []
+
+    var i: i64 = 0
+    while i < urls.len {
+        channelSend(sem, 1)!
+        let url = urls[i].clone()
+        let t = spawn(move (): void => {
+            let resp = fetch(url)
+            match resp {
+                Result.Ok(r) => {
+                    let msg = url.clone() + ": " + r.status.toString() + " (" + r.body.len.toString() + " bytes)"
+                    print(msg)
+                }
+                Result.Err(e) => {
+                    print(url.clone() + ": error")
+                }
+            }
+            channelRecv(sem)!
+            channelSend(results, 1)!
+        })!
+        threads.push(t)
+        i = i + 1
+    }
+
+    // wait for all threads
+    var j: i64 = 0
+    while j < threads.len {
+        threadJoin(threads[j])!
+        j = j + 1
+    }
+
+    channelDestroy(sem)
+    channelDestroy(results)
+    return 0
+}

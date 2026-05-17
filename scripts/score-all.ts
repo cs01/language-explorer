@@ -10,12 +10,11 @@ const extMap: Record<string, string> = {
   python: 'py', typescript: 'ts', rust: 'rs', go: 'go',
   c: 'c', cpp: 'cpp', swift: 'swift', zig: 'zig',
   javascript: 'js', ruby: 'rb', java: 'java', kotlin: 'kt',
-  haskell: 'hs', elixir: 'exs',
+  haskell: 'hs', elixir: 'exs', milo: 'milo',
 };
 
 let count = 0;
 for (const lang of readdirSync(solutionsDir)) {
-  if (lang === 'milo') continue;
   const ext = extMap[lang];
   if (!ext) continue;
   const langDir = join(solutionsDir, lang);

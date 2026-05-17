@@ -1,0 +1,21 @@
+{
+  "file": "r4-concurrent-fetch.milo",
+  "conciseness": {
+    "loc": 46,
+    "tokens": 161,
+    "chars": 906,
+    "halsteadVolume": 1060,
+    "compressionRatio": 0.397
+  },
+  "sigils": {
+    "sigilsPerLine": 4.46,
+    "uniqueSigilTypes": 16,
+    "totalSigils": 205
+  },
+  "readability": {
+    "avgLineLength": 30,
+    "maxNesting": 10,
+    "avgIdentifierLength": 4.7,
+    "visualDensity": 0.639
+  }
+}

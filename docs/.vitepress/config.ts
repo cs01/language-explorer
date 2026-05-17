@@ -38,6 +38,7 @@ export default defineConfig({
           { text: 'C++', link: '/languages/cpp' },
           { text: 'C', link: '/languages/c' },
           { text: 'Zig', link: '/languages/zig' },
+          { text: 'Milo', link: '/languages/milo' },
         ]
       },
       {

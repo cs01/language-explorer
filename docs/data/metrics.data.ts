@@ -51,13 +51,12 @@ const extMap: Record<string, string> = {
   python: 'py', typescript: 'ts', rust: 'rs', go: 'go',
   c: 'c', cpp: 'cpp', swift: 'swift', zig: 'zig',
   javascript: 'js', ruby: 'rb', java: 'java', kotlin: 'kt',
-  haskell: 'hs', elixir: 'exs',
+  haskell: 'hs', elixir: 'exs', milo: 'milo',
 }
 
 function loadSolutions(): SolutionEntry[] {
   const entries: SolutionEntry[] = []
   for (const lang of readdirSync(solutionsDir)) {
-    if (lang === 'milo') continue
     const langDir = join(solutionsDir, lang)
     const ext = extMap[lang]
     if (!ext) continue

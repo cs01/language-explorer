@@ -1,0 +1,21 @@
+{
+  "file": "a1-two-sum.milo",
+  "conciseness": {
+    "loc": 20,
+    "tokens": 78,
+    "chars": 343,
+    "halsteadVolume": 445,
+    "compressionRatio": 0.573
+  },
+  "sigils": {
+    "sigilsPerLine": 4.4,
+    "uniqueSigilTypes": 17,
+    "totalSigils": 88
+  },
+  "readability": {
+    "avgLineLength": 25,
+    "maxNesting": 6,
+    "avgIdentifierLength": 3.7,
+    "visualDensity": 0.665
+  }
+}

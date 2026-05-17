@@ -1,0 +1,21 @@
+{
+  "file": "a3-valid-parens.milo",
+  "conciseness": {
+    "loc": 33,
+    "tokens": 114,
+    "chars": 390,
+    "halsteadVolume": 640,
+    "compressionRatio": 0.377
+  },
+  "sigils": {
+    "sigilsPerLine": 4.33,
+    "uniqueSigilTypes": 18,
+    "totalSigils": 143
+  },
+  "readability": {
+    "avgLineLength": 23,
+    "maxNesting": 8,
+    "avgIdentifierLength": 3.4,
+    "visualDensity": 0.503
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "file": "s1-channel-pipeline.milo",
+  "conciseness": {
+    "loc": 41,
+    "tokens": 131,
+    "chars": 633,
+    "halsteadVolume": 806,
+    "compressionRatio": 0.375
+  },
+  "sigils": {
+    "sigilsPerLine": 3.05,
+    "uniqueSigilTypes": 16,
+    "totalSigils": 125
+  },
+  "readability": {
+    "avgLineLength": 25,
+    "maxNesting": 8,
+    "avgIdentifierLength": 5.3,
+    "visualDensity": 0.602
+  }
+}
