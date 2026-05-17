@@ -52,6 +52,12 @@ Score ranges from 0 (C) to 5 (Rust, Swift, Haskell, Elixir). Half-points for lan
 
 #### Full breakdown
 
+- **Memory** — Can you access freed memory, overflow a buffer, or read uninitialized data?
+- **Null** — Can a variable be `null`/`nil`/`None` without the type system knowing?
+- **Race** — Can two threads mutate shared state without the compiler stopping you?
+- **Overflow** — Does `255 + 1` silently become `0` (or wrap unpredictably)?
+- **Coercion** — Does `"5" + 3` silently produce `"53"` or `8` instead of an error?
+
 <div class="guardrail-table">
 
 | | Memory | Null | Race | Overflow | Coercion | **Total** |
