@@ -6,29 +6,48 @@ interface Row {
   [key: string]: string | number
 }
 
-const props = defineProps<{
+interface Group {
+  label: string
+  languages: string[]
+}
+
+const props = withDefaults(defineProps<{
   data: Row[]
   columns: { key: string; label: string; lower?: boolean }[]
-}>()
+  groups?: Group[]
+}>(), {
+  groups: () => []
+})
 
-// lower=true means lower is better (default for all metrics)
+const activeGroup = ref('All')
 const sortKey = ref(props.columns[0]?.key || 'language')
 const sortAsc = ref(true)
+
+const allGroups = computed(() => {
+  if (props.groups.length === 0) return []
+  return [{ label: 'All', languages: [] as string[] }, ...props.groups]
+})
 
 function toggleSort(key: string) {
   if (sortKey.value === key) {
     sortAsc.value = !sortAsc.value
   } else {
     sortKey.value = key
-    // For 'language', default ascending. For metrics, default ascending (lower is better)
     sortAsc.value = true
   }
 }
 
+const filtered = computed(() => {
+  if (activeGroup.value === 'All' || allGroups.value.length === 0) return props.data
+  const group = allGroups.value.find(g => g.label === activeGroup.value)
+  if (!group || group.languages.length === 0) return props.data
+  return props.data.filter(r => group.languages.includes(r.language.toLowerCase()))
+})
+
 const sorted = computed(() => {
   const key = sortKey.value
   const asc = sortAsc.value
-  return [...props.data].sort((a, b) => {
+  return [...filtered.value].sort((a, b) => {
     const av = a[key]
     const bv = b[key]
     if (typeof av === 'string' && typeof bv === 'string') {
@@ -41,18 +60,17 @@ const sorted = computed(() => {
 function getColor(value: number, key: string): string {
   const col = props.columns.find(c => c.key === key)
   if (!col) return ''
-  const vals = props.data.map(r => r[key] as number)
+  // Color relative to visible data only
+  const vals = filtered.value.map(r => r[key] as number)
   const min = Math.min(...vals)
   const max = Math.max(...vals)
   if (max === min) return ''
 
-  // lower is better by default
   const lowerBetter = col.lower !== false
   const ratio = lowerBetter
-    ? (value - min) / (max - min)     // 0 = best, 1 = worst
-    : 1 - (value - min) / (max - min) // inverted
+    ? (value - min) / (max - min)
+    : 1 - (value - min) / (max - min)
 
-  // Green (best) → Yellow (mid) → Red (worst)
   const r = ratio < 0.5 ? Math.round(ratio * 2 * 234) : 234
   const g = ratio < 0.5 ? 197 : Math.round((1 - (ratio - 0.5) * 2) * 197)
   const b = 30
@@ -63,7 +81,7 @@ function getColor(value: number, key: string): string {
 function isBest(value: number, key: string): boolean {
   const col = props.columns.find(c => c.key === key)
   if (!col) return false
-  const vals = props.data.map(r => r[key] as number)
+  const vals = filtered.value.map(r => r[key] as number)
   const lowerBetter = col.lower !== false
   return lowerBetter ? value === Math.min(...vals) : value === Math.max(...vals)
 }
@@ -75,36 +93,48 @@ function sortArrow(key: string): string {
 </script>
 
 <template>
-  <table class="metrics-table">
-    <thead>
-      <tr>
-        <th @click="toggleSort('language')">
-          Language
-          <span class="sort-arrow" :class="{ active: sortKey === 'language' }">
-            {{ sortArrow('language') }}
-          </span>
-        </th>
-        <th v-for="col in columns" :key="col.key" @click="toggleSort(col.key)">
-          {{ col.label }}
-          <span class="sort-arrow" :class="{ active: sortKey === col.key }">
-            {{ sortArrow(col.key) }}
-          </span>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="row in sorted" :key="row.language">
-        <td class="lang-cell">{{ row.language }}</td>
-        <td
-          v-for="col in columns"
-          :key="col.key"
-          class="metric-cell"
-          :style="{ backgroundColor: getColor(row[col.key] as number, col.key) }"
-        >
-          {{ row[col.key] }}
-          <span v-if="isBest(row[col.key] as number, col.key)" class="best-badge">best</span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div>
+    <div v-if="allGroups.length > 0" class="metrics-filters">
+      <button
+        v-for="group in allGroups"
+        :key="group.label"
+        :class="{ active: activeGroup === group.label }"
+        @click="activeGroup = group.label"
+      >
+        {{ group.label }}
+      </button>
+    </div>
+    <table class="metrics-table">
+      <thead>
+        <tr>
+          <th @click="toggleSort('language')">
+            Language
+            <span class="sort-arrow" :class="{ active: sortKey === 'language' }">
+              {{ sortArrow('language') }}
+            </span>
+          </th>
+          <th v-for="col in columns" :key="col.key" @click="toggleSort(col.key)">
+            {{ col.label }}
+            <span class="sort-arrow" :class="{ active: sortKey === col.key }">
+              {{ sortArrow(col.key) }}
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="row in sorted" :key="row.language">
+          <td class="lang-cell">{{ row.language }}</td>
+          <td
+            v-for="col in columns"
+            :key="col.key"
+            class="metric-cell"
+            :style="{ backgroundColor: getColor(row[col.key] as number, col.key) }"
+          >
+            {{ row[col.key] }}
+            <span v-if="isBest(row[col.key] as number, col.key)" class="best-badge">best</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
