@@ -38,7 +38,7 @@
 **Keywords** — distinct language keywords used in the solution (e.g., `fn`, `let`, `match`, `async`). **Syntax patterns** — distinct constructs like generics, closures, pattern matching, channels. **Concept count** = keywords + patterns. Measures how many distinct language features the programmer must know.
 
 ### Guardrails
-**Guardrail score** — counts how many of 5 safety guarantees a language provides **by default**, without opt-in flags or libraries. Each is binary (yes/no):
+**Guardrail score** — rates 5 safety guarantees on a 3-point scale: **0** = not available, **0.5** = available but opt-in, **1** = enforced by default.
 
 | Guardrail | What it prevents |
 |-----------|-----------------|
@@ -48,7 +48,7 @@
 | **Overflow safe** | Integer overflow trapped, not silently wrapped |
 | **Coercion safe** | No implicit type coercions (e.g., `"5" + 3` doesn't silently produce `"53"`) |
 
-Score ranges from 0 (C, C++) to 5 (Rust, Haskell, Elixir). This is a language-level property — it doesn't vary per solution.
+Score ranges from 0 (C) to 5 (Rust, Swift, Haskell, Elixir). Half-points for languages with opt-in mechanisms (e.g., C++ smart pointers = 0.5 for memory, Java `Optional` = 0.5 for null). This is a language-level property — it doesn't vary per solution.
 
 ### Ceremony
 **Ceremony ratio** — proportion of lines that are language overhead rather than algorithm logic. Counts: import/use/include statements, main function signatures, class/module wrappers, `return 0`, lone braces/end keywords, defer statements, type-only declarations, and preprocessor directives. Lower = less boilerplate.

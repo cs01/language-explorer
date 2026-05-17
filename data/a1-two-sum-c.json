@@ -26,11 +26,11 @@
     "conceptCount": 7
   },
   "guardrails": {
-    "memory": false,
-    "null": false,
-    "race": false,
-    "overflow": false,
-    "coercion": false,
+    "memory": 0,
+    "null": 0,
+    "race": 0,
+    "overflow": 0,
+    "coercion": 0,
     "guardrailScore": 0
   },
   "ceremony": {

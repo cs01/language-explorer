@@ -135,28 +135,29 @@ function scoreConcepts(src: string, nonBlankLines: string[]) {
 }
 
 // Static language-level safety guardrails (not per-file — inherent to the language).
-// Each category is binary: does the language prevent this class of bug by default?
+// Scored per category: 0 = not available, 0.5 = available but opt-in, 1 = enforced by default.
 //   memory:   use-after-free, double-free, buffer overflow, uninitialized reads
 //   null:     null/nil pointer dereference (Option/Maybe required)
 //   race:     data races prevented at compile time
 //   overflow: integer overflow trapped (not silent wrap)
 //   coercion: no implicit type coercions
-const guardrails: Record<string, { memory: boolean; null: boolean; race: boolean; overflow: boolean; coercion: boolean }> = {
-  c:          { memory: false, null: false, race: false, overflow: false, coercion: false },
-  cpp:        { memory: false, null: false, race: false, overflow: false, coercion: false },
-  zig:        { memory: false, null: false, race: false, overflow: true,  coercion: true },
-  rust:       { memory: true,  null: true,  race: true,  overflow: true,  coercion: true },
-  milo:       { memory: true,  null: true,  race: false, overflow: false, coercion: true },
-  go:         { memory: true,  null: false, race: false, overflow: false, coercion: true },
-  java:       { memory: true,  null: false, race: false, overflow: false, coercion: false },
-  kotlin:     { memory: true,  null: true,  race: false, overflow: false, coercion: true },
-  swift:      { memory: true,  null: true,  race: false, overflow: true,  coercion: true },
-  haskell:    { memory: true,  null: true,  race: true,  overflow: true,  coercion: true },
-  elixir:     { memory: true,  null: true,  race: true,  overflow: true,  coercion: true },
-  python:     { memory: true,  null: false, race: false, overflow: true,  coercion: true },
-  ruby:       { memory: true,  null: false, race: false, overflow: true,  coercion: true },
-  javascript: { memory: true,  null: false, race: false, overflow: false, coercion: false },
-  typescript: { memory: true,  null: false, race: false, overflow: false, coercion: true },
+type G = { memory: number; null: number; race: number; overflow: number; coercion: number }
+const guardrails: Record<string, G> = {
+  c:          { memory: 0,   null: 0,   race: 0, overflow: 0, coercion: 0   },
+  cpp:        { memory: 0.5, null: 0.5, race: 0, overflow: 0, coercion: 0   },
+  zig:        { memory: 0.5, null: 0.5, race: 0, overflow: 1, coercion: 1   },
+  rust:       { memory: 1,   null: 1,   race: 1, overflow: 1, coercion: 1   },
+  milo:       { memory: 1,   null: 1,   race: 0, overflow: 0, coercion: 1   },
+  go:         { memory: 1,   null: 0,   race: 0, overflow: 0, coercion: 1   },
+  java:       { memory: 1,   null: 0.5, race: 0, overflow: 0, coercion: 0.5 },
+  kotlin:     { memory: 1,   null: 1,   race: 0, overflow: 0, coercion: 1   },
+  swift:      { memory: 1,   null: 1,   race: 1, overflow: 1, coercion: 1   },
+  haskell:    { memory: 1,   null: 1,   race: 1, overflow: 1, coercion: 1   },
+  elixir:     { memory: 1,   null: 1,   race: 1, overflow: 1, coercion: 1   },
+  python:     { memory: 1,   null: 0,   race: 0, overflow: 1, coercion: 1   },
+  ruby:       { memory: 1,   null: 0,   race: 0, overflow: 1, coercion: 1   },
+  javascript: { memory: 1,   null: 0,   race: 0, overflow: 0, coercion: 0   },
+  typescript: { memory: 1,   null: 0.5, race: 0, overflow: 0, coercion: 1   },
 }
 
 const extToLang: Record<string, string> = {
@@ -169,8 +170,8 @@ const extToLang: Record<string, string> = {
 function scoreGuardrails(filename: string) {
   const ext = filename.split('.').pop() || ''
   const lang = extToLang[ext] || ext
-  const g = guardrails[lang] || { memory: false, null: false, race: false, overflow: false, coercion: false }
-  const score = [g.memory, g.null, g.race, g.overflow, g.coercion].filter(Boolean).length
+  const g = guardrails[lang] || { memory: 0, null: 0, race: 0, overflow: 0, coercion: 0 }
+  const score = g.memory + g.null + g.race + g.overflow + g.coercion
   return { ...g, guardrailScore: score }
 }
 
