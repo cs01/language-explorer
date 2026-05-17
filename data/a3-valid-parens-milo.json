@@ -24,5 +24,13 @@
     "syntaxPatterns": 2,
     "apiCalls": 4,
     "conceptCount": 12
+  },
+  "safety": {
+    "safetyScore": 1,
+    "safetyPerLine": 0.05
+  },
+  "ceremony": {
+    "ceremonyLines": 6,
+    "ceremonyRatio": 0.273
   }
 }

@@ -134,10 +134,87 @@ function scoreConcepts(src: string, nonBlankLines: string[]) {
   };
 }
 
+function scoreSafety(src: string, nonBlankLines: string[]) {
+  let score = 0;
+
+  // Sum/option types used as values: Result, Option, Maybe, Either
+  score += (src.match(/\b(Result|Option|Maybe|Either)\b/g) || []).length;
+
+  // Rust ? operator, Milo ! operator (error propagation)
+  score += (src.match(/\w[?!]\s*[;,\n)}]/g) || []).length;
+  score += (src.match(/\w\)\s*[?!]/g) || []).length;
+
+  // unwrap/expect calls (explicit error acknowledgment)
+  score += (src.match(/\.(unwrap|unwrap_or|unwrap_or_else|unwrap_or_default|expect)\s*\(/g) || []).length;
+
+  // try/catch/except/rescue/errdefer blocks
+  score += (src.match(/\b(try|catch|except|rescue|errdefer)\b/g) || []).length;
+
+  // Go-style if err != nil
+  score += (src.match(/if\s+err\s*!=\s*nil/g) || []).length;
+
+  // Go err return patterns (_, err :=)
+  score += (src.match(/,\s*err\s*:?=/g) || []).length;
+
+  // Elixir/Erlang :ok/:error tuple matching
+  score += (src.match(/:ok\b/g) || []).length;
+  score += (src.match(/:error\b/g) || []).length;
+
+  // Haskell Just/Nothing/Left/Right pattern matches
+  score += (src.match(/\b(Just|Nothing|Left|Right)\b/g) || []).length;
+
+  // match/case on Err/Error/Failure variants
+  score += (src.match(/\b(Err|Ok)\s*\(/g) || []).length;
+  score += (src.match(/Result\.(Ok|Err|Error)\b/g) || []).length;
+  score += (src.match(/Option\.(Some|None)\b/g) || []).length;
+
+  // Type annotations on function params
+  score += (src.match(/(fn|func|fun)\s+\w+\s*\([^)]*:\s*[A-Z&\[*]\w*/g) || []).length;
+
+  // Return type annotations (-> Type or ): Type)
+  score += (src.match(/(->\s*[A-Z(&\[]\w*|\):\s*[A-Z]\w*)/g) || []).length;
+
+  const safetyPerLine = +(score / nonBlankLines.length).toFixed(2);
+  return { safetyScore: score, safetyPerLine };
+}
+
+function scoreCeremony(src: string, nonBlankLines: string[]) {
+  let ceremonyLines = 0;
+
+  for (const line of nonBlankLines) {
+    const t = line.trim();
+    // Import/use/include/require/from/package statements
+    if (/^(import|use|from|require|include|package|module)\b/.test(t)) { ceremonyLines++; continue; }
+    // Main function signature and its closing brace
+    if (/^(fn\s+main|func\s+main|def\s+main|public\s+static\s+void\s+main|int\s+main)/.test(t)) { ceremonyLines++; continue; }
+    // Class/module wrappers that exist only to hold code
+    if (/^(class\s+\w+\s*\{?|module\s+\w+\s+where|module\s+\w+\s+do)$/.test(t)) { ceremonyLines++; continue; }
+    // Bare return 0/return statements at end of main
+    if (/^return\s+0\s*;?$/.test(t)) { ceremonyLines++; continue; }
+    // Lone opening/closing braces or 'end'
+    if (/^[{}]$/.test(t) || /^end$/.test(t)) { ceremonyLines++; continue; }
+    // Standalone defer/close cleanup
+    if (/^defer\s/.test(t)) { ceremonyLines++; continue; }
+    // Type-only lines (struct/type declarations with no logic)
+    if (/^(struct|type|typedef|using)\s+\w+/.test(t) && !/=/.test(t)) { ceremonyLines++; continue; }
+    // #include guards, pragma
+    if (/^#(include|pragma|define|ifndef|endif)/.test(t)) { ceremonyLines++; continue; }
+    // @import / @_
+    if (/^@(import|_)/.test(t)) { ceremonyLines++; continue; }
+    // const std = @import("std")
+    if (/^const\s+std\s*=/.test(t)) { ceremonyLines++; continue; }
+  }
+
+  const ratio = +(ceremonyLines / nonBlankLines.length).toFixed(3);
+  return { ceremonyLines, ceremonyRatio: ratio };
+}
+
 const conciseness = scoreConciseness(source, lines);
 const sigils = scoreSigils(lines);
 const readability = scoreReadability(lines);
 const concepts = scoreConcepts(source, lines);
+const safety = scoreSafety(source, lines);
+const ceremony = scoreCeremony(source, lines);
 
 const result = {
   file: basename(file),
@@ -145,6 +222,8 @@ const result = {
   sigils,
   readability,
   concepts,
+  safety,
+  ceremony,
 };
 
 console.log(JSON.stringify(result, null, 2));

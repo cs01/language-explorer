@@ -34,14 +34,20 @@
 ### Compression ratio
 **gzip ratio** — `compressed_size / original_size`. A practical proxy for [Kolmogorov complexity](https://en.wikipedia.org/wiki/Kolmogorov_complexity). Low ratio = repetitive/predictable code. High ratio = dense/novel code.
 
+### Concept Count
+**Keywords** — distinct language keywords used in the solution (e.g., `fn`, `let`, `match`, `async`). **Syntax patterns** — distinct constructs like generics, closures, pattern matching, channels. **Concept count** = keywords + patterns. Measures how many distinct language features the programmer must know.
+
+### Safety
+**Safety score per line** — counts explicit error handling and type safety constructs normalized by LOC. Includes: Result/Option/Maybe/Either types, error propagation operators (`?`, `!`), try/catch blocks, Go `if err != nil` checks, Elixir `:ok`/`:error` tuples, Haskell `Just`/`Nothing` matches, typed function signatures, and return type annotations. Higher = more safety infrastructure in the code.
+
+### Ceremony
+**Ceremony ratio** — proportion of lines that are language overhead rather than algorithm logic. Counts: import/use/include statements, main function signatures, class/module wrappers, `return 0`, lone braces/end keywords, defer statements, type-only declarations, and preprocessor directives. Lower = less boilerplate.
+
 ## Dimensions not yet automated
 
 | Dimension | Why it's hard to automate |
 |-----------|--------------------------|
-| Concept Count | Requires human judgment about what constitutes a "concept" |
 | Type Annotation Burden | Needs language-specific parsers to distinguish required vs optional annotations |
-| Error Handling Overhead | Requires semantic understanding of which lines are error handling |
-| Safety Ceremony | Requires understanding which tokens serve memory safety vs other purposes |
 
 ## Academic references
 

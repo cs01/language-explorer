@@ -14,6 +14,7 @@ const metrics = data.metrics
     tokens: m.tokens,
     complexity: m.halsteadVolume,
     'tok/line': m.tokensPerLine, 'symbols/line': m.sigilsPerLine, concepts: m.conceptCount,
+    safety: m.safetyPerLine, ceremony: m.ceremonyRatio,
   }))
 
 const columns = [
@@ -21,6 +22,7 @@ const columns = [
   { key: 'tokens', label: 'Tokens' },
   { key: 'complexity', label: 'Complexity' },
   { key: 'tok/line', label: 'Tok/Line' }, { key: 'symbols/line', label: 'Sym/Line' }, { key: 'concepts', label: 'Concepts' },
+  { key: 'safety', label: 'Safety', lower: false }, { key: 'ceremony', label: 'Ceremony' },
 ]
 
 const langLabels = {
