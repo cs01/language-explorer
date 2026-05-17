@@ -1,0 +1,21 @@
+{
+  "file": "a1-two-sum.py",
+  "conciseness": {
+    "loc": 7,
+    "tokens": 31,
+    "chars": 158,
+    "halsteadVolume": 146,
+    "compressionRatio": 0.674
+  },
+  "sigils": {
+    "sigilsPerLine": 4.43,
+    "uniqueSigilTypes": 11,
+    "totalSigils": 31
+  },
+  "readability": {
+    "avgLineLength": 32,
+    "maxNesting": 6,
+    "avgIdentifierLength": 4.1,
+    "visualDensity": 0.681
+  }
+}

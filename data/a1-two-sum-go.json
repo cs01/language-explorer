@@ -1,0 +1,21 @@
+{
+  "file": "a1-two-sum.go",
+  "conciseness": {
+    "loc": 12,
+    "tokens": 44,
+    "chars": 173,
+    "halsteadVolume": 216,
+    "compressionRatio": 0.755
+  },
+  "sigils": {
+    "sigilsPerLine": 3.25,
+    "uniqueSigilTypes": 11,
+    "totalSigils": 39
+  },
+  "readability": {
+    "avgLineLength": 18,
+    "maxNesting": 1,
+    "avgIdentifierLength": 3.7,
+    "visualDensity": 0.749
+  }
+}
