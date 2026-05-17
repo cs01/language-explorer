@@ -13,18 +13,20 @@ const avgData = languages.map(lang => {
     language: lang.charAt(0).toUpperCase() + lang.slice(1),
     lines: avg('loc'),
     tokens: avg('tokens'),
+    'tok/line': avg('tokensPerLine'),
     complexity: Math.round(entries.reduce((s, e) => s + e.halsteadVolume, 0) / entries.length),
     'symbols/line': avg('sigilsPerLine'),
-    'symbol types': Math.round(entries.reduce((s, e) => s + e.uniqueSigilTypes, 0) / entries.length),
+    concepts: Math.round(entries.reduce((s, e) => s + e.conceptCount, 0) / entries.length),
   }
 })
 
 const columns = [
   { key: 'lines', label: 'Lines' },
   { key: 'tokens', label: 'Tokens' },
+  { key: 'tok/line', label: 'Tok/Line' },
   { key: 'complexity', label: 'Complexity' },
   { key: 'symbols/line', label: 'Sym/Line' },
-  { key: 'symbol types', label: 'Sym Types' },
+  { key: 'concepts', label: 'Concepts' },
 ]
 
 const groupDefs = [
@@ -52,15 +54,14 @@ const dynamicData = filterByGroup(['python', 'ruby', 'javascript', 'elixir'])
 
 # langmetrics
 
-**How much does your language cost you?** Quantitative comparison of 14 programming languages — same programs, measured automatically.
+**How much does your language cost you?** Same programs, measured automatically. Lower is better.
 
-Every language solves the same 7 problems. We measure what you actually type: how many lines, how many tokens, how much symbolic noise, and how much total information your brain has to process. Lower is better across the board.
-
-- **Lines** — average non-blank lines of code
-- **Tokens** — whitespace-separated tokens (information density)
-- **Complexity** — Halstead Volume (total information content your brain processes)
+- **Lines** — non-blank lines of code
+- **Tokens** — whitespace-separated tokens
+- **Tok/Line** — information density per line
+- **Complexity** — Halstead Volume (total information content)
 - **Sym/Line** — special characters per line (punctuation tax)
-- **Sym Types** — unique symbol varieties (learning curve)
+- **Concepts** — distinct language constructs used (keywords + syntax patterns)
 
 <MetricsTable :data="avgData" :columns="columns" />
 
@@ -68,73 +69,48 @@ Every language solves the same 7 problems. We measure what you actually type: ho
 
 ---
 
-### Systems — C, C++, Rust, Zig
-
-Does modern systems design save code? Rust is 44% fewer lines than C — while adding safety. Zig stays C-sized but trades manual memory bugs for explicit error handling.
+### Systems
 
 <MetricsTable :data="systemsData" :columns="columns" />
 
 ---
 
-### Scripting — Python, Ruby, JavaScript, TypeScript
-
-Ruby edges Python on symbol noise and complexity. JavaScript is close but loses on tokens — `const`/`let`/`function` add up vs Python's minimal keywords. TypeScript adds type annotations on top, pushing symbols and complexity higher.
+### Scripting
 
 <MetricsTable :data="scriptingData" :columns="columns" />
 
 ---
 
-### JVM — Java, Kotlin
-
-Kotlin cuts Java's lines by 25% and tokens by 27%. The `val`/`fun`/`it` brevity is real, not cosmetic.
+### JVM
 
 <MetricsTable :data="jvmData" :columns="columns" />
 
 ---
 
-### Functional — Haskell, Elixir
-
-Elixir is more concise (16.5 vs 20.5 lines) but noisier (6.4 vs 4.6 symbols/line). Haskell's token count is high — pattern matching and type signatures are verbose but carry a lot of information per token.
+### Functional
 
 <MetricsTable :data="functionalData" :columns="columns" />
 
 ---
 
-### GC Languages — automatic memory management
+### GC Languages
 
 <MetricsTable :data="gcData" :columns="columns" />
 
 ---
 
-### Static Types — compile-time checked
+### Static Types
 
 <MetricsTable :data="staticData" :columns="columns" />
 
 ---
 
-### Dynamic Types — runtime flexibility
+### Dynamic Types
 
 <MetricsTable :data="dynamicData" :columns="columns" />
 
 ---
 
-## Key observations
-
-::: info Metric 1: Conciseness
-Zig/C need **~3× more code** than Python/Ruby. Every missing stdlib abstraction costs ~10 lines. Kotlin matches JavaScript despite being statically typed.
-:::
-
-::: tip Metric 2: Symbol Noise
-Rust, TypeScript, Elixir, Zig all hit 6.3-6.4 symbols/line — for different reasons (safety, types, pipelines, explicitness). Ruby (4.1) beats even Go (4.3).
-:::
-
-::: warning Metric 3: Complexity
-Halstead Volume: C/Zig are 5× Python/Ruby. Haskell is surprisingly high (626) due to token-dense pattern matching. Kotlin/Elixir cluster with scripting languages (~280-294).
-:::
-
-::: danger Metric 4: Symbol Vocabulary
-Python uses 12 unique symbol types. C uses 20. More variety = steeper learning curve. Haskell uses only 14 — few symbols, used densely.
-:::
 
 ## Explore by problem
 
@@ -145,13 +121,5 @@ Python uses 12 unique symbol types. C uses 20. More variety = steeper learning c
 - [HTTP Server](/problems/http-server) — Routing + JSON responses (real-world)
 - [Concurrent Fetch](/problems/concurrent-fetch) — HTTP + bounded parallelism (real-world)
 - [Channel Pipeline](/problems/channel-pipeline) — Producer/filter/consumer (systems)
-
-## What's next
-
-These metrics are automated. More dimensions coming:
-
-- **Concept Count** — how many distinct ideas do you need to learn to be productive?
-- **Type Ceremony** — how many annotations does the compiler demand?
-- **Error Overhead** — what fraction of your code handles errors vs does actual work?
 
 See [Methodology](/methodology) for how we measure.

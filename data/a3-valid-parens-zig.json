@@ -5,7 +5,8 @@
     "tokens": 90,
     "chars": 331,
     "halsteadVolume": 520,
-    "compressionRatio": 0.422
+    "compressionRatio": 0.422,
+    "tokensPerLine": 3.46
   },
   "sigils": {
     "sigilsPerLine": 5.04,
@@ -17,5 +18,11 @@
     "maxNesting": 5,
     "avgIdentifierLength": 4,
     "visualDensity": 0.468
+  },
+  "concepts": {
+    "keywords": 11,
+    "syntaxPatterns": 2,
+    "apiCalls": 1,
+    "conceptCount": 13
   }
 }

@@ -88,15 +88,63 @@ function scoreReadability(nonBlankLines: string[]) {
   return { avgLineLength, maxNesting, avgIdentifierLength, visualDensity };
 }
 
+function scoreConcepts(src: string, nonBlankLines: string[]) {
+  // Keywords used (language constructs the programmer must know)
+  const keywordPattern = /\b(fn|func|fun|def|class|struct|enum|trait|impl|interface|type|import|from|use|module|package|let|var|val|const|mut|pub|pub\(crate\)|private|protected|static|async|await|spawn|go|chan|channel|match|switch|case|when|if|else|for|while|loop|do|return|break|continue|yield|try|catch|throw|throws|raise|rescue|defer|unsafe|where|in|is|as|new|self|this|super|nil|null|None|true|false|void|main|with|lambda|move|ref|dyn|box|impl|derive|macro|comptime|errdefer|orelse|unreachable)\b/g;
+  const keywords = new Set<string>();
+  for (const m of src.matchAll(keywordPattern)) {
+    keywords.add(m[0]);
+  }
+
+  // Syntax patterns (distinct constructs beyond keywords)
+  const patterns = new Set<string>();
+  if (/=>/.test(src)) patterns.add('arrow_fn');
+  if (/->/.test(src)) patterns.add('return_type');
+  if (/<[A-Z]\w*>/.test(src)) patterns.add('generics');
+  if (/\.\.\.|\.\./.test(src)) patterns.add('range');
+  if (/\|[^|]/.test(src) && /closure|lambda|\{.*\|/.test(src)) patterns.add('closure');
+  if (/match\s|case\s|when\s/.test(src)) patterns.add('pattern_match');
+  if (/async|await|Future|Promise/.test(src)) patterns.add('async');
+  if (/chan|channel|Channel/.test(src)) patterns.add('channels');
+  if (/spawn|go\s|thread|Thread|Task\./.test(src)) patterns.add('concurrency');
+  if (/Result|Option|Maybe|Either|\?/.test(src)) patterns.add('sum_types');
+  if (/impl\s|trait\s|interface\s|protocol\s/.test(src)) patterns.add('interfaces');
+  if (/&mut|&\w|borrowing|\*const|\*mut/.test(src)) patterns.add('references');
+  if (/\bmap\b|\bfilter\b|\breduce\b|\bfold\b/.test(src)) patterns.add('higher_order');
+  if (/struct\s|class\s|data\s+class/.test(src)) patterns.add('struct_def');
+  if (/enum\s/.test(src)) patterns.add('enum_def');
+  if (/import|use|from|require|include/.test(src)) patterns.add('imports');
+  if (/\berr\b|\bError\b|rescue|except|catch/.test(src)) patterns.add('error_handling');
+
+  // Unique stdlib/API identifiers (function calls from standard library)
+  const callPattern = /\b([a-z][a-zA-Z0-9]*(?:\.[a-z][a-zA-Z0-9]*)?)\s*\(/g;
+  const apiCalls = new Set<string>();
+  for (const m of src.matchAll(callPattern)) {
+    const call = m[1];
+    if (!keywords.has(call) && call.length > 2) {
+      apiCalls.add(call);
+    }
+  }
+
+  return {
+    keywords: keywords.size,
+    syntaxPatterns: patterns.size,
+    apiCalls: apiCalls.size,
+    conceptCount: keywords.size + patterns.size,
+  };
+}
+
 const conciseness = scoreConciseness(source, lines);
 const sigils = scoreSigils(lines);
 const readability = scoreReadability(lines);
+const concepts = scoreConcepts(source, lines);
 
 const result = {
   file: basename(file),
-  conciseness,
+  conciseness: { ...conciseness, tokensPerLine: +(conciseness.tokens / conciseness.loc).toFixed(2) },
   sigils,
   readability,
+  concepts,
 };
 
 console.log(JSON.stringify(result, null, 2));

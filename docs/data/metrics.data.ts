@@ -9,6 +9,7 @@ export interface MetricsEntry {
   language: string
   loc: number
   tokens: number
+  tokensPerLine: number
   halsteadVolume: number
   sigilsPerLine: number
   uniqueSigilTypes: number
@@ -16,6 +17,10 @@ export interface MetricsEntry {
   avgLineLength: number
   maxNesting: number
   visualDensity: number
+  conceptCount: number
+  keywords: number
+  syntaxPatterns: number
+  apiCalls: number
 }
 
 export interface SolutionEntry {
@@ -36,6 +41,7 @@ function loadMetrics(): MetricsEntry[] {
       language,
       loc: raw.conciseness.loc,
       tokens: raw.conciseness.tokens,
+      tokensPerLine: raw.conciseness.tokensPerLine ?? +(raw.conciseness.tokens / raw.conciseness.loc).toFixed(2),
       halsteadVolume: raw.conciseness.halsteadVolume,
       sigilsPerLine: raw.sigils.sigilsPerLine,
       uniqueSigilTypes: raw.sigils.uniqueSigilTypes,
@@ -43,6 +49,10 @@ function loadMetrics(): MetricsEntry[] {
       avgLineLength: raw.readability.avgLineLength,
       maxNesting: raw.readability.maxNesting,
       visualDensity: raw.readability.visualDensity,
+      conceptCount: raw.concepts?.conceptCount ?? 0,
+      keywords: raw.concepts?.keywords ?? 0,
+      syntaxPatterns: raw.concepts?.syntaxPatterns ?? 0,
+      apiCalls: raw.concepts?.apiCalls ?? 0,
     }
   })
 }

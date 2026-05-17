@@ -13,20 +13,20 @@ const metrics = data.metrics
     lines: m.loc,
     tokens: m.tokens,
     complexity: m.halsteadVolume,
-    'symbols/line': m.sigilsPerLine,
+    'tok/line': m.tokensPerLine, 'symbols/line': m.sigilsPerLine, concepts: m.conceptCount,
   }))
 
 const columns = [
   { key: 'lines', label: 'Lines' },
   { key: 'tokens', label: 'Tokens' },
   { key: 'complexity', label: 'Complexity' },
-  { key: 'symbols/line', label: 'Sym/Line' },
+  { key: 'tok/line', label: 'Tok/Line' }, { key: 'symbols/line', label: 'Sym/Line' }, { key: 'concepts', label: 'Concepts' },
 ]
 
 const langLabels: Record<string, string> = {
   python: 'Python', typescript: 'TypeScript', rust: 'Rust', go: 'Go',
   c: 'C', cpp: 'C++', swift: 'Swift', zig: 'Zig', javascript: 'JavaScript',
-  ruby: 'Ruby', java: 'Java', kotlin: 'Kotlin', haskell: 'Haskell', elixir: 'Elixir',
+  ruby: 'Ruby', java: 'Java', kotlin: 'Kotlin', haskell: 'Haskell', elixir: 'Elixir', milo: 'Milo',
 }
 
 const solutions = data.solutions
