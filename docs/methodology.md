@@ -68,8 +68,8 @@ Score ranges from 0 (C) to 5 (Rust, Swift, Haskell, Elixir), normalized from the
 | **Swift** | 1 | 1 | 1 | 1 | 1 | **5** |
 | **Haskell** | 1 | 1 | 1 | 1 | 1 | **5** |
 | **Elixir** | 1 | 1 | 1 | 1 | 1 | **5** |
+| **Milo** | 1 | 1 | 1 | 1 | 1 | **5** |
 | **Kotlin** | 1 | 1 | 0 | 0 | 1 | **3** |
-| **Milo** | 1 | 1 | 0 | 0 | 1 | **3** |
 | **Python** | 1 | 0 | 0 | 1 | 1 | **3** |
 | **Ruby** | 1 | 0 | 0 | 1 | 1 | **3** |
 | **Zig** | 0.5 | 0.5 | 0 | 1 | 1 | **3** |

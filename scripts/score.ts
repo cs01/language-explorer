@@ -147,7 +147,7 @@ const guardrails: Record<string, G> = {
   cpp:        { memory: 0.5, null: 0.5, race: 0, overflow: 0, coercion: 0   },
   zig:        { memory: 0.5, null: 0.5, race: 0, overflow: 1, coercion: 1   },
   rust:       { memory: 1,   null: 1,   race: 1, overflow: 1, coercion: 1   },
-  milo:       { memory: 1,   null: 1,   race: 0, overflow: 0, coercion: 1   },
+  milo:       { memory: 1,   null: 1,   race: 1, overflow: 1, coercion: 1   },
   go:         { memory: 1,   null: 0,   race: 0, overflow: 0, coercion: 1   },
   java:       { memory: 1,   null: 0.5, race: 0, overflow: 0, coercion: 0.5 },
   kotlin:     { memory: 1,   null: 1,   race: 0, overflow: 0, coercion: 1   },

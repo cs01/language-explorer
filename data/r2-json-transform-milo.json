@@ -28,10 +28,10 @@
   "guardrails": {
     "memory": 1,
     "null": 1,
-    "race": 0,
-    "overflow": 0,
+    "race": 1,
+    "overflow": 1,
     "coercion": 1,
-    "guardrailScore": 3.6
+    "guardrailScore": 5
   },
   "ceremony": {
     "ceremonyLines": 7,
