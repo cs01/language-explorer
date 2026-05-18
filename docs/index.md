@@ -92,6 +92,8 @@ const pairRadars = pairs.map(p => ({
 
 A quantitative explorer of programming languages — their properties, features, explicitness, and safety guardrails. Two views: what the language demands as a learner, and what it demands as a writer.
 
+Every metric here is computed from real code — 7 benchmark problems solved idiomatically in each language, scored for conciseness, complexity, and ceremony. Browse [individual language profiles](/languages/python) to see where a language's complexity lives, use the [Compare](/compare) page to put languages side-by-side, or read the [Methodology](/methodology) to see exactly how each score is calculated. No opinions, no tier lists — just measurements.
+
 ---
 
 ## Language Profile
