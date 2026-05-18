@@ -46,7 +46,14 @@ const maxVals = computed(() => ({
 }))
 
 const metrics = ['lines', 'tokens', 'complexity', 'sigilsPerLine', 'symbolTypes', 'guardrails', 'ceremony'] as const
-const metricLabels: Record<string, string> = {
+// Metrics where higher raw value = better (no inversion needed)
+const higherIsBetter = new Set(['guardrails'])
+const radarLabels: Record<string, string> = {
+  lines: 'Concise', tokens: 'Terse', complexity: 'Simple',
+  sigilsPerLine: 'Clear', symbolTypes: 'Clean',
+  guardrails: 'Safe', ceremony: 'Efficient',
+}
+const barLabels: Record<string, string> = {
   lines: 'Lines', tokens: 'Tokens', complexity: 'Complexity',
   sigilsPerLine: 'Sym/Line', symbolTypes: 'Sym Types',
   guardrails: 'Guardrails', ceremony: 'Ceremony',
@@ -83,7 +90,7 @@ const radarAxes = computed(() => {
     const angle = (360 / n) * i
     const [x, y] = polarToCart(angle, radarR)
     const [lx, ly] = polarToCart(angle, radarR + 20)
-    return { metric: m, label: metricLabels[m], angle, x, y, lx, ly }
+    return { metric: m, label: radarLabels[m], angle, x, y, lx, ly }
   })
 })
 
@@ -105,7 +112,8 @@ function langRadarPath(lang: string): string {
   const points = metrics.map((m, i) => {
     const val = entry[m as keyof LangData] as number
     const max = maxVals.value[m as keyof typeof maxVals.value]
-    const r = radarR * Math.min(val / max, 1)
+    const normalized = higherIsBetter.has(m) ? val / max : 1 - val / max
+    const r = radarR * Math.max(Math.min(normalized, 1), 0)
     const angle = (360 / n) * i
     return polarToCart(angle, r)
   })
@@ -174,7 +182,7 @@ function langRadarPath(lang: string): string {
 
     <div class="comparison-bars">
       <div v-for="metric in metrics" :key="metric" class="bar-group">
-        <div class="bar-label">{{ metricLabels[metric] }}</div>
+        <div class="bar-label">{{ barLabels[metric] }}</div>
         <div v-for="(lang, idx) in selected" :key="lang + metric" class="bar-row">
           <span class="bar-lang" :style="{ color: colors[idx] }">{{ lang }}</span>
           <div class="bar-track">
