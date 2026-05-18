@@ -53,18 +53,15 @@ const radarLabels: Record<string, string> = {
   sigilsPerLine: 'Clear', symbolTypes: 'Clean',
   guardrails: 'Safe', ceremony: 'Efficient',
 }
-const barLabels: Record<string, string> = {
-  lines: 'Lines', tokens: 'Tokens', complexity: 'Complexity',
-  sigilsPerLine: 'Sym/Line', symbolTypes: 'Sym Types',
-  guardrails: 'Guardrails', ceremony: 'Ceremony',
-}
+const barLabels = radarLabels
 
 function getBarWidth(lang: string, metric: string): number {
   const entry = props.languages.find(l => l.language === lang)
   if (!entry) return 0
   const val = entry[metric as keyof LangData] as number
   const max = maxVals.value[metric as keyof typeof maxVals.value]
-  return (val / max) * 100
+  const normalized = higherIsBetter.has(metric) ? val / max : 1 - val / max
+  return Math.max(normalized, 0) * 100
 }
 
 function getValue(lang: string, metric: string): number {

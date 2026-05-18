@@ -30,12 +30,12 @@ Pick 2-4 languages to see them head-to-head. Bars show relative performance — 
 
 ## How to read this
 
-- **Lines** — average non-blank lines of code across all problems
-- **Tokens** — words and symbols in the code
-- **Complexity** — total information your brain processes ([Halstead Volume](https://en.wikipedia.org/wiki/Halstead_complexity_measures))
-- **Sym/Line** — special characters per line (`{`, `->`, `&`, etc.)
-- **Sym Types** — how many different special characters you need to recognize
-- **Guardrails** — how many bugs the language prevents for you (0–5, [details](/methodology#guardrails))
-- **Ceremony** — what fraction of code is overhead vs actual logic
+Bigger = better, everywhere.
 
-**Radar:** bigger polygon = better. **Bars:** shorter = better (except Guardrails).
+- **Concise** — fewer lines of code
+- **Terse** — fewer tokens (words and symbols)
+- **Simple** — less complexity ([Halstead Volume](https://en.wikipedia.org/wiki/Halstead_complexity_measures))
+- **Clear** — fewer special characters per line (`{`, `->`, `&`, etc.)
+- **Clean** — fewer distinct special character types to recognize
+- **Safe** — more bugs prevented by the language (0–5, [details](/methodology#guardrails))
+- **Efficient** — less ceremony (imports, boilerplate) vs actual logic
