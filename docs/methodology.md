@@ -89,7 +89,9 @@ Score ranges from 0 (C) to 5 (Rust, Swift, Haskell, Elixir), normalized from the
 | **Java** | 1 | 0.5 | 0 | 0 | 0.5 | **2** |
 | **C++** | 0.5 | 0.5 | 0 | 0 | 0 | **1** |
 | **JavaScript** | 1 | 0 | 0 | 0 | 0 | **1** |
+| **LLVM IR** | 0 | 0 | 0 | 0 | 0.5 | **0.5** |
 | **C** | 0 | 0 | 0 | 0 | 0 | **0** |
+| **x86_64 asm** | 0 | 0 | 0 | 0 | 0 | **0** |
 
 </div>
 
@@ -118,6 +120,8 @@ This is a language-level property — it doesn't vary per solution. Higher = mor
 
 | | Keywords | Concepts |
 |---|:---:|:---:|
+| **x86_64 asm** | 1,503 | 45 |
+| **LLVM IR** | 150 | 35 |
 | **C++** | 92 | 135 |
 | **Rust** | 58 | 110 |
 | **Swift** | 98 | 110 |
@@ -142,6 +146,8 @@ This is a language-level property — it doesn't vary per solution. Higher = mor
 - **Elixir's** low keyword count (15) reflects that constructs like `def`, `if`, `case` are macros, not reserved words — but developers must still learn them (captured in Concepts).
 - **C++** at 135 concepts reflects templates, SFINAE, move semantics, rule of five, coroutines, modules, concepts, ranges, etc. — the full surface area that makes C++ notoriously difficult to master.
 - **Haskell** has only 24 keywords but 75 concepts because most complexity lives in the type system (type classes, monads, GADTs, kind system) rather than in reserved syntax.
+- **x86_64** has 1,503 instruction mnemonics (per [Intel SDM analysis](https://stefanheule.com/blog/how-many-x86-64-instructions-are-there-anyway/)) but only 45 structural concepts — the complexity is in the sheer number of instructions, not conceptual depth.
+- **LLVM IR** has 69 instruction opcodes plus ~80 keywords for types, attributes, and metadata. Coercion 0.5 because the verifier rejects type mismatches, but this is a compile-time check on IR, not a runtime guarantee.
 
 ## Dimensions not yet automated
 

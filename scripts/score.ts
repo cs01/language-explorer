@@ -159,6 +159,8 @@ const guardrails: Record<string, G> = {
   javascript: { memory: 1,   null: 0,   race: 0, overflow: 0, coercion: 0   },
   typescript: { memory: 1,   null: 0.5, race: 0, overflow: 0, coercion: 1   },
   ada:        { memory: 0.5, null: 0.5, race: 0.5, overflow: 1, coercion: 1 },
+  x86_64:     { memory: 0,   null: 0,   race: 0, overflow: 0, coercion: 0   },
+  llvm:       { memory: 0,   null: 0,   race: 0, overflow: 0, coercion: 0.5 },
 }
 
 // Language surface area: how much a developer must learn to read arbitrary code.
@@ -184,6 +186,8 @@ const surfaceArea: Record<string, SA> = {
   javascript: { keywords: 46,  concepts: 65  },
   typescript: { keywords: 67,  concepts: 100 },
   ada:        { keywords: 74,  concepts: 85  },
+  x86_64:     { keywords: 1503, concepts: 45 },
+  llvm:       { keywords: 150,  concepts: 35 },
 }
 
 const extToLang: Record<string, string> = {
@@ -191,6 +195,7 @@ const extToLang: Record<string, string> = {
   rb: 'ruby', kt: 'kotlin', hs: 'haskell', exs: 'elixir',
   c: 'c', cpp: 'cpp', go: 'go', swift: 'swift', zig: 'zig',
   java: 'java', milo: 'milo', adb: 'ada', ads: 'ada',
+  asm: 'x86_64', s: 'x86_64', ll: 'llvm',
 }
 
 // Weights derived from CVE/CWE data: Microsoft + Chrome found ~70% of CVEs are memory safety.
