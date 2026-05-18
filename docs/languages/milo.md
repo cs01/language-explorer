@@ -86,11 +86,11 @@ const tags = ['Systems', 'Static']
 const catData = catLabels.map((label, i) => ({ label, value: entries[0]?.[catKeys[i]] ?? 0 }))
 
 const grReasons = {
-  memory: 'Borrow checker prevents use-after-free at compile time',
-  null: 'No null — Maybe<T> with explicit unwrap',
-  race: 'Ownership system prevents shared mutable state',
-  overflow: 'Compile-time range checks on bounded integers',
-  coercion: 'No implicit conversions',
+  memory: 'Move semantics — single owner, use-after-move is a compile error',
+  null: 'No null — Option<T> with explicit unwrap',
+  race: 'Send/Sync traits enforce thread safety at compile time',
+  overflow: 'Compile-time range checks, debug-mode overflow traps',
+  coercion: 'No implicit conversions — explicit `as` casts required',
 }
 </script>
 
@@ -98,7 +98,7 @@ const grReasons = {
 
 <div class="lang-tags"><span v-for="t in tags" class="lang-tag">{{ t }}</span></div>
 
-An experimental language exploring minimal design — only 40 concepts, less than a third of C++. Static typing with type inference, pattern matching, and a small keyword set. Benchmarks show compact, low-ceremony code. The concept distribution is narrow by design, focusing on a small set of orthogonal features rather than specialized abstractions. [GitHub](https://github.com/cs01/milo)
+A memory-safe systems language that compiles to native code via LLVM. Ownership without lifetimes — move semantics and second-class references eliminate dangling pointers without a borrow checker or GC. 49 concepts, about a third of C++. Features green threads with transparent async I/O, channels, parallel blocks, and compile-time Send/Sync enforcement. [GitHub](https://github.com/cs01/milo)
 
 <div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" />

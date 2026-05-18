@@ -207,7 +207,7 @@ const surfaceArea: Record<string, SA> = {
   cpp:        { keywords: 92,  concepts: 135, categories: { types: 25, controlFlow: 12, functions: 15, oopData: 22, memory: 20, concurrency: 12, metaprogramming: 18, errorHandling: 11 } },
   rust:       { keywords: 58,  concepts: 110, categories: { types: 22, controlFlow: 12, functions: 12, oopData: 12, memory: 22, concurrency: 10, metaprogramming: 10, errorHandling: 10 } },
   zig:        { keywords: 49,  concepts: 65,  categories: { types: 12, controlFlow: 10, functions: 6,  oopData: 5,  memory: 15, concurrency: 5,  metaprogramming: 5,  errorHandling: 7  } },
-  milo:       { keywords: 30,  concepts: 40,  categories: { types: 8,  controlFlow: 6,  functions: 5,  oopData: 4,  memory: 8,  concurrency: 4,  metaprogramming: 1,  errorHandling: 4  } },
+  milo:       { keywords: 30,  concepts: 49,  categories: { types: 8,  controlFlow: 6,  functions: 5,  oopData: 4,  memory: 8,  concurrency: 10, metaprogramming: 4,  errorHandling: 4  } },
   go:         { keywords: 25,  concepts: 58,  categories: { types: 10, controlFlow: 8,  functions: 6,  oopData: 8,  memory: 5,  concurrency: 10, metaprogramming: 3,  errorHandling: 8  } },
   java:       { keywords: 68,  concepts: 80,  categories: { types: 14, controlFlow: 10, functions: 8,  oopData: 18, memory: 4,  concurrency: 10, metaprogramming: 8,  errorHandling: 8  } },
   kotlin:     { keywords: 78,  concepts: 85,  categories: { types: 16, controlFlow: 10, functions: 12, oopData: 14, memory: 3,  concurrency: 10, metaprogramming: 8,  errorHandling: 12 } },

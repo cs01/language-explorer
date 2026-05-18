@@ -49,17 +49,17 @@
   },
   "surfaceArea": {
     "keywords": 30,
-    "concepts": 40,
+    "concepts": 49,
     "categories": {
       "types": 8,
       "controlFlow": 6,
       "functions": 5,
       "oopData": 4,
       "memory": 8,
-      "concurrency": 4,
-      "metaprogramming": 1,
+      "concurrency": 10,
+      "metaprogramming": 4,
       "errorHandling": 4
     },
-    "keywordRatio": 0.75
+    "keywordRatio": 0.61
   }
 }

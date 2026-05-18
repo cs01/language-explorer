@@ -111,7 +111,7 @@ This is a language-level property — it doesn't vary per solution. Higher = mor
 | **Go** | 25 | 58 |
 | **Zero** | 32 | 50 |
 | **Objective-C** | 57 | 48 |
-| **Milo** | 30 | 40 |
+| **Milo** | 30 | 49 |
 
 </div>
 
