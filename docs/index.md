@@ -90,7 +90,7 @@ const pairRadars = pairs.map(p => ({
 
 # Language Explorer
 
-**How much does your language cost you?** Two views: what the language demands of you as a learner, and what it demands of you as a writer.
+A quantitative explorer of programming languages — their properties, features, explicitness, and safety guardrails. Two views: what the language demands as a learner, and what it demands as a writer.
 
 ---
 
