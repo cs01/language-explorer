@@ -98,7 +98,7 @@ const grReasons = {
 
 <div class="lang-tags"><span v-for="t in tags" class="lang-tag">{{ t }}</span></div>
 
-An experimental language exploring minimal design — only 40 concepts, less than a third of C++. Static typing with type inference, pattern matching, and a small keyword set. Benchmarks show compact, low-ceremony code. The concept distribution is narrow by design, focusing on a small set of orthogonal features rather than specialized abstractions.
+An experimental language exploring minimal design — only 40 concepts, less than a third of C++. Static typing with type inference, pattern matching, and a small keyword set. Benchmarks show compact, low-ceremony code. The concept distribution is narrow by design, focusing on a small set of orthogonal features rather than specialized abstractions. [GitHub](https://github.com/cs01/milo)
 
 <div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" />
