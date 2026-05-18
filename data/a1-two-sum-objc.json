@@ -1,0 +1,65 @@
+{
+  "file": "a1-two-sum.m",
+  "conciseness": {
+    "loc": 14,
+    "tokens": 59,
+    "chars": 372,
+    "halsteadVolume": 320,
+    "compressionRatio": 0.541,
+    "tokensPerLine": 4.21
+  },
+  "sigils": {
+    "sigilsPerLine": 6.57,
+    "uniqueSigilTypes": 19,
+    "totalSigils": 92
+  },
+  "readability": {
+    "avgLineLength": 35,
+    "maxNesting": 3,
+    "avgIdentifierLength": 5.8,
+    "visualDensity": 0.735
+  },
+  "concepts": {
+    "keywords": 5,
+    "syntaxPatterns": 1,
+    "apiCalls": 1,
+    "conceptCount": 6
+  },
+  "guardrails": {
+    "memory": 0.33,
+    "null": 0,
+    "race": 0,
+    "overflow": 0,
+    "coercion": 0,
+    "guardrailScore": 0.8,
+    "grMemoryWhen": "runtime",
+    "grMemoryActivation": "optin",
+    "grNullWhen": "none",
+    "grNullActivation": "default",
+    "grRaceWhen": "none",
+    "grRaceActivation": "default",
+    "grOverflowWhen": "none",
+    "grOverflowActivation": "default",
+    "grCoercionWhen": "none",
+    "grCoercionActivation": "default"
+  },
+  "ceremony": {
+    "ceremonyLines": 3,
+    "ceremonyRatio": 0.214
+  },
+  "surfaceArea": {
+    "keywords": 57,
+    "concepts": 48,
+    "categories": {
+      "types": 8,
+      "controlFlow": 6,
+      "functions": 4,
+      "oopData": 10,
+      "memory": 8,
+      "concurrency": 4,
+      "metaprogramming": 5,
+      "errorHandling": 3
+    },
+    "keywordRatio": 1.19
+  }
+}

@@ -11,6 +11,7 @@ const extMap: Record<string, string> = {
   c: 'c', cpp: 'cpp', swift: 'swift', zig: 'zig',
   javascript: 'js', ruby: 'rb', java: 'java', kotlin: 'kt',
   haskell: 'hs', elixir: 'exs', milo: 'milo',
+  csharp: 'cs', erlang: 'erl', clojure: 'clj', objc: 'm',
 };
 
 let count = 0;

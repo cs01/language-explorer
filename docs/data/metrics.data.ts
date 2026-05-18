@@ -22,10 +22,34 @@ export interface MetricsEntry {
   syntaxPatterns: number
   apiCalls: number
   guardrailScore: number
+  grMemory: number
+  grNull: number
+  grRace: number
+  grOverflow: number
+  grCoercion: number
+  grMemoryWhen: string
+  grMemoryActivation: string
+  grNullWhen: string
+  grNullActivation: string
+  grRaceWhen: string
+  grRaceActivation: string
+  grOverflowWhen: string
+  grOverflowActivation: string
+  grCoercionWhen: string
+  grCoercionActivation: string
   ceremonyLines: number
   ceremonyRatio: number
   langKeywords: number
   langConcepts: number
+  keywordRatio: number
+  catTypes: number
+  catControlFlow: number
+  catFunctions: number
+  catOopData: number
+  catMemory: number
+  catConcurrency: number
+  catMetaprogramming: number
+  catErrorHandling: number
 }
 
 export interface SolutionEntry {
@@ -59,10 +83,34 @@ function loadMetrics(): MetricsEntry[] {
       syntaxPatterns: raw.concepts?.syntaxPatterns ?? 0,
       apiCalls: raw.concepts?.apiCalls ?? 0,
       guardrailScore: raw.guardrails?.guardrailScore ?? 0,
+      grMemory: raw.guardrails?.memory ?? 0,
+      grNull: raw.guardrails?.null ?? 0,
+      grRace: raw.guardrails?.race ?? 0,
+      grOverflow: raw.guardrails?.overflow ?? 0,
+      grCoercion: raw.guardrails?.coercion ?? 0,
+      grMemoryWhen: raw.guardrails?.grMemoryWhen ?? 'none',
+      grMemoryActivation: raw.guardrails?.grMemoryActivation ?? 'default',
+      grNullWhen: raw.guardrails?.grNullWhen ?? 'none',
+      grNullActivation: raw.guardrails?.grNullActivation ?? 'default',
+      grRaceWhen: raw.guardrails?.grRaceWhen ?? 'none',
+      grRaceActivation: raw.guardrails?.grRaceActivation ?? 'default',
+      grOverflowWhen: raw.guardrails?.grOverflowWhen ?? 'none',
+      grOverflowActivation: raw.guardrails?.grOverflowActivation ?? 'default',
+      grCoercionWhen: raw.guardrails?.grCoercionWhen ?? 'none',
+      grCoercionActivation: raw.guardrails?.grCoercionActivation ?? 'default',
       ceremonyLines: raw.ceremony?.ceremonyLines ?? 0,
       ceremonyRatio: raw.ceremony?.ceremonyRatio ?? 0,
       langKeywords: raw.surfaceArea?.keywords ?? 0,
       langConcepts: raw.surfaceArea?.concepts ?? 0,
+      keywordRatio: raw.surfaceArea?.keywordRatio ?? 0,
+      catTypes: raw.surfaceArea?.categories?.types ?? 0,
+      catControlFlow: raw.surfaceArea?.categories?.controlFlow ?? 0,
+      catFunctions: raw.surfaceArea?.categories?.functions ?? 0,
+      catOopData: raw.surfaceArea?.categories?.oopData ?? 0,
+      catMemory: raw.surfaceArea?.categories?.memory ?? 0,
+      catConcurrency: raw.surfaceArea?.categories?.concurrency ?? 0,
+      catMetaprogramming: raw.surfaceArea?.categories?.metaprogramming ?? 0,
+      catErrorHandling: raw.surfaceArea?.categories?.errorHandling ?? 0,
     }
   })
 }
@@ -72,6 +120,7 @@ const extMap: Record<string, string> = {
   c: 'c', cpp: 'cpp', swift: 'swift', zig: 'zig',
   javascript: 'js', ruby: 'rb', java: 'java', kotlin: 'kt',
   haskell: 'hs', elixir: 'exs', milo: 'milo', ada: 'adb',
+  csharp: 'cs', erlang: 'erl', clojure: 'clj', objc: 'm',
 }
 
 function loadSolutions(): SolutionEntry[] {

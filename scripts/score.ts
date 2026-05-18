@@ -135,59 +135,97 @@ function scoreConcepts(src: string, nonBlankLines: string[]) {
 }
 
 // Static language-level safety guardrails (not per-file — inherent to the language).
-// Scored per category: 0 = not available, 0.5 = available but opt-in, 1 = enforced by default.
+// 4-level scale per category:
+//   1.0  = Prevented  — bug literally cannot happen (compile-time or runtime guarantee)
+//   0.67 = Caught     — bug triggers defined behavior (panic/exception), not UB
+//   0.33 = Opt-in     — tools/features available but not default
+//   0    = None       — no protection
+//
+// Categories:
 //   memory:   use-after-free, double-free, buffer overflow, uninitialized reads
-//   null:     null/nil pointer dereference (Option/Maybe required)
-//   race:     data races prevented at compile time
-//   overflow: integer overflow trapped (not silent wrap)
-//   coercion: no implicit type coercions
-type G = { memory: number; null: number; race: number; overflow: number; coercion: number }
+//   null:     null/nil pointer dereference
+//   race:     data races
+//   overflow: integer overflow
+//   coercion: implicit type coercions
+type GLevel = { when: 'compile' | 'runtime' | 'none'; activation: 'default' | 'optin' }
+type G = { memory: GLevel; null: GLevel; race: GLevel; overflow: GLevel; coercion: GLevel }
+
+const C = (when: GLevel['when'], activation: GLevel['activation'] = 'default'): GLevel => ({ when, activation })
+const NONE: GLevel = { when: 'none', activation: 'default' }
+
 const guardrails: Record<string, G> = {
-  c:          { memory: 0,   null: 0,   race: 0, overflow: 0, coercion: 0   },
-  cpp:        { memory: 0.5, null: 0.5, race: 0, overflow: 0, coercion: 0   },
-  zig:        { memory: 0.5, null: 0.5, race: 0, overflow: 1, coercion: 1   },
-  rust:       { memory: 1,   null: 1,   race: 1, overflow: 1, coercion: 1   },
-  milo:       { memory: 1,   null: 1,   race: 1, overflow: 1, coercion: 1   },
-  go:         { memory: 1,   null: 0,   race: 0, overflow: 0, coercion: 1   },
-  java:       { memory: 1,   null: 0.5, race: 0, overflow: 0, coercion: 0.5 },
-  kotlin:     { memory: 1,   null: 1,   race: 0, overflow: 0, coercion: 1   },
-  swift:      { memory: 1,   null: 1,   race: 1, overflow: 1, coercion: 1   },
-  haskell:    { memory: 1,   null: 1,   race: 1, overflow: 1, coercion: 1   },
-  elixir:     { memory: 1,   null: 1,   race: 1, overflow: 1, coercion: 1   },
-  python:     { memory: 1,   null: 0,   race: 0, overflow: 1, coercion: 1   },
-  ruby:       { memory: 1,   null: 0,   race: 0, overflow: 1, coercion: 1   },
-  javascript: { memory: 1,   null: 0,   race: 0, overflow: 0, coercion: 0   },
-  typescript: { memory: 1,   null: 0.5, race: 0, overflow: 0, coercion: 1   },
-  ada:        { memory: 0.5, null: 0.5, race: 0.5, overflow: 1, coercion: 1 },
-  x86_64:     { memory: 0,   null: 0,   race: 0, overflow: 0, coercion: 0   },
-  llvm:       { memory: 0,   null: 0,   race: 0, overflow: 0, coercion: 0.5 },
+  c:          { memory: NONE,                  null: NONE,                  race: NONE,                  overflow: NONE,                  coercion: NONE                  },
+  cpp:        { memory: C('runtime','optin'),  null: C('runtime','optin'),  race: NONE,                  overflow: NONE,                  coercion: NONE                  },
+  zig:        { memory: C('runtime'),          null: C('compile'),          race: NONE,                  overflow: C('runtime'),          coercion: C('compile')          },
+  rust:       { memory: C('compile'),          null: C('compile'),          race: C('compile'),          overflow: C('runtime'),          coercion: C('compile')          },
+  milo:       { memory: C('compile'),          null: C('compile'),          race: C('compile'),          overflow: C('compile'),          coercion: C('compile')          },
+  go:         { memory: C('compile'),          null: C('runtime'),          race: C('runtime','optin'),  overflow: NONE,                  coercion: C('compile')          },
+  java:       { memory: C('compile'),          null: C('runtime','optin'),  race: C('runtime','optin'),  overflow: NONE,                  coercion: C('runtime')          },
+  kotlin:     { memory: C('compile'),          null: C('compile'),          race: C('runtime','optin'),  overflow: NONE,                  coercion: C('compile')          },
+  swift:      { memory: C('compile'),          null: C('compile'),          race: C('runtime','optin'),  overflow: C('runtime'),          coercion: C('compile')          },
+  haskell:    { memory: C('compile'),          null: C('compile'),          race: C('compile'),          overflow: C('runtime'),          coercion: C('compile')          },
+  elixir:     { memory: C('compile'),          null: C('compile'),          race: C('compile'),          overflow: C('compile'),          coercion: C('compile')          },
+  python:     { memory: C('compile'),          null: C('runtime'),          race: NONE,                  overflow: C('compile'),          coercion: C('runtime')          },
+  ruby:       { memory: C('compile'),          null: C('runtime'),          race: NONE,                  overflow: C('compile'),          coercion: C('runtime')          },
+  javascript: { memory: C('compile'),          null: NONE,                  race: NONE,                  overflow: NONE,                  coercion: NONE                  },
+  typescript: { memory: C('compile'),          null: C('compile','optin'),  race: NONE,                  overflow: NONE,                  coercion: C('runtime')          },
+  ada:        { memory: C('runtime'),          null: C('runtime'),          race: C('runtime','optin'),  overflow: C('compile'),          coercion: C('compile')          },
+  x86_64:     { memory: NONE,                  null: NONE,                  race: NONE,                  overflow: NONE,                  coercion: NONE                  },
+  llvm:       { memory: NONE,                  null: NONE,                  race: NONE,                  overflow: NONE,                  coercion: C('compile','optin')  },
+  csharp:     { memory: C('compile'),          null: C('compile','optin'),  race: C('runtime','optin'),  overflow: C('runtime','optin'),  coercion: C('runtime')          },
+  clojure:    { memory: C('compile'),          null: C('runtime'),          race: C('runtime'),          overflow: C('compile'),          coercion: C('runtime')          },
+  erlang:     { memory: C('compile'),          null: C('runtime'),          race: C('compile'),          overflow: C('compile'),          coercion: C('compile')          },
+  objc:       { memory: C('runtime','optin'),  null: NONE,                  race: NONE,                  overflow: NONE,                  coercion: NONE                  },
+  zero:       { memory: C('compile'),          null: C('compile'),          race: C('compile'),          overflow: C('compile'),          coercion: C('compile')          },
+}
+
+// Convert 2-axis model to numeric score for weighting
+function levelToScore(l: GLevel): number {
+  if (l.when === 'none') return 0
+  if (l.when === 'compile' && l.activation === 'default') return 1.0
+  if (l.when === 'compile' && l.activation === 'optin') return 0.75
+  if (l.when === 'runtime' && l.activation === 'default') return 0.67
+  return 0.33 // runtime + optin
 }
 
 // Language surface area: how much a developer must learn to read arbitrary code.
-// keywords = reserved/special words from language spec (verified against official docs)
-// concepts = distinct features a developer must learn (curated across 13 categories:
-//   variables, types, compounds, type system, control flow, functions, OOP,
-//   generics, error handling, memory, concurrency, modules, metaprogramming)
-type SA = { keywords: number, concepts: number }
+// categories sum to concepts total; see methodology for category definitions
+type Categories = {
+  types: number        // primitives, compounds, type system, generics
+  controlFlow: number  // if/match/for/while/pattern matching
+  functions: number    // closures, higher-order, lambdas
+  oopData: number      // classes, structs, interfaces, inheritance
+  memory: number       // ownership, borrowing, GC, allocation
+  concurrency: number  // async, channels, actors, threads
+  metaprogramming: number // macros, decorators, reflection
+  errorHandling: number   // exceptions, Result types, error flow
+}
+type SA = { keywords: number, concepts: number, categories: Categories }
 const surfaceArea: Record<string, SA> = {
-  c:          { keywords: 44,  concepts: 60  },
-  cpp:        { keywords: 92,  concepts: 135 },
-  rust:       { keywords: 58,  concepts: 110 },
-  zig:        { keywords: 49,  concepts: 65  },
-  milo:       { keywords: 30,  concepts: 40  },
-  go:         { keywords: 25,  concepts: 58  },
-  java:       { keywords: 68,  concepts: 80  },
-  kotlin:     { keywords: 78,  concepts: 85  },
-  swift:      { keywords: 98,  concepts: 110 },
-  haskell:    { keywords: 24,  concepts: 75  },
-  elixir:     { keywords: 15,  concepts: 62  },
-  python:     { keywords: 39,  concepts: 75  },
-  ruby:       { keywords: 41,  concepts: 65  },
-  javascript: { keywords: 46,  concepts: 65  },
-  typescript: { keywords: 67,  concepts: 100 },
-  ada:        { keywords: 74,  concepts: 85  },
-  x86_64:     { keywords: 1503, concepts: 45 },
-  llvm:       { keywords: 150,  concepts: 35 },
+  //                                                  typ ctl fun oop mem con met err
+  c:          { keywords: 44,  concepts: 60,  categories: { types: 12, controlFlow: 8,  functions: 6,  oopData: 4,  memory: 15, concurrency: 5,  metaprogramming: 6,  errorHandling: 4  } },
+  cpp:        { keywords: 92,  concepts: 135, categories: { types: 25, controlFlow: 12, functions: 15, oopData: 22, memory: 20, concurrency: 12, metaprogramming: 18, errorHandling: 11 } },
+  rust:       { keywords: 58,  concepts: 110, categories: { types: 22, controlFlow: 12, functions: 12, oopData: 12, memory: 22, concurrency: 10, metaprogramming: 10, errorHandling: 10 } },
+  zig:        { keywords: 49,  concepts: 65,  categories: { types: 12, controlFlow: 10, functions: 6,  oopData: 5,  memory: 15, concurrency: 5,  metaprogramming: 5,  errorHandling: 7  } },
+  milo:       { keywords: 30,  concepts: 40,  categories: { types: 8,  controlFlow: 6,  functions: 5,  oopData: 4,  memory: 8,  concurrency: 4,  metaprogramming: 1,  errorHandling: 4  } },
+  go:         { keywords: 25,  concepts: 58,  categories: { types: 10, controlFlow: 8,  functions: 6,  oopData: 8,  memory: 5,  concurrency: 10, metaprogramming: 3,  errorHandling: 8  } },
+  java:       { keywords: 68,  concepts: 80,  categories: { types: 14, controlFlow: 10, functions: 8,  oopData: 18, memory: 4,  concurrency: 10, metaprogramming: 8,  errorHandling: 8  } },
+  kotlin:     { keywords: 78,  concepts: 85,  categories: { types: 16, controlFlow: 10, functions: 12, oopData: 14, memory: 3,  concurrency: 10, metaprogramming: 8,  errorHandling: 12 } },
+  swift:      { keywords: 98,  concepts: 110, categories: { types: 20, controlFlow: 12, functions: 12, oopData: 16, memory: 12, concurrency: 12, metaprogramming: 14, errorHandling: 12 } },
+  haskell:    { keywords: 24,  concepts: 75,  categories: { types: 22, controlFlow: 8,  functions: 15, oopData: 3,  memory: 2,  concurrency: 8,  metaprogramming: 5,  errorHandling: 12 } },
+  elixir:     { keywords: 15,  concepts: 62,  categories: { types: 8,  controlFlow: 8,  functions: 10, oopData: 4,  memory: 2,  concurrency: 14, metaprogramming: 10, errorHandling: 6  } },
+  python:     { keywords: 39,  concepts: 75,  categories: { types: 8,  controlFlow: 10, functions: 10, oopData: 18, memory: 2,  concurrency: 10, metaprogramming: 12, errorHandling: 5  } },
+  ruby:       { keywords: 41,  concepts: 65,  categories: { types: 6,  controlFlow: 10, functions: 10, oopData: 14, memory: 2,  concurrency: 5,  metaprogramming: 12, errorHandling: 6  } },
+  javascript: { keywords: 46,  concepts: 65,  categories: { types: 6,  controlFlow: 8,  functions: 12, oopData: 10, memory: 2,  concurrency: 10, metaprogramming: 10, errorHandling: 7  } },
+  typescript: { keywords: 67,  concepts: 100, categories: { types: 22, controlFlow: 10, functions: 12, oopData: 14, memory: 2,  concurrency: 10, metaprogramming: 14, errorHandling: 16 } },
+  ada:        { keywords: 74,  concepts: 85,  categories: { types: 18, controlFlow: 10, functions: 8,  oopData: 12, memory: 10, concurrency: 12, metaprogramming: 6,  errorHandling: 9  } },
+  x86_64:     { keywords: 1503, concepts: 45, categories: { types: 8,  controlFlow: 8,  functions: 2,  oopData: 0,  memory: 15, concurrency: 5,  metaprogramming: 5,  errorHandling: 2  } },
+  llvm:       { keywords: 150,  concepts: 35, categories: { types: 10, controlFlow: 6,  functions: 4,  oopData: 0,  memory: 8,  concurrency: 2,  metaprogramming: 3,  errorHandling: 2  } },
+  csharp:     { keywords: 118,  concepts: 120, categories: { types: 20, controlFlow: 12, functions: 12, oopData: 20, memory: 6,  concurrency: 12, metaprogramming: 22, errorHandling: 16 } },
+  clojure:    { keywords: 16,   concepts: 65,  categories: { types: 8,  controlFlow: 6,  functions: 14, oopData: 6,  memory: 2,  concurrency: 12, metaprogramming: 12, errorHandling: 5  } },
+  erlang:     { keywords: 28,   concepts: 55,  categories: { types: 6,  controlFlow: 8,  functions: 8,  oopData: 4,  memory: 2,  concurrency: 15, metaprogramming: 6,  errorHandling: 6  } },
+  objc:       { keywords: 57,   concepts: 48,  categories: { types: 8,  controlFlow: 6,  functions: 4,  oopData: 10, memory: 8,  concurrency: 4,  metaprogramming: 5,  errorHandling: 3  } },
+  zero:       { keywords: 32,   concepts: 50,  categories: { types: 10, controlFlow: 8,  functions: 6,  oopData: 6,  memory: 8,  concurrency: 2,  metaprogramming: 2,  errorHandling: 8  } },
 }
 
 const extToLang: Record<string, string> = {
@@ -196,6 +234,8 @@ const extToLang: Record<string, string> = {
   c: 'c', cpp: 'cpp', go: 'go', swift: 'swift', zig: 'zig',
   java: 'java', milo: 'milo', adb: 'ada', ads: 'ada',
   asm: 'x86_64', s: 'x86_64', ll: 'llvm',
+  cs: 'csharp', clj: 'clojure', erl: 'erlang', m: 'objc',
+  '0': 'zero',
 }
 
 // Weights derived from CVE/CWE data: Microsoft + Chrome found ~70% of CVEs are memory safety.
@@ -205,18 +245,35 @@ const guardrailWeights = { memory: 0.45, null: 0.20, race: 0.15, overflow: 0.12,
 function scoreGuardrails(filename: string) {
   const ext = filename.split('.').pop() || ''
   const lang = extToLang[ext] || ext
-  const g = guardrails[lang] || { memory: 0, null: 0, race: 0, overflow: 0, coercion: 0 }
-  const unweighted = g.memory + g.null + g.race + g.overflow + g.coercion
+  const defaultG: G = { memory: NONE, null: NONE, race: NONE, overflow: NONE, coercion: NONE }
+  const g = guardrails[lang] || defaultG
+
+  const scores = {
+    memory: levelToScore(g.memory),
+    null: levelToScore(g.null),
+    race: levelToScore(g.race),
+    overflow: levelToScore(g.overflow),
+    coercion: levelToScore(g.coercion),
+  }
+
   const weighted = +(
-    g.memory * guardrailWeights.memory +
-    g.null * guardrailWeights.null +
-    g.race * guardrailWeights.race +
-    g.overflow * guardrailWeights.overflow +
-    g.coercion * guardrailWeights.coercion
+    scores.memory * guardrailWeights.memory +
+    scores.null * guardrailWeights.null +
+    scores.race * guardrailWeights.race +
+    scores.overflow * guardrailWeights.overflow +
+    scores.coercion * guardrailWeights.coercion
   ).toFixed(2)
-  // Normalize weighted to 0-5 scale (max raw weighted = 1.0 when all categories are 1)
   const guardrailScore = +(weighted * 5).toFixed(1)
-  return { ...g, guardrailScore }
+
+  return {
+    ...scores,
+    guardrailScore,
+    grMemoryWhen: g.memory.when, grMemoryActivation: g.memory.activation,
+    grNullWhen: g.null.when, grNullActivation: g.null.activation,
+    grRaceWhen: g.race.when, grRaceActivation: g.race.activation,
+    grOverflowWhen: g.overflow.when, grOverflowActivation: g.overflow.activation,
+    grCoercionWhen: g.coercion.when, grCoercionActivation: g.coercion.activation,
+  }
 }
 
 function scoreCeremony(src: string, nonBlankLines: string[]) {
@@ -250,11 +307,18 @@ function scoreCeremony(src: string, nonBlankLines: string[]) {
   return { ceremonyLines, ceremonyRatio: ratio };
 }
 
+const defaultCategories: Categories = { types: 0, controlFlow: 0, functions: 0, oopData: 0, memory: 0, concurrency: 0, metaprogramming: 0, errorHandling: 0 }
+
 function scoreSurfaceArea(filename: string) {
   const ext = filename.split('.').pop() || ''
   const lang = extToLang[ext] || ext
-  const s = surfaceArea[lang] || { keywords: 0, concepts: 0 }
-  return { ...s }
+  const s = surfaceArea[lang] || { keywords: 0, concepts: 0, categories: defaultCategories }
+  const catSum = Object.values(s.categories).reduce((a, b) => a + b, 0)
+  if (s.concepts > 0 && catSum !== s.concepts) {
+    throw new Error(`${lang}: category sum ${catSum} !== concepts ${s.concepts}`)
+  }
+  const keywordRatio = s.concepts > 0 ? +(s.keywords / s.concepts).toFixed(2) : 0
+  return { ...s, keywordRatio }
 }
 
 const conciseness = scoreConciseness(source, lines);

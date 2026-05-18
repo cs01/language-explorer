@@ -1,14 +1,12 @@
 # Language Explorer
 
-**How much does your language cost you?**
-
-Same programs, 15 languages, measured automatically. Compares conciseness, complexity, symbol noise, concept count, safety guardrails, and ceremony.
+A quantitative explorer of programming languages — their properties, features, explicitness, and safety guardrails. Same programs, 23 languages, measured automatically.
 
 **[View the dashboard →](https://cs01.github.io/language-explorer)**
 
 ## Languages
 
-Ada, C, C++, Rust, Zig, Milo, Go, Java, Kotlin, Swift, Haskell, Elixir, Python, Ruby, JavaScript, TypeScript, LLVM IR, x86_64 Assembly
+Ada, C, C#, C++, Clojure, Erlang, Milo, Objective-C, Rust, Zero, Zig, Go, Java, Kotlin, Swift, Haskell, Elixir, Python, Ruby, JavaScript, TypeScript, LLVM IR, x86_64 Assembly
 
 ## Quick start
 

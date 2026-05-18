@@ -48,61 +48,30 @@ Measured from actual code. Averaged across 7 benchmark problems for each languag
 **Keywords** — distinct language keywords used in the solution (`fn`, `let`, `match`, `async`, etc.). **Syntax patterns** — distinct features like generics, closures, pattern matching, channels. **Concept count** = keywords + patterns. Measures how many different language features you need to know to read the code.
 
 ### Guardrails
-**Guardrail score** — rates 5 safety guarantees on a 3-point scale: **0** = not available, **0.5** = available but opt-in, **1** = enforced by default.
+**Guardrail score** — rates 5 safety categories on a 4-level scale:
 
-| Guardrail | What it prevents | Weight |
-|-----------|-----------------|--------|
-| **Memory safe** | Use-after-free, double-free, buffer overflow, uninitialized reads | **45%** |
-| **Null safe** | Null/nil pointer dereference (requires Option/Maybe to represent absence) | **20%** |
-| **Race safe** | Data races prevented at compile time (not just detected at runtime) | **15%** |
-| **Overflow safe** | Integer overflow trapped, not silently wrapped | **12%** |
-| **Coercion safe** | No implicit type coercions (e.g., `"5" + 3` doesn't silently produce `"53"`) | **8%** |
+| Category | What it prevents | Weight |
+|----------|-----------------|--------|
+| **Memory** | Use-after-free, double-free, buffer overflow, uninitialized reads | **45%** |
+| **Null** | Null/nil pointer dereference (requires Option/Maybe to represent absence) | **20%** |
+| **Data Races** | Two threads mutating shared state without the compiler stopping you | **15%** |
+| **Overflow** | Integer overflow silently wrapping instead of being trapped | **12%** |
+| **Coercion** | Implicit type coercions (e.g., `"5" + 3` silently producing `"53"`) | **8%** |
 
-Categories are **weighted by real-world impact**, not treated equally. Memory safety dominates because [Microsoft](https://msrc.microsoft.com/blog/2019/07/a-proactive-approach-to-more-secure-code/) and [Google Chrome](https://www.chromium.org/Home/chromium-security/memory-safety/) independently found that ~70% of their high-severity CVEs are memory safety bugs. Null dereference is the [#1 logged error](https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/) in most Java production environments. Race conditions account for [~44% of concurrency bugs](https://jisajournal.springeropen.com/articles/10.1186/s13174-017-0055-2) and are notoriously hard to fix (39% of patches are themselves incorrect). Integer overflow ([CWE-190](https://cwe.mitre.org/data/definitions/190.html)) has caused RCE in WhatsApp and Chrome but dropped out of the [CWE Top 25 in 2025](https://cwe.mitre.org/top25/archive/2025/2025_cwe_top25.html). Type coercion bugs are mostly logic errors, not security vulnerabilities.
+Each category is scored on a **4-level enforcement scale**:
 
-Score ranges from 0 (C) to 5 (Rust, Swift, Haskell, Elixir), normalized from the weighted sum. Half-points for languages with opt-in mechanisms (e.g., C++ smart pointers = 0.5 for memory, Java `Optional` = 0.5 for null). This is a language-level property — it doesn't vary per solution.
+| Score | Level | Meaning |
+|:---:|-------|---------|
+| **1.0** | Compile-time | Type system makes the bug unrepresentable. Can't compile invalid code. |
+| **0.67** | Runtime | Bug triggers immediate panic/error, not silent corruption. On by default. |
+| **0.33** | Opt-in | Mechanism exists but requires explicit flag, annotation, or mode. |
+| **0** | None | Language provides no protection for this bug class. |
 
-#### Full breakdown
+**Formula:** `(memory × 0.45 + null × 0.20 + race × 0.15 + overflow × 0.12 + coercion × 0.08) × 5`
 
-- **Memory** — Can you access freed memory, overflow a buffer, or read uninitialized data?
-- **Null** — Can a variable be `null`/`nil`/`None` without the type system knowing?
-- **Race** — Can two threads mutate shared state without the compiler stopping you?
-- **Overflow** — Does `255 + 1` silently become `0` (or wrap unpredictably)?
-- **Coercion** — Does `"5" + 3` silently produce `"53"` or `8` instead of an error?
+Categories are **weighted by real-world impact**. Memory safety dominates because [Microsoft](https://msrc.microsoft.com/blog/2019/07/a-proactive-approach-to-more-secure-code/) and [Google Chrome](https://www.chromium.org/Home/chromium-security/memory-safety/) independently found ~70% of high-severity CVEs are memory safety bugs. Null dereference is the [#1 logged error](https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/) in most Java production environments. Race conditions account for [~44% of concurrency bugs](https://jisajournal.springeropen.com/articles/10.1186/s13174-017-0055-2) and 39% of patches are themselves incorrect. Integer overflow ([CWE-190](https://cwe.mitre.org/data/definitions/190.html)) dropped out of the [CWE Top 25 in 2025](https://cwe.mitre.org/top25/archive/2025/2025_cwe_top25.html). Type coercion bugs are mostly logic errors, not security vulnerabilities.
 
-<div class="guardrail-table">
-
-| | Memory | Null | Race | Overflow | Coercion | **Total** |
-|---|:---:|:---:|:---:|:---:|:---:|:---:|
-| **Rust** | 1 | 1 | 1 | 1 | 1 | **5** |
-| **Swift** | 1 | 1 | 1 | 1 | 1 | **5** |
-| **Haskell** | 1 | 1 | 1 | 1 | 1 | **5** |
-| **Elixir** | 1 | 1 | 1 | 1 | 1 | **5** |
-| **Milo** | 1 | 1 | 1 | 1 | 1 | **5** |
-| **Kotlin** | 1 | 1 | 0 | 0 | 1 | **3** |
-| **Python** | 1 | 0 | 0 | 1 | 1 | **3** |
-| **Ruby** | 1 | 0 | 0 | 1 | 1 | **3** |
-| **Ada** | 0.5 | 0.5 | 0.5 | 1 | 1 | **3.5** |
-| **Zig** | 0.5 | 0.5 | 0 | 1 | 1 | **3** |
-| **TypeScript** | 1 | 0.5 | 0 | 0 | 1 | **2.5** |
-| **Go** | 1 | 0 | 0 | 0 | 1 | **2** |
-| **Java** | 1 | 0.5 | 0 | 0 | 0.5 | **2** |
-| **C++** | 0.5 | 0.5 | 0 | 0 | 0 | **1** |
-| **JavaScript** | 1 | 0 | 0 | 0 | 0 | **1** |
-| **LLVM IR** | 0 | 0 | 0 | 0 | 0.5 | **0.5** |
-| **C** | 0 | 0 | 0 | 0 | 0 | **0** |
-| **x86_64 asm** | 0 | 0 | 0 | 0 | 0 | **0** |
-
-</div>
-
-**0** = not available. **0.5** = opt-in (e.g., C++ `unique_ptr`, Java `Optional`, TS `strictNullChecks`). **1** = enforced by default.
-
-**Notes:**
-- **Memory 0.5** (C++, Zig): Tools like smart pointers exist, but you can still create dangling references, invalidate iterators, or use objects after moving them — the compiler won't stop you.
-- **Race 1** (Haskell, Elixir): Haskell prevents shared mutable state by design — functions can't have side effects. Elixir uses isolated processes with immutable data, so threads can't accidentally access the same memory.
-- **Overflow 1** (Python, Ruby): Integers grow as large as needed (arbitrary precision), so overflow is impossible. Note: `float` arithmetic can still silently produce `inf`, and numpy arrays wrap.
-- **Swift Race 1**: Swift 6 (2024) checks for data races at compile time. New projects enforce this by default.
-- **Ada 0.5** (Memory, Null, Race): Ada has bounds checking and default-null initialization, but `Unchecked_Deallocation` creates dangling pointers. `not null` access types are opt-in. Protected objects enforce mutual exclusion at runtime, but the compiler doesn't prevent all data races.
+Score ranges from 0 (C) to 5 (Rust, Swift, Haskell, Elixir). Each language page has a detailed guardrail card showing per-category scores with explanations. This is a language-level property — it doesn't vary per solution.
 
 ### Ceremony
 **Ceremony ratio** — what fraction of your code is overhead rather than problem-solving logic. Counts: imports, main function wrappers, class/module boilerplate, `return 0`, lone braces, type-only declarations, and preprocessor directives. Lower = less boilerplate standing between you and the algorithm.
@@ -123,6 +92,7 @@ This is a language-level property — it doesn't vary per solution. Higher = mor
 | **x86_64 asm** | 1,503 | 45 |
 | **LLVM IR** | 150 | 35 |
 | **C++** | 92 | 135 |
+| **C#** | 118 | 120 |
 | **Rust** | 58 | 110 |
 | **Swift** | 98 | 110 |
 | **TypeScript** | 67 | 100 |
@@ -134,9 +104,13 @@ This is a language-level property — it doesn't vary per solution. Higher = mor
 | **Ruby** | 41 | 65 |
 | **JavaScript** | 46 | 65 |
 | **Zig** | 49 | 65 |
+| **Clojure** | 16 | 65 |
 | **Elixir** | 15 | 62 |
 | **C** | 44 | 60 |
+| **Erlang** | 28 | 55 |
 | **Go** | 25 | 58 |
+| **Zero** | 32 | 50 |
+| **Objective-C** | 57 | 48 |
 | **Milo** | 30 | 40 |
 
 </div>
@@ -148,6 +122,11 @@ This is a language-level property — it doesn't vary per solution. Higher = mor
 - **Haskell** has only 24 keywords but 75 concepts because most complexity lives in the type system (type classes, monads, GADTs, kind system) rather than in reserved syntax.
 - **x86_64** has 1,503 instruction mnemonics (per [Intel SDM analysis](https://stefanheule.com/blog/how-many-x86-64-instructions-are-there-anyway/)) but only 45 structural concepts — the complexity is in the sheer number of instructions, not conceptual depth.
 - **LLVM IR** has 69 instruction opcodes plus ~80 keywords for types, attributes, and metadata. Coercion 0.5 because the verifier rejects type mismatches, but this is a compile-time check on IR, not a runtime guarantee.
+- **C#** at 118 keywords includes 77 reserved + 41 contextual. 120 concepts reflects LINQ, async/await, properties, events, delegates, records, pattern matching, nullable reference types, extension methods, etc. Null safety 0.5: nullable reference types enabled by default since .NET 6 but produce warnings, not errors. Overflow 0.5: unchecked by default, `checked` context is opt-in.
+- **Clojure** has only 16 special forms (`def`, `if`, `fn`, `let`, etc.) — most constructs are macros. Race 0.5: immutable-by-default with STM, but no static type system to enforce it.
+- **Erlang** at 55 concepts reflects OTP patterns (gen_server, supervisors), binary pattern matching, ETS, and hot code loading. Race 1: process isolation with no shared mutable state. Null 0.5: `undefined` atoms serve as nil, pattern matching makes handling explicit, but Dialyzer is opt-in.
+- **Objective-C** inherits C's safety profile. Memory 0.5: ARC prevents manual memory bugs but retain cycles and raw C pointers remain. 48 concepts is lower than C++ because Obj-C adds message passing, categories, and protocols but not templates/SFINAE/move semantics.
+- **Zero** is a capability-based systems language. 32 keywords and 50 concepts for a language with `shape`, `choice`, `match`, explicit effects (`raises`/`check`), borrow tracking (`ref<T>`/`mutref<T>`), and `owned<T>` cleanup — all without hidden dispatch or runtime overhead.
 
 ## Dimensions not yet automated
 

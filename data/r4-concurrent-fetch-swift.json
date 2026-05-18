@@ -28,10 +28,20 @@
   "guardrails": {
     "memory": 1,
     "null": 1,
-    "race": 1,
-    "overflow": 1,
+    "race": 0.33,
+    "overflow": 0.67,
     "coercion": 1,
-    "guardrailScore": 5
+    "guardrailScore": 4.3,
+    "grMemoryWhen": "compile",
+    "grMemoryActivation": "default",
+    "grNullWhen": "compile",
+    "grNullActivation": "default",
+    "grRaceWhen": "runtime",
+    "grRaceActivation": "optin",
+    "grOverflowWhen": "runtime",
+    "grOverflowActivation": "default",
+    "grCoercionWhen": "compile",
+    "grCoercionActivation": "default"
   },
   "ceremony": {
     "ceremonyLines": 12,
@@ -39,6 +49,17 @@
   },
   "surfaceArea": {
     "keywords": 98,
-    "concepts": 110
+    "concepts": 110,
+    "categories": {
+      "types": 20,
+      "controlFlow": 12,
+      "functions": 12,
+      "oopData": 16,
+      "memory": 12,
+      "concurrency": 12,
+      "metaprogramming": 14,
+      "errorHandling": 12
+    },
+    "keywordRatio": 0.89
   }
 }

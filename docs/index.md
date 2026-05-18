@@ -6,13 +6,17 @@ outline: deep
 import { data } from './data/metrics.data'
 
 const languages = [...new Set(data.metrics.map(m => m.language))]
+const displayName: Record<string, string> = {
+  cpp: 'C++', csharp: 'C#', objc: 'Objective-C', javascript: 'JavaScript', typescript: 'TypeScript',
+}
+const toDisplay = (lang: string) => displayName[lang] ?? lang.charAt(0).toUpperCase() + lang.slice(1)
 
 // Per-program metrics (averaged across benchmark problems)
 const expressData = languages.map(lang => {
   const entries = data.metrics.filter(m => m.language === lang)
   const avg = (key) => +(entries.reduce((s, e) => s + e[key], 0) / entries.length).toFixed(1)
   return {
-    language: lang.charAt(0).toUpperCase() + lang.slice(1),
+    language: toDisplay(lang),
     lines: avg('loc'),
     tokens: avg('tokens'),
     'tok/line': avg('tokensPerLine'),
@@ -28,25 +32,21 @@ const profileData = [
   ...languages.map(lang => {
     const entries = data.metrics.filter(m => m.language === lang)
     return {
-      language: lang.charAt(0).toUpperCase() + lang.slice(1),
+      language: toDisplay(lang),
       guardrails: entries[0]?.guardrailScore ?? 0,
       keywords: entries[0]?.langKeywords ?? 0,
       surface: entries[0]?.langConcepts ?? 0,
     }
   }),
   // Languages with profile data but no benchmark solutions yet
-  { language: 'Ada', guardrails: 3.0, keywords: 74, surface: 85 },
-  { language: 'x86_64 asm', guardrails: 0, keywords: 1503, surface: 45 },
-  { language: 'LLVM IR', guardrails: 0.2, keywords: 150, surface: 35 },
+  { language: 'Ada', guardrails: 3.4, keywords: 74, surface: 85 },
+  { language: 'LLVM IR', guardrails: 0.1, keywords: 150, surface: 35 },
+  { language: 'Zero', guardrails: 5.0, keywords: 32, surface: 50 },
 ]
 
 const expressColumns = [
   { key: 'lines', label: 'Lines' },
-  { key: 'tokens', label: 'Tokens' },
-  { key: 'tok/line', label: 'Tok/Line' },
   { key: 'complexity', label: 'Complexity' },
-  { key: 'symbols/line', label: 'Sym/Line' },
-  { key: 'concepts', label: 'Concepts' },
   { key: 'ceremony', label: 'Ceremony' },
 ]
 
@@ -56,17 +56,36 @@ const profileColumns = [
   { key: 'surface', label: 'Surface Area' },
 ]
 
-function filterExpress(langs: string[]) {
-  return expressData.filter(r => langs.includes(r.language.toLowerCase()))
+// Concept category radars for paired comparisons
+const catKeys = ['catTypes','catControlFlow','catFunctions','catOopData','catMemory','catConcurrency','catMetaprogramming','catErrorHandling'] as const
+const catLabels = ['Types','Control','Functions','OOP/Data','Memory','Concurrency','Metaprog','Errors']
+
+function conceptRadarFor(lang: string) {
+  const entries = data.metrics.filter(m => m.language === lang)
+  const allMax = catKeys.map(k => Math.max(...languages.map(l => {
+    const e = data.metrics.filter(m => m.language === l)
+    return e[0]?.[k] ?? 0
+  }), 1))
+  return catLabels.map((label, i) => ({
+    label,
+    value: entries[0]?.[catKeys[i]] ?? 0,
+    max: allMax[i],
+  }))
 }
 
-const systemsData = filterExpress(['c', 'cpp', 'rust', 'zig', 'milo'])
-const scriptingData = filterExpress(['python', 'ruby', 'javascript', 'typescript'])
-const jvmData = filterExpress(['java', 'kotlin'])
-const functionalData = filterExpress(['haskell', 'elixir'])
-const gcData = filterExpress(['python', 'ruby', 'javascript', 'typescript', 'java', 'kotlin', 'go', 'haskell', 'elixir', 'swift'])
-const staticData = filterExpress(['typescript', 'rust', 'go', 'c', 'cpp', 'swift', 'zig', 'java', 'kotlin', 'haskell', 'milo'])
-const dynamicData = filterExpress(['python', 'ruby', 'javascript', 'elixir'])
+const pairs = [
+  { left: 'python', right: 'haskell', why: 'Same total concepts (75), opposite shapes' },
+  { left: 'rust', right: 'go', why: 'Systems safety vs simplicity' },
+  { left: 'cpp', right: 'milo', why: 'Kitchen sink (135) vs minimal (40)' },
+]
+
+const pairRadars = pairs.map(p => ({
+  ...p,
+  leftLabel: p.left.charAt(0).toUpperCase() + p.left.slice(1),
+  rightLabel: p.right.charAt(0).toUpperCase() + p.right.slice(1),
+  leftData: conceptRadarFor(p.left),
+  rightData: conceptRadarFor(p.right),
+}))
 </script>
 
 # Language Explorer
@@ -79,9 +98,9 @@ const dynamicData = filterExpress(['python', 'ruby', 'javascript', 'elixir'])
 
 Properties of the language itself — independent of any specific program. These don't change per solution.
 
-- **Guardrails** — how many bugs the language prevents for you (0–5, [details](/methodology#guardrails))
-- **Keywords** — reserved words in the language spec
-- **Surface Area** — total distinct concepts a developer must learn ([details](/methodology#surface-area))
+- **Guardrails** — how many bugs the language prevents for you (0–5, [details](/methodology#guardrails)). E.g., Rust prevents use-after-free; JavaScript allows `"5" + 3 → "53"`
+- **Keywords** — reserved words in the language spec (`fn`, `class`, `async`, `match`, `defer`, …)
+- **Surface Area** — total distinct concepts a developer must learn ([details](/methodology#surface-area)). E.g., generics, pattern matching, closures, ownership, decorators
 
 <MetricsTable :data="profileData" :columns="profileColumns" />
 
@@ -89,75 +108,46 @@ Properties of the language itself — independent of any specific program. These
 
 ---
 
+## Concept Shape
+
+Where does each language's complexity live? Same total concepts can mean radically different things. These radars break surface area into 8 categories — the *shape* of what you have to learn.
+
+<div v-for="pair in pairRadars" :key="pair.left" class="concept-pair">
+<div class="pair-header"><strong>{{ pair.leftLabel }}</strong> vs <strong>{{ pair.rightLabel }}</strong> — {{ pair.why }}</div>
+<div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+<RadarChart :data="pair.leftData" :label="pair.leftLabel" color="#3b82f6" :size="220" />
+<RadarChart :data="pair.rightData" :label="pair.rightLabel" color="#f97316" :size="220" />
+</div>
+</div>
+
+<small>Each axis shows one concept category, normalized across all languages. Bigger = more concepts in that area. See individual [language pages](/languages/python) for full breakdowns.</small>
+
+---
+
 ## Expressiveness
 
-How concise and clean the code is — averaged across 7 benchmark problems. Lower is better for all metrics.
+How concise is the code? Averaged across 7 benchmark problems. Lower is better.
 
 - **Lines** — non-blank lines of code
-- **Tokens** — words and symbols in the code
-- **Tok/Line** — how much information is packed into each line
 - **Complexity** — total information your brain processes ([Halstead Volume](https://en.wikipedia.org/wiki/Halstead_complexity_measures))
-- **Sym/Line** — special characters per line (`{`, `->`, `&`, etc.)
-- **Concepts** — language features used per solution
 - **Ceremony** — fraction of code that's overhead (imports, boilerplate) vs logic
 
 <MetricsTable :data="expressData" :columns="expressColumns" />
 
-<small>Averages across 7 benchmark problems. Click any column to sort. Green = best, red = worst.</small>
-
----
-
-### Systems
-
-<MetricsTable :data="systemsData" :columns="expressColumns" />
-
----
-
-### Scripting
-
-<MetricsTable :data="scriptingData" :columns="expressColumns" />
-
----
-
-### JVM
-
-<MetricsTable :data="jvmData" :columns="expressColumns" />
-
----
-
-### Functional
-
-<MetricsTable :data="functionalData" :columns="expressColumns" />
-
----
-
-### GC Languages
-
-<MetricsTable :data="gcData" :columns="expressColumns" />
-
----
-
-### Static Types
-
-<MetricsTable :data="staticData" :columns="expressColumns" />
-
----
-
-### Dynamic Types
-
-<MetricsTable :data="dynamicData" :columns="expressColumns" />
-
----
+<small>Averages across 7 benchmark problems. Full metrics on the [Compare](/compare) page.</small>
 
 
-## Explore by problem
-
-- [Two Sum](/problems/two-sum) — HashMap + iteration (algorithmic)
-- [Valid Parentheses](/problems/valid-parens) — Stack + pattern matching (algorithmic)
-- [Word Frequency](/problems/word-freq) — File I/O + sorting (real-world)
-- [JSON Transform](/problems/json-transform) — Parse, filter, reshape (real-world)
-- [HTTP Server](/problems/http-server) — Routing + JSON responses (real-world)
-- [Concurrent Fetch](/problems/concurrent-fetch) — HTTP + bounded parallelism (real-world)
-- [Channel Pipeline](/problems/channel-pipeline) — Producer/filter/consumer (systems)
-
-See [Methodology](/methodology) for how we measure.
+<style>
+.concept-pair {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: var(--vp-c-bg-soft);
+}
+.pair-header {
+  text-align: center;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--vp-c-text-2);
+}
+</style>
