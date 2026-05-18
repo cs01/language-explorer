@@ -38,4 +38,4 @@ Pick 2-4 languages to see them head-to-head. Bars show relative performance — 
 - **Guardrails** — how many bugs the language prevents for you (0–5, [details](/methodology#guardrails))
 - **Ceremony** — what fraction of code is overhead vs actual logic
 
-Lower is better for most metrics except Guardrails.
+**Radar:** bigger polygon = better. **Bars:** shorter = better (except Guardrails).
