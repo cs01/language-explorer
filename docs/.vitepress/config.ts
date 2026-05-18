@@ -51,18 +51,20 @@ export default defineConfig({
       {
         text: 'Metrics',
         items: [
+          { text: 'Safety Guardrails', link: '/metrics/guardrails' },
           { text: 'Code Size', link: '/metrics/code-size' },
           { text: 'Symbol Noise', link: '/metrics/symbol-noise' },
           { text: 'Complexity', link: '/metrics/complexity' },
           { text: 'Concept Count', link: '/metrics/concept-count' },
           { text: 'Type Ceremony', link: '/metrics/type-ceremony' },
           { text: 'Error Overhead', link: '/metrics/error-overhead' },
+          { text: 'AI Readiness', link: '/metrics/ai-readiness' },
+          { text: 'How We Score', link: '/methodology' },
         ]
       },
       {
         text: 'Reference',
         items: [
-          { text: 'Methodology', link: '/methodology' },
           { text: 'Adding a Problem', link: '/contributing' },
         ]
       },

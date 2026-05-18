@@ -105,7 +105,7 @@ const grReasons = {
 
 A purely functional language built on immutability, monads, and a powerful type system that catches errors at compile time. Niche in industry but deeply influential (Rust's traits, Swift's optionals, Java's streams all trace back here). Same total concepts as Python (75) but radically different shape — heavy on types and functions, minimal OOP.
 
-<div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" />
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
 

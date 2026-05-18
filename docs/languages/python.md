@@ -105,7 +105,7 @@ const grReasons = {
 
 The most popular language for data science, ML, scripting, and teaching. Consistently among the most concise in benchmarks with very low ceremony. Surface area is moderate (75 concepts) but heavily weighted toward OOP and metaprogramming — decorators, metaclasses, descriptors, and dunder methods add depth most users never touch.
 
-<div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" />
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
 

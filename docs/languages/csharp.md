@@ -98,7 +98,7 @@ const grReasons = {
 
 Microsoft's flagship language — dominant in enterprise, game development (Unity), and Windows desktop applications. Similar to Java but with more modern features: LINQ, async/await, nullable reference types. Benchmarks show moderate verbosity with decent guardrails from GC and optional null checking.
 
-<div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" />
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
 

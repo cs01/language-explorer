@@ -57,23 +57,6 @@ const profileColumns = [
   { key: 'typeCoverage', label: 'Type Coverage', lower: false },
 ]
 
-const aiData = languages.map(lang => {
-  const entries = data.metrics.filter(m => m.language === lang)
-  const avg = (key) => +(entries.reduce((s, e) => s + e[key], 0) / entries.length).toFixed(1)
-  return {
-    language: toDisplay(lang),
-    llmTokens: Math.round(entries.reduce((s, e) => s + e.llmTokens, 0) / entries.length),
-    'tok/line': avg('llmTokensPerLine'),
-    typeCoverage: entries[0]?.typeCoverage ?? 0,
-  }
-})
-
-const aiColumns = [
-  { key: 'llmTokens', label: 'LLM Tokens' },
-  { key: 'tok/line', label: 'Tok/Line' },
-  { key: 'typeCoverage', label: 'Type Coverage', lower: false },
-]
-
 // Concept category radars for paired comparisons
 const catKeys = ['catTypes','catControlFlow','catFunctions','catOopData','catMemory','catConcurrency','catMetaprogramming','catErrorHandling'] as const
 const catLabels = ['Types','Control','Functions','OOP/Data','Memory','Concurrency','Metaprog','Errors']
@@ -91,46 +74,146 @@ function conceptRadarFor(lang: string) {
   }))
 }
 
+// Guardrail breakdown — show when (compile/runtime/none) for nuance
+function guardrailBreakdown(lang: string) {
+  const entries = data.metrics.filter(m => m.language === lang)
+  if (!entries.length) return []
+  const e = entries[0]
+  const items = [
+    { label: 'Memory', when: e.grMemoryWhen },
+    { label: 'Null', when: e.grNullWhen },
+    { label: 'Race', when: e.grRaceWhen },
+    { label: 'Overflow', when: e.grOverflowWhen },
+    { label: 'Coercion', when: e.grCoercionWhen },
+  ]
+  return items.map(i => ({
+    ...i,
+    level: i.when === 'compile' ? 'compile' : i.when === 'runtime' ? 'runtime' : 'none',
+  }))
+}
+
+const zigGuardrails = guardrailBreakdown('zig')
+const rustGuardrails = guardrailBreakdown('rust')
+const zigScore = data.metrics.find(m => m.language === 'zig')?.guardrailScore ?? 0
+const rustScore = data.metrics.find(m => m.language === 'rust')?.guardrailScore ?? 0
+
+// Hero feature bars — averaged across benchmarks
+function heroStats(lang: string) {
+  const entries = data.metrics.filter(m => m.language === lang)
+  const avg = (key: string) => +(entries.reduce((s, e) => s + e[key], 0) / entries.length).toFixed(1)
+  return {
+    lines: avg('loc'),
+    complexity: Math.round(entries.reduce((s, e) => s + e.halsteadVolume, 0) / entries.length),
+    ceremony: avg('ceremonyRatio'),
+    concepts: entries[0]?.langConcepts ?? 0,
+    keywords: entries[0]?.langKeywords ?? 0,
+    guardrails: entries[0]?.guardrailScore ?? 0,
+  }
+}
+const zigStats = heroStats('zig')
+const rustStats = heroStats('rust')
+
+const heroMetrics = [
+  { label: 'Concepts to Learn', zig: zigStats.concepts, rust: rustStats.concepts, unit: '', lower: true },
+  { label: 'Keywords', zig: zigStats.keywords, rust: rustStats.keywords, unit: '', lower: true },
+  { label: 'Avg Lines', zig: zigStats.lines, rust: rustStats.lines, unit: '', lower: true },
+  { label: 'Complexity', zig: zigStats.complexity, rust: rustStats.complexity, unit: '', lower: true },
+  { label: 'Ceremony', zig: +(zigStats.ceremony * 100).toFixed(0), rust: +(rustStats.ceremony * 100).toFixed(0), unit: '%', lower: true },
+  { label: 'Guardrails', zig: zigStats.guardrails, rust: rustStats.guardrails, unit: ' / 5', lower: false },
+]
+
 const pairs = [
   { left: 'python', right: 'haskell', why: 'Same total concepts (75), opposite shapes' },
   { left: 'rust', right: 'go', why: 'Systems safety vs simplicity' },
   { left: 'c', right: 'zig', why: 'C successor — similar size (60 vs 65), more guardrails' },
+  { left: 'typescript', right: 'javascript', why: 'Types added — 100 vs 65 concepts, but stronger guardrails' },
 ]
 
 const pairRadars = pairs.map(p => ({
   ...p,
-  leftLabel: p.left.charAt(0).toUpperCase() + p.left.slice(1),
-  rightLabel: p.right.charAt(0).toUpperCase() + p.right.slice(1),
+  leftLabel: toDisplay(p.left),
+  rightLabel: toDisplay(p.right),
   leftData: conceptRadarFor(p.left),
   rightData: conceptRadarFor(p.right),
+  leftGuardrails: guardrailBreakdown(p.left),
+  rightGuardrails: guardrailBreakdown(p.right),
 }))
 </script>
 
 # Language Explorer
 
-A quantitative explorer of programming languages — their properties, features, explicitness, and safety guardrails. Two views: what the language demands as a learner, and what it demands as a writer.
+Quantitative comparison of programming languages — measured from real code, not opinions.
 
-Every metric here is computed from real code — 7 benchmark problems solved idiomatically in each language, scored for conciseness, complexity, and ceremony. Browse [individual language profiles](/languages/python) to see where a language's complexity lives, use the [Compare](/compare) page to put languages side-by-side, or read the [Methodology](/methodology) to see exactly how each score is calculated. No opinions, no tier lists — just measurements.
+<div class="hero-matchup">
+<div class="matchup-header">
+  <span class="matchup-vs">Zig vs Rust</span>
+  <span class="matchup-tagline">Two modern takes on systems programming. Different tradeoffs.</span>
+</div>
 
----
+<div class="hero-radars">
+<RadarChart :data="conceptRadarFor('zig')" label="Zig" color="#3b82f6" :size="220" />
+<RadarChart :data="conceptRadarFor('rust')" label="Rust" color="#f97316" :size="220" />
+</div>
 
-## Language Profile
+<div class="matchup-insight">
+Zig bets on <strong>simplicity</strong> — comptime, no hidden allocators, 65 concepts. Rust bets on <strong>safety</strong> — ownership, lifetimes, borrow checker, 110 concepts. Same polygon axes, radically different shapes.
+</div>
 
-Properties of the language itself — independent of any specific program. These don't change per solution.
+<div class="hero-bars">
+  <div class="hero-bar-header">
+    <span></span>
+    <span class="hero-lang-label" style="color: #3b82f6">Zig</span>
+    <span class="hero-lang-label" style="color: #f97316">Rust</span>
+  </div>
+  <div v-for="m in heroMetrics" :key="m.label" class="hero-bar-row">
+    <span class="hero-bar-label">{{ m.label }}</span>
+    <div class="hero-bar-pair">
+      <div class="hero-bar-cell">
+        <div class="hero-bar-track">
+          <div class="hero-bar-fill" :style="{ width: (m.zig / Math.max(m.zig, m.rust) * 100) + '%', background: '#3b82f6' }"></div>
+        </div>
+        <span class="hero-bar-val">{{ m.zig }}{{ m.unit }}</span>
+      </div>
+      <div class="hero-bar-cell">
+        <div class="hero-bar-track">
+          <div class="hero-bar-fill" :style="{ width: (m.rust / Math.max(m.zig, m.rust) * 100) + '%', background: '#f97316' }"></div>
+        </div>
+        <span class="hero-bar-val">{{ m.rust }}{{ m.unit }}</span>
+      </div>
+    </div>
+  </div>
+</div>
 
-- **Guardrails** — how many bugs the language prevents for you (0–5, [details](/methodology#guardrails)). E.g., Rust prevents use-after-free; JavaScript allows `"5" + 3 → "53"`
-- **Keywords** — reserved words in the language spec (`fn`, `class`, `async`, `match`, `defer`, …)
-- **Surface Area** — total distinct concepts a developer must learn ([details](/methodology#surface-area)). E.g., generics, pattern matching, closures, ownership, decorators
+<div class="safety-comparison">
+<div class="safety-header">Safety Guardrails <a href="./methodology#guardrails" class="safety-link">how we score →</a></div>
+<div class="safety-legend">
+  <span class="safety-badge compile">compile-time</span>
+  <span class="safety-badge runtime">runtime</span>
+  <span class="safety-badge none">none</span>
+</div>
+<div class="safety-row">
+  <div class="safety-lang">
+    <span class="safety-name" style="color: #3b82f6">Zig</span>
+  </div>
+  <div class="safety-badges">
+    <span v-for="g in zigGuardrails" :key="g.label" :class="['safety-badge', g.level]">{{ g.label }}</span>
+  </div>
+</div>
+<div class="safety-row">
+  <div class="safety-lang">
+    <span class="safety-name" style="color: #f97316">Rust</span>
+  </div>
+  <div class="safety-badges">
+    <span v-for="g in rustGuardrails" :key="g.label" :class="['safety-badge', g.level]">{{ g.label }}</span>
+  </div>
+</div>
+</div>
 
-<MetricsTable :data="profileData" :columns="profileColumns" />
-
-<small>Static properties from language specs. Guardrails: higher is better. Keywords and Surface Area: lower means less to learn.</small>
-
----
-
-## Concept Shape
-
-Where does each language's complexity live? Same total concepts can mean radically different things. These radars break surface area into 8 categories — the *shape* of what you have to learn.
+<div class="matchup-cta">
+<a href="./compare?langs=zig,rust" class="cta-button">Full Comparison →</a>
+<a href="./compare" class="cta-link">or explore all 14 languages</a>
+</div>
+</div>
 
 <div v-for="pair in pairRadars" :key="pair.left" class="concept-pair">
 <div class="pair-header"><strong>{{ pair.leftLabel }}</strong> vs <strong>{{ pair.rightLabel }}</strong> — {{ pair.why }}</div>
@@ -138,23 +221,42 @@ Where does each language's complexity live? Same total concepts can mean radical
 <RadarChart :data="pair.leftData" :label="pair.leftLabel" color="#3b82f6" :size="220" />
 <RadarChart :data="pair.rightData" :label="pair.rightLabel" color="#f97316" :size="220" />
 </div>
+<div class="safety-comparison">
+<div class="safety-header">Safety Guardrails <a href="./methodology#guardrails" class="safety-link">how we score →</a></div>
+<div class="safety-legend">
+  <span class="safety-badge compile">compile-time</span>
+  <span class="safety-badge runtime">runtime</span>
+  <span class="safety-badge none">none</span>
 </div>
-
-<small>Each axis shows one concept category, normalized across all languages. Bigger = more concepts in that area. See individual [language pages](/languages/python) for full breakdowns.</small>
+<div class="safety-row">
+  <div class="safety-lang">
+    <span class="safety-name" style="color: #3b82f6">{{ pair.leftLabel }}</span>
+  </div>
+  <div class="safety-badges">
+    <span v-for="g in pair.leftGuardrails" :key="g.label" :class="['safety-badge', g.level]">{{ g.label }}</span>
+  </div>
+</div>
+<div class="safety-row">
+  <div class="safety-lang">
+    <span class="safety-name" style="color: #f97316">{{ pair.rightLabel }}</span>
+  </div>
+  <div class="safety-badges">
+    <span v-for="g in pair.rightGuardrails" :key="g.label" :class="['safety-badge', g.level]">{{ g.label }}</span>
+  </div>
+</div>
+</div>
+<div class="pair-cta"><a :href="`./compare?langs=${pair.left},${pair.right}`">Compare {{ pair.leftLabel }} & {{ pair.rightLabel }} →</a></div>
+</div>
 
 ---
 
-## AI Readiness
+## Language Profile
 
-How efficiently can an LLM process this language? Averaged across 7 benchmark problems.
+Properties of each language — guardrails, keyword count, surface area, and type coverage.
 
-- **LLM Tokens** — tokens consumed when feeding code to a language model (cl100k tokenizer). Lower = cheaper API calls, more code fits in context
-- **Tok/Line** — LLM token density per line of code
-- **Type Coverage** — how much type information is statically available (0–1). Higher = more for AI to verify and infer from
+<MetricsTable :data="profileData" :columns="profileColumns" />
 
-<MetricsTable :data="aiData" :columns="aiColumns" />
-
-<small>LLM tokens measured with cl100k_base tokenizer (GPT-4/Claude class). Type coverage is a static language property.</small>
+<small>Guardrails: higher is better. Keywords and Surface Area: lower means less to learn. <a href="./methodology#guardrails">Details →</a></small>
 
 ---
 
@@ -162,16 +264,215 @@ How efficiently can an LLM process this language? Averaged across 7 benchmark pr
 
 How concise is the code? Averaged across 7 benchmark problems. Lower is better.
 
-- **Lines** — non-blank lines of code
-- **Complexity** — total information your brain processes ([Halstead Volume](https://en.wikipedia.org/wiki/Halstead_complexity_measures))
-- **Ceremony** — fraction of code that's overhead (imports, boilerplate) vs logic
-
 <MetricsTable :data="expressData" :columns="expressColumns" />
 
-<small>Averages across 7 benchmark problems. Full metrics on the [Compare](/compare) page.</small>
+<small>Full metrics on the <a href="./compare">Compare</a> page. <a href="./methodology">Methodology →</a></small>
 
 
 <style>
+.hero-matchup {
+  margin: 1.5rem 0 2rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+}
+.matchup-header {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+.matchup-vs {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--vp-c-text-1);
+  letter-spacing: -0.02em;
+}
+.matchup-tagline {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--vp-c-text-2);
+  margin-top: 0.25rem;
+}
+.hero-radars {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+.hero-bars {
+  margin-bottom: 1.25rem;
+}
+.hero-bar-header {
+  display: grid;
+  grid-template-columns: 120px 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  padding: 0 0.25rem;
+}
+.hero-lang-label {
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-align: center;
+}
+.hero-bar-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+.hero-bar-label {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--vp-c-text-2);
+  text-align: right;
+  padding-right: 0.5rem;
+}
+.hero-bar-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.hero-bar-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.hero-bar-track {
+  flex: 1;
+  height: 18px;
+  background: var(--vp-c-bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.hero-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  opacity: 0.75;
+}
+.hero-bar-val {
+  font-size: 0.78rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  min-width: 3.5rem;
+  color: var(--vp-c-text-2);
+}
+.matchup-insight {
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--vp-c-text-2);
+  max-width: 600px;
+  margin: 0 auto 1.25rem;
+  line-height: 1.5;
+}
+.safety-comparison {
+  background: var(--vp-c-bg);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.safety-header {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--vp-c-text-1);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.safety-link {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--vp-c-text-3) !important;
+  text-decoration: none !important;
+}
+.safety-link:hover {
+  color: var(--vp-c-brand-1) !important;
+}
+.safety-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+.safety-lang {
+  min-width: 60px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.safety-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.safety-badges {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+.safety-legend {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+  font-size: 0.7rem;
+}
+.safety-badge {
+  padding: 0.2rem 0.55rem;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-3);
+  border: 1px solid var(--vp-c-divider);
+}
+.safety-badge.compile {
+  background: #22c55e18;
+  color: #16a34a;
+  border-color: #22c55e44;
+}
+.safety-badge.runtime {
+  background: #f59e0b18;
+  color: #d97706;
+  border-color: #f59e0b44;
+}
+.safety-badge.none {
+  opacity: 0.5;
+}
+.dark .safety-badge.compile {
+  color: #4ade80;
+}
+.dark .safety-badge.runtime {
+  color: #fbbf24;
+}
+.matchup-cta {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.cta-button {
+  display: inline-block;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  background: var(--vp-c-brand-1);
+  color: var(--vp-c-bg) !important;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none !important;
+  transition: opacity 0.15s ease;
+}
+.cta-button:hover {
+  opacity: 0.9;
+}
+.cta-link {
+  font-size: 0.82rem;
+  color: var(--vp-c-text-2);
+}
 .concept-pair {
   margin-bottom: 2rem;
   padding: 1rem;
@@ -183,5 +484,21 @@ How concise is the code? Averaged across 7 benchmark problems. Lower is better.
   margin-bottom: 0.75rem;
   font-size: 0.9rem;
   color: var(--vp-c-text-2);
+}
+.pair-cta {
+  text-align: center;
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
+}
+@media (max-width: 640px) {
+  .hero-bar-row {
+    grid-template-columns: 1fr;
+  }
+  .hero-bar-label {
+    text-align: left;
+  }
+  .hero-bar-header {
+    display: none;
+  }
 }
 </style>

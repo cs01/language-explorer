@@ -104,7 +104,7 @@ const grReasons = {
 
 The foundation of systems programming — kernels, embedded systems, and most language runtimes are written in C. Minimal surface area (55 concepts) and no runtime overhead, but zero guardrails means manual memory management with no safety net. Among the most concise languages in benchmarks, but that brevity comes at the cost of doing everything yourself.
 
-<div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" />
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
 <GuardrailCard :score="stats.guardrails" :memory="gr.memory" :null="gr.null" :race="gr.race" :overflow="gr.overflow" :coercion="gr.coercion" :memoryWhen="gr.memoryWhen" :memoryActivation="gr.memoryActivation" :nullWhen="gr.nullWhen" :nullActivation="gr.nullActivation" :raceWhen="gr.raceWhen" :raceActivation="gr.raceActivation" :overflowWhen="gr.overflowWhen" :overflowActivation="gr.overflowActivation" :coercionWhen="gr.coercionWhen" :coercionActivation="gr.coercionActivation" :reasons="grReasons" />

@@ -105,7 +105,7 @@ const grReasons = {
 
 JavaScript extended with a structural type system — now the default for large-scale web development. Adds significant surface area over JavaScript (90 vs 70 concepts), mostly in the type system category. Benchmarks show slightly more ceremony than JavaScript but substantially better guardrails from compile-time type checking.
 
-<div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" />
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
 

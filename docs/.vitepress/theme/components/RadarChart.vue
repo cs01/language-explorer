@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<{
 
 const cx = computed(() => props.size / 2)
 const cy = computed(() => props.size / 2)
-const radius = computed(() => props.size / 2 - 30)
+const radius = computed(() => props.size / 2 - 45)
 
 function polarToCart(angle: number, r: number): [number, number] {
   const rad = (angle - 90) * (Math.PI / 180)
@@ -32,7 +32,7 @@ const axes = computed(() => {
   return props.data.map((d, i) => {
     const angle = (360 / n) * i
     const [x, y] = polarToCart(angle, radius.value)
-    const [lx, ly] = polarToCart(angle, radius.value + 16)
+    const [lx, ly] = polarToCart(angle, radius.value + 20)
     return { ...d, angle, x, y, lx, ly }
   })
 })

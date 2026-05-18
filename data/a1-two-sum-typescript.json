@@ -30,7 +30,7 @@
     "null": 0.75,
     "race": 0,
     "overflow": 0,
-    "coercion": 0.67,
+    "coercion": 0.75,
     "guardrailScore": 3.3,
     "grMemoryWhen": "compile",
     "grMemoryActivation": "default",
@@ -40,8 +40,8 @@
     "grRaceActivation": "default",
     "grOverflowWhen": "none",
     "grOverflowActivation": "default",
-    "grCoercionWhen": "runtime",
-    "grCoercionActivation": "default"
+    "grCoercionWhen": "compile",
+    "grCoercionActivation": "optin"
   },
   "ceremony": {
     "ceremonyLines": 3,

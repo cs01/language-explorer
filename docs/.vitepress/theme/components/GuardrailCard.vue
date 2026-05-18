@@ -116,7 +116,6 @@ function reason(key: string): string {
   border-radius: 10px;
   padding: 1rem 1.25rem;
   min-width: 260px;
-  max-width: 320px;
   background: var(--vp-c-bg-soft);
 }
 .gr-header {

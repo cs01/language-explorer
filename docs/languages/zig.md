@@ -105,7 +105,7 @@ const grReasons = {
 
 A modern systems language designed as a practical alternative to C — no hidden control flow, no hidden allocators, no GC. Compact surface area (60 concepts) with comptime replacing macros and generics. Benchmarks show concise code with low ceremony. Pointers are non-nullable by default and safe builds include runtime bounds checking and overflow detection, but there's no borrow checker or compile-time race prevention — safety sits between C and Rust.
 
-<div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" />
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
 

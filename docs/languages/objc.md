@@ -98,7 +98,7 @@ const grReasons = {
 
 The original Apple development language — Smalltalk-style messaging grafted onto C. Still found in legacy iOS/macOS codebases but largely replaced by Swift. Inherits C's lack of memory safety (manual retain/release or ARC) and adds its own ceremony with bracket syntax and verbose method names. Low guardrail score reflects the C foundation.
 
-<div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" />
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
 

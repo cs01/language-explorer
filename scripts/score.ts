@@ -169,7 +169,7 @@ const guardrails: Record<string, G> = {
   python:     { memory: C('compile'),          null: C('runtime'),          race: NONE,                  overflow: C('compile'),          coercion: C('runtime')          },
   ruby:       { memory: C('compile'),          null: C('runtime'),          race: NONE,                  overflow: C('compile'),          coercion: C('runtime')          },
   javascript: { memory: C('compile'),          null: NONE,                  race: NONE,                  overflow: NONE,                  coercion: NONE                  },
-  typescript: { memory: C('compile'),          null: C('compile','optin'),  race: NONE,                  overflow: NONE,                  coercion: C('runtime')          },
+  typescript: { memory: C('compile'),          null: C('compile','optin'),  race: NONE,                  overflow: NONE,                  coercion: C('compile','optin') },
   ada:        { memory: C('runtime'),          null: C('runtime'),          race: C('runtime','optin'),  overflow: C('compile'),          coercion: C('compile')          },
   x86_64:     { memory: NONE,                  null: NONE,                  race: NONE,                  overflow: NONE,                  coercion: NONE                  },
   llvm:       { memory: NONE,                  null: NONE,                  race: NONE,                  overflow: NONE,                  coercion: C('compile','optin')  },

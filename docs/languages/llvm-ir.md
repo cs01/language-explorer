@@ -11,6 +11,7 @@ const stats = {
   guardrails: 0.1,
   keywords: 150,
   surface: 35,
+  keywordRatio: +(150 / 35).toFixed(2),
   typeCoverage: 0.25,
 }
 
@@ -41,12 +42,11 @@ Not a programming language but a compiler intermediate representation — the as
 
 <small>Profile only — no benchmark solutions yet.</small>
 
-<div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
 <GuardrailCard :score="stats.guardrails" :memory="gr.memory" :null="gr.null" :race="gr.race" :overflow="gr.overflow" :coercion="gr.coercion" :memoryWhen="gr.memoryWhen" :memoryActivation="gr.memoryActivation" :nullWhen="gr.nullWhen" :nullActivation="gr.nullActivation" :raceWhen="gr.raceWhen" :raceActivation="gr.raceActivation" :overflowWhen="gr.overflowWhen" :overflowActivation="gr.overflowActivation" :coercionWhen="gr.coercionWhen" :coercionActivation="gr.coercionActivation" :reasons="grReasons" />
 <SurfaceAreaCard :concepts="stats.surface" :keywords="stats.keywords" :keywordRatio="stats.keywordRatio" :categories="catData" />
 <ExplicitnessCard :concepts="stats.surface" :keywordRatio="stats.keywordRatio" />
-<AIReadinessCard :llmTokens="0" :llmTokensPerLine="0" :typeCoverage="stats.typeCoverage" :maxLlmTokens="1" :maxLlmTokensPerLine="1" />
 </div>
 
 <style>

@@ -34,7 +34,6 @@ const implicitPct = 100 - pct
   border-radius: 10px;
   padding: 0.85rem 1.25rem;
   min-width: 260px;
-  max-width: 320px;
   background: var(--vp-c-bg-soft);
 }
 .ex-header { margin-bottom: 0.5rem; }

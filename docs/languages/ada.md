@@ -11,6 +11,7 @@ const stats = {
   guardrails: 3.4,
   keywords: 74,
   surface: 85,
+  keywordRatio: +(74 / 85).toFixed(2),
   typeCoverage: 1.0,
 }
 
@@ -43,12 +44,11 @@ Designed for safety-critical systems — avionics, defense, railway signaling, a
 
 <small>Profile only — no benchmark solutions yet.</small>
 
-<div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
 <GuardrailCard :score="stats.guardrails" :memory="gr.memory" :null="gr.null" :race="gr.race" :overflow="gr.overflow" :coercion="gr.coercion" :memoryWhen="gr.memoryWhen" :memoryActivation="gr.memoryActivation" :nullWhen="gr.nullWhen" :nullActivation="gr.nullActivation" :raceWhen="gr.raceWhen" :raceActivation="gr.raceActivation" :overflowWhen="gr.overflowWhen" :overflowActivation="gr.overflowActivation" :coercionWhen="gr.coercionWhen" :coercionActivation="gr.coercionActivation" :reasons="grReasons" />
 <SurfaceAreaCard :concepts="stats.surface" :keywords="stats.keywords" :keywordRatio="stats.keywordRatio" :categories="catData" />
 <ExplicitnessCard :concepts="stats.surface" :keywordRatio="stats.keywordRatio" />
-<AIReadinessCard :llmTokens="0" :llmTokensPerLine="0" :typeCoverage="stats.typeCoverage" :maxLlmTokens="1" :maxLlmTokensPerLine="1" />
 </div>
 
 <style>

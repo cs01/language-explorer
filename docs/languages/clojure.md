@@ -98,7 +98,7 @@ const grReasons = {
 
 A modern Lisp on the JVM — immutable data structures by default and a strong concurrency story with atoms, refs, and STM. Niche but valued in finance and data processing for its simplicity and REPL-driven development. Among the most concise languages in benchmarks, with minimal syntax and a prefix notation that eliminates operator precedence.
 
-<div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" />
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
 

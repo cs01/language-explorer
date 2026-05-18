@@ -98,7 +98,7 @@ const grReasons = {
 
 Built for telecom reliability — powers WhatsApp, RabbitMQ, and systems that need 99.999% uptime. The actor model and "let it crash" philosophy make concurrency natural. Among the highest guardrail scores thanks to immutable data, process isolation, and pattern matching that eliminates most null/race/overflow bugs.
 
-<div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" />
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
 

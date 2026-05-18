@@ -105,7 +105,7 @@ const grReasons = {
 
 Apple's replacement for Objective-C — the primary language for iOS, macOS, and Apple platform development. Combines protocol-oriented design with strong type safety and optionals. Benchmarks show moderate conciseness with good guardrails; concept distribution leans toward types and OOP, reflecting its protocol-heavy design.
 
-<div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" />
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
 

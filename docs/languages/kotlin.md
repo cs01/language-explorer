@@ -105,7 +105,7 @@ const grReasons = {
 
 JetBrains's modern alternative to Java — now Google's preferred language for Android. Dramatically more concise than Java in benchmarks with data classes, null safety, and extension functions reducing boilerplate. Surface area is large (90 concepts), trading a bigger learning surface for stronger guardrails and expressiveness than Java.
 
-<div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" />
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
 

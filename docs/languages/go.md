@@ -105,7 +105,7 @@ const grReasons = {
 
 Google's answer to C++ complexity — intentionally minimal with only 25 keywords. Dominant in cloud infrastructure, DevOps tooling, and microservices. Benchmarks show moderate conciseness with very low symbol noise and ceremony. The concept distribution is notably flat — Go deliberately avoids depth in any single area.
 
-<div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" />
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
 

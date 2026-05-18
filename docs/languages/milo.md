@@ -105,7 +105,7 @@ const grReasons = {
 
 A memory-safe systems language that compiles to native code via LLVM. Ownership without lifetimes — move semantics and second-class references eliminate dangling pointers without a borrow checker or GC. 49 concepts, about a third of C++. Features green threads with transparent async I/O, channels, parallel blocks, and compile-time Send/Sync enforcement. [GitHub](https://github.com/cs01/milo)
 
-<div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" />
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
 

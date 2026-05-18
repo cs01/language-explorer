@@ -70,7 +70,6 @@ const tokenMetrics = [
   border-radius: 10px;
   padding: 1rem 1.25rem;
   min-width: 240px;
-  max-width: 300px;
   background: var(--vp-c-bg-soft);
 }
 .ai-header { margin-bottom: 0.75rem; }

@@ -105,7 +105,7 @@ const grReasons = {
 
 The language of the web — runs in every browser and increasingly on servers via Node.js. Flexible and concise in benchmarks, but dynamic typing and implicit coercion give it one of the lowest guardrail scores. Concept distribution is broad, spanning OOP, functional, and async patterns from decades of evolution.
 
-<div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" />
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
 

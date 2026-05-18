@@ -105,7 +105,7 @@ const grReasons = {
 
 The largest language by surface area (135 concepts) — decades of features from templates to coroutines to concepts. Ubiquitous in games, finance, browsers, and performance-critical infrastructure. Benchmarks show high complexity and symbol density, reflecting the breadth of features accumulated across 40+ years of standardization.
 
-<div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" />
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
 

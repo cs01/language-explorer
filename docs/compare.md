@@ -30,14 +30,19 @@ const langData = languages.map(lang => {
     catConcurrency: entries[0]?.catConcurrency ?? 0,
     catMetaprogramming: entries[0]?.catMetaprogramming ?? 0,
     catErrorHandling: entries[0]?.catErrorHandling ?? 0,
+    grMemoryWhen: entries[0]?.grMemoryWhen ?? 'none',
+    grNullWhen: entries[0]?.grNullWhen ?? 'none',
+    grRaceWhen: entries[0]?.grRaceWhen ?? 'none',
+    grOverflowWhen: entries[0]?.grOverflowWhen ?? 'none',
+    grCoercionWhen: entries[0]?.grCoercionWhen ?? 'none',
   }
 })
 
 // Profile-only languages (no benchmark solutions yet — fingerprint only)
 const profileOnly = [
-  { language: 'Ada', lines: 0, tokens: 0, complexity: 0, sigilsPerLine: 0, guardrails: 3.4, ceremony: 0, catTypes: 18, catControlFlow: 10, catFunctions: 8, catOopData: 12, catMemory: 10, catConcurrency: 12, catMetaprogramming: 6, catErrorHandling: 9 },
-  { language: 'LLVM IR', lines: 0, tokens: 0, complexity: 0, sigilsPerLine: 0, guardrails: 0.1, ceremony: 0, catTypes: 10, catControlFlow: 6, catFunctions: 4, catOopData: 0, catMemory: 8, catConcurrency: 2, catMetaprogramming: 3, catErrorHandling: 2 },
-  { language: 'Zero', lines: 0, tokens: 0, complexity: 0, sigilsPerLine: 0, guardrails: 5.0, ceremony: 0, catTypes: 10, catControlFlow: 8, catFunctions: 6, catOopData: 6, catMemory: 8, catConcurrency: 2, catMetaprogramming: 2, catErrorHandling: 8 },
+  { language: 'Ada', lines: 0, tokens: 0, complexity: 0, sigilsPerLine: 0, guardrails: 3.4, ceremony: 0, catTypes: 18, catControlFlow: 10, catFunctions: 8, catOopData: 12, catMemory: 10, catConcurrency: 12, catMetaprogramming: 6, catErrorHandling: 9, grMemoryWhen: 'runtime', grNullWhen: 'compile', grRaceWhen: 'runtime', grOverflowWhen: 'runtime', grCoercionWhen: 'compile' },
+  { language: 'LLVM IR', lines: 0, tokens: 0, complexity: 0, sigilsPerLine: 0, guardrails: 0.1, ceremony: 0, catTypes: 10, catControlFlow: 6, catFunctions: 4, catOopData: 0, catMemory: 8, catConcurrency: 2, catMetaprogramming: 3, catErrorHandling: 2, grMemoryWhen: 'none', grNullWhen: 'none', grRaceWhen: 'none', grOverflowWhen: 'none', grCoercionWhen: 'none' },
+  { language: 'Zero', lines: 0, tokens: 0, complexity: 0, sigilsPerLine: 0, guardrails: 5.0, ceremony: 0, catTypes: 10, catControlFlow: 8, catFunctions: 6, catOopData: 6, catMemory: 8, catConcurrency: 2, catMetaprogramming: 2, catErrorHandling: 8, grMemoryWhen: 'compile', grNullWhen: 'compile', grRaceWhen: 'compile', grOverflowWhen: 'runtime', grCoercionWhen: 'compile' },
 ]
 
 const benchLangs = new Set(langData.map(l => l.language))

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 interface LangData {
   language: string
@@ -9,6 +9,11 @@ interface LangData {
   sigilsPerLine: number
   guardrails: number
   ceremony: number
+  grMemoryWhen?: string
+  grNullWhen?: string
+  grRaceWhen?: string
+  grOverflowWhen?: string
+  grCoercionWhen?: string
 }
 
 interface Group {
@@ -26,6 +31,27 @@ const allLangs = computed(() => props.languages.map(l => l.language).sort())
 const defaultPair = ['Rust', 'Zig'].filter(l => allLangs.value.includes(l))
 const selected = ref<string[]>(defaultPair.length === 2 ? defaultPair : [allLangs.value[0] || '', allLangs.value[1] || ''])
 const activeGroup = ref('')
+
+// ?langs=python,haskell → auto-select from URL
+const displayAliases: Record<string, string> = {
+  cpp: 'C++', 'c++': 'C++', csharp: 'C#', 'c#': 'C#',
+  objc: 'Objective-C', javascript: 'JavaScript', typescript: 'TypeScript',
+}
+function resolveDisplayName(slug: string): string {
+  const lower = slug.toLowerCase().trim()
+  return displayAliases[lower] ?? lower.charAt(0).toUpperCase() + lower.slice(1)
+}
+onMounted(() => {
+  if (typeof window === 'undefined') return
+  const params = new URLSearchParams(window.location.search)
+  const langsParam = params.get('langs')
+  if (!langsParam) return
+  const requested = langsParam.split(',')
+    .map(resolveDisplayName)
+    .filter(s => allLangs.value.includes(s))
+    .slice(0, 4)
+  if (requested.length >= 2) selected.value = requested
+})
 
 function toggleLang(lang: string) {
   activeGroup.value = ''
@@ -203,6 +229,19 @@ function langCatPath(lang: string): string {
 }
 
 const hasCatData = computed(() => props.languages.some(l => (l as any).catTypes > 0))
+
+// Safety guardrail badge data
+const guardrailFields = [
+  { key: 'grMemoryWhen', label: 'Memory' },
+  { key: 'grNullWhen', label: 'Null' },
+  { key: 'grRaceWhen', label: 'Race' },
+  { key: 'grOverflowWhen', label: 'Overflow' },
+  { key: 'grCoercionWhen', label: 'Coercion' },
+] as const
+
+const hasGuardrailWhenData = computed(() =>
+  props.languages.some(l => l.grMemoryWhen || l.grNullWhen || l.grRaceWhen || l.grOverflowWhen || l.grCoercionWhen)
+)
 </script>
 
 <template>
@@ -318,6 +357,27 @@ const hasCatData = computed(() => props.languages.some(l => (l as any).catTypes 
             {{ axis.label }}
           </text>
         </svg>
+      </div>
+    </div>
+
+    <div v-if="hasGuardrailWhenData" class="safety-comparison">
+      <div class="safety-header">Safety Guardrails</div>
+      <div class="safety-legend">
+        <span class="safety-badge compile">compile-time</span>
+        <span class="safety-badge runtime">runtime</span>
+        <span class="safety-badge none">none</span>
+      </div>
+      <div v-for="(lang, idx) in selected" :key="'gr-' + lang" class="safety-row">
+        <div class="safety-lang">
+          <span class="safety-name" :style="{ color: colors[idx] }">{{ lang }}</span>
+        </div>
+        <div class="safety-badges">
+          <span
+            v-for="field in guardrailFields"
+            :key="field.key"
+            :class="['safety-badge', (props.languages.find(l => l.language === lang)?.[field.key as keyof LangData] as string) || 'none']"
+          >{{ field.label }}</span>
+        </div>
       </div>
     </div>
 
@@ -492,5 +552,62 @@ const hasCatData = computed(() => props.languages.some(l => (l as any).catTypes 
 .radar-label {
   font-size: 13px;
   fill: var(--vp-c-text-2);
+}
+.safety-comparison {
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  background: var(--vp-c-bg-soft);
+}
+.safety-header {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--vp-c-text-2);
+  margin-bottom: 0.5rem;
+}
+.safety-legend {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.safety-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+.safety-lang {
+  min-width: 5.5rem;
+  text-align: right;
+}
+.safety-name {
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+.safety-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.safety-badge {
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+}
+.safety-badge.compile {
+  background: #22c55e18;
+  color: #16a34a;
+  border-color: #22c55e44;
+}
+.safety-badge.runtime {
+  background: #f59e0b18;
+  color: #d97706;
+  border-color: #f59e0b44;
+}
+.safety-badge.none {
+  opacity: 0.5;
 }
 </style>

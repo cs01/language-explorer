@@ -105,7 +105,7 @@ const grReasons = {
 
 Memory safety without garbage collection — the ownership system prevents use-after-free, data races, and null pointer bugs at compile time. Growing rapidly in systems programming, WebAssembly, and CLI tools. High surface area (110 concepts) and more verbose than C or Go in benchmarks, but near-perfect guardrails (4.8/5) — overflow is caught at runtime rather than prevented at compile time, everything else is prevented.
 
-<div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" />
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
 
