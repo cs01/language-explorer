@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-// Score a source file across all langmetrics dimensions.
+// Score a source file across all Language Explorer dimensions.
 
 import { readFileSync } from 'fs';
 import { basename } from 'path';

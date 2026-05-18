@@ -63,7 +63,7 @@ const staticData = filterExpress(['typescript', 'rust', 'go', 'c', 'cpp', 'swift
 const dynamicData = filterExpress(['python', 'ruby', 'javascript', 'elixir'])
 </script>
 
-# langmetrics
+# Language Explorer
 
 **How much does your language cost you?** Two views: what the language demands of you as a learner, and what it demands of you as a writer.
 

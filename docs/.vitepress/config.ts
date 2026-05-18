@@ -1,17 +1,17 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: 'langmetrics',
+  title: 'Language Explorer',
   description: 'Data-driven comparison of programming language design',
-  base: '/langmetrics/',
-  head: [['link', { rel: 'icon', href: '/langmetrics/favicon.ico' }]],
+  base: '/language-explorer/',
+  head: [['link', { rel: 'icon', href: '/language-explorer/favicon.ico' }]],
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Compare', link: '/compare' },
       { text: 'Languages', link: '/languages/python' },
       { text: 'Methodology', link: '/methodology' },
-      { text: 'GitHub', link: 'https://github.com/cs01/langmetrics' },
+      { text: 'GitHub', link: 'https://github.com/cs01/language-explorer' },
     ],
     sidebar: [
       {
@@ -61,7 +61,7 @@ export default defineConfig({
       },
     ],
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/cs01/langmetrics' },
+      { icon: 'github', link: 'https://github.com/cs01/language-explorer' },
     ],
   },
 })

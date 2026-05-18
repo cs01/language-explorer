@@ -1,10 +1,10 @@
-# langmetrics
+# Language Explorer
 
 **How much does your language cost you?**
 
 Same programs, 15 languages, measured automatically. Compares conciseness, complexity, symbol noise, concept count, safety guardrails, and ceremony.
 
-**[View the dashboard →](https://cs01.github.io/langmetrics)**
+**[View the dashboard →](https://cs01.github.io/language-explorer)**
 
 ## Languages
 
@@ -25,4 +25,4 @@ bun run docs:dev                                         # local dev server
 3. `score.ts` computes metrics automatically → JSON in `data/`
 4. VitePress site reads the JSON and renders tables, radar charts, and comparisons
 
-See [Methodology](https://cs01.github.io/langmetrics/methodology) for how each metric is defined.
+See [Methodology](https://cs01.github.io/language-explorer/methodology) for how each metric is defined.
