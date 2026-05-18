@@ -105,6 +105,8 @@ Score ranges from 0 (C) to 5 (Rust, Swift, Haskell, Elixir), normalized from the
 ### Ceremony
 **Ceremony ratio** — what fraction of your code is overhead rather than problem-solving logic. Counts: imports, main function wrappers, class/module boilerplate, `return 0`, lone braces, type-only declarations, and preprocessor directives. Lower = less boilerplate standing between you and the algorithm.
 
+**Tradeoff with surface area:** ceremony and surface area are in tension. Languages that reduce ceremony often do so by adding implicit behavior — which is another concept to learn. Go's explicit `if err != nil` is verbose (high ceremony) but requires zero new concepts. Ruby's implicit returns save a line but add a rule every new developer must learn. A language with low ceremony *and* low surface area is genuinely doing something right; low ceremony with high surface area might just be hiding complexity behind sugar.
+
 ### Surface Area
 **Keywords** — reserved words from the language specification. Objective, verifiable count. Sources: ISO C11, ISO C++20, Rust Reference, Go Spec, Python 3.13, Ruby 3.3, ES2024, TypeScript 5.x, Java SE 21 JLS, Kotlin 2.x, Swift 5.9, Haskell 2010, Elixir 1.19, Zig 0.14.
 
