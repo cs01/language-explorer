@@ -24,6 +24,8 @@ export interface MetricsEntry {
   guardrailScore: number
   ceremonyLines: number
   ceremonyRatio: number
+  langKeywords: number
+  langConcepts: number
 }
 
 export interface SolutionEntry {
@@ -59,6 +61,8 @@ function loadMetrics(): MetricsEntry[] {
       guardrailScore: raw.guardrails?.guardrailScore ?? 0,
       ceremonyLines: raw.ceremony?.ceremonyLines ?? 0,
       ceremonyRatio: raw.ceremony?.ceremonyRatio ?? 0,
+      langKeywords: raw.surfaceArea?.keywords ?? 0,
+      langConcepts: raw.surfaceArea?.concepts ?? 0,
     }
   })
 }
@@ -67,7 +71,7 @@ const extMap: Record<string, string> = {
   python: 'py', typescript: 'ts', rust: 'rs', go: 'go',
   c: 'c', cpp: 'cpp', swift: 'swift', zig: 'zig',
   javascript: 'js', ruby: 'rb', java: 'java', kotlin: 'kt',
-  haskell: 'hs', elixir: 'exs', milo: 'milo',
+  haskell: 'hs', elixir: 'exs', milo: 'milo', ada: 'adb',
 }
 
 function loadSolutions(): SolutionEntry[] {

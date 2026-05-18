@@ -10,6 +10,8 @@ interface LangData {
   symbolTypes: number
   guardrails: number
   ceremony: number
+  keywords: number
+  surface: number
 }
 
 const props = defineProps<{
@@ -43,13 +45,16 @@ const maxVals = computed(() => ({
   symbolTypes: Math.max(...props.languages.map(l => l.symbolTypes)),
   guardrails: Math.max(...props.languages.map(l => l.guardrails)),
   ceremony: Math.max(...props.languages.map(l => l.ceremony)),
+  keywords: Math.max(...props.languages.map(l => l.keywords)),
+  surface: Math.max(...props.languages.map(l => l.surface)),
 }))
 
-const metrics = ['lines', 'tokens', 'complexity', 'sigilsPerLine', 'symbolTypes', 'guardrails', 'ceremony'] as const
+const metrics = ['lines', 'tokens', 'complexity', 'sigilsPerLine', 'symbolTypes', 'guardrails', 'ceremony', 'keywords', 'surface'] as const
 const metricLabels: Record<string, string> = {
   lines: 'Lines', tokens: 'Tokens', complexity: 'Complexity',
   sigilsPerLine: 'Sym/Line', symbolTypes: 'Sym Types',
   guardrails: 'Guardrails', ceremony: 'Ceremony',
+  keywords: 'Keywords', surface: 'Surface Area',
 }
 
 function getBarWidth(lang: string, metric: string): number {

@@ -8,7 +8,7 @@ Same programs, 15 languages, measured automatically. Compares conciseness, compl
 
 ## Languages
 
-C, C++, Rust, Zig, Milo, Go, Java, Kotlin, Swift, Haskell, Elixir, Python, Ruby, JavaScript, TypeScript
+Ada, C, C++, Rust, Zig, Milo, Go, Java, Kotlin, Swift, Haskell, Elixir, Python, Ruby, JavaScript, TypeScript
 
 ## Quick start
 

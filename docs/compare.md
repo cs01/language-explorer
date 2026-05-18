@@ -18,6 +18,8 @@ const langData = languages.map(lang => {
     symbolTypes: Math.round(entries.reduce((s, e) => s + e.uniqueSigilTypes, 0) / entries.length),
     guardrails: entries[0]?.guardrailScore ?? 0,
     ceremony: avg('ceremonyRatio'),
+    keywords: entries[0]?.langKeywords ?? 0,
+    surface: entries[0]?.langConcepts ?? 0,
   }
 })
 </script>
@@ -37,5 +39,7 @@ Pick 2-4 languages to see them head-to-head. Bars show relative performance — 
 - **Sym Types** — how many different special characters you need to recognize
 - **Guardrails** — how many bugs the language prevents for you (0–5, [details](/methodology#guardrails))
 - **Ceremony** — what fraction of code is overhead vs actual logic
+- **Keywords** — reserved words in the language spec
+- **Surface Area** — total distinct concepts a developer must learn
 
 Lower is better for most metrics except Guardrails.

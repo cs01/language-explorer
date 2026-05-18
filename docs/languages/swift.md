@@ -26,6 +26,8 @@ const stats = {
   ceremony: avg('ceremonyRatio'),
   concepts: Math.round(entries.reduce((s, e) => s + e.conceptCount, 0) / entries.length),
   tokensPerLine: avg('tokensPerLine'),
+  keywords: entries[0]?.langKeywords ?? 0,
+  surface: entries[0]?.langConcepts ?? 0,
 }
 
 const maxVals = {
@@ -94,6 +96,8 @@ const columns = [
 | Symbol Types | {{ stats.symbolTypes }} |
 | Guardrails | {{ stats.guardrails }} / 5 |
 | Ceremony | {{ stats.ceremony }} |
+| Keywords | {{ stats.keywords }} |
+| Surface Area | {{ stats.surface }} |
 
 </div>
 </div>

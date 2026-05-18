@@ -158,13 +158,39 @@ const guardrails: Record<string, G> = {
   ruby:       { memory: 1,   null: 0,   race: 0, overflow: 1, coercion: 1   },
   javascript: { memory: 1,   null: 0,   race: 0, overflow: 0, coercion: 0   },
   typescript: { memory: 1,   null: 0.5, race: 0, overflow: 0, coercion: 1   },
+  ada:        { memory: 0.5, null: 0.5, race: 0.5, overflow: 1, coercion: 1 },
+}
+
+// Language surface area: how much a developer must learn to read arbitrary code.
+// keywords = reserved/special words from language spec (verified against official docs)
+// concepts = distinct features a developer must learn (curated across 13 categories:
+//   variables, types, compounds, type system, control flow, functions, OOP,
+//   generics, error handling, memory, concurrency, modules, metaprogramming)
+type SA = { keywords: number, concepts: number }
+const surfaceArea: Record<string, SA> = {
+  c:          { keywords: 44,  concepts: 60  },
+  cpp:        { keywords: 92,  concepts: 135 },
+  rust:       { keywords: 58,  concepts: 110 },
+  zig:        { keywords: 49,  concepts: 65  },
+  milo:       { keywords: 30,  concepts: 40  },
+  go:         { keywords: 25,  concepts: 58  },
+  java:       { keywords: 68,  concepts: 80  },
+  kotlin:     { keywords: 78,  concepts: 85  },
+  swift:      { keywords: 98,  concepts: 110 },
+  haskell:    { keywords: 24,  concepts: 75  },
+  elixir:     { keywords: 15,  concepts: 62  },
+  python:     { keywords: 39,  concepts: 75  },
+  ruby:       { keywords: 41,  concepts: 65  },
+  javascript: { keywords: 46,  concepts: 65  },
+  typescript: { keywords: 67,  concepts: 100 },
+  ada:        { keywords: 74,  concepts: 85  },
 }
 
 const extToLang: Record<string, string> = {
   py: 'python', ts: 'typescript', rs: 'rust', js: 'javascript',
   rb: 'ruby', kt: 'kotlin', hs: 'haskell', exs: 'elixir',
   c: 'c', cpp: 'cpp', go: 'go', swift: 'swift', zig: 'zig',
-  java: 'java', milo: 'milo',
+  java: 'java', milo: 'milo', adb: 'ada', ads: 'ada',
 }
 
 // Weights derived from CVE/CWE data: Microsoft + Chrome found ~70% of CVEs are memory safety.
@@ -219,12 +245,20 @@ function scoreCeremony(src: string, nonBlankLines: string[]) {
   return { ceremonyLines, ceremonyRatio: ratio };
 }
 
+function scoreSurfaceArea(filename: string) {
+  const ext = filename.split('.').pop() || ''
+  const lang = extToLang[ext] || ext
+  const s = surfaceArea[lang] || { keywords: 0, concepts: 0 }
+  return { ...s }
+}
+
 const conciseness = scoreConciseness(source, lines);
 const sigils = scoreSigils(lines);
 const readability = scoreReadability(lines);
 const concepts = scoreConcepts(source, lines);
 const guardrailResult = scoreGuardrails(basename(file));
 const ceremony = scoreCeremony(source, lines);
+const surface = scoreSurfaceArea(basename(file));
 
 const result = {
   file: basename(file),
@@ -234,6 +268,7 @@ const result = {
   concepts,
   guardrails: guardrailResult,
   ceremony,
+  surfaceArea: surface,
 };
 
 console.log(JSON.stringify(result, null, 2));

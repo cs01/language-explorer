@@ -36,5 +36,9 @@
   "ceremony": {
     "ceremonyLines": 9,
     "ceremonyRatio": 0.36
+  },
+  "surfaceArea": {
+    "keywords": 58,
+    "concepts": 110
   }
 }

@@ -16,6 +16,16 @@
 
 ## Metrics
 
+We measure two things: **what the language is** (language-level properties that don't change per program) and **what the code looks like** (per-program metrics measured from benchmark solutions).
+
+### Language-level metrics
+
+These are static properties of the language itself — they don't vary per solution. See [Guardrails](#guardrails), [Surface Area](#surface-area).
+
+### Per-program metrics
+
+Measured from actual code. Averaged across 7 benchmark problems for each language.
+
 ### Code Size
 **Lines of code (LOC)** — non-blank lines. The most intuitive measure, but affected by formatting choices.
 
@@ -72,6 +82,7 @@ Score ranges from 0 (C) to 5 (Rust, Swift, Haskell, Elixir), normalized from the
 | **Kotlin** | 1 | 1 | 0 | 0 | 1 | **3** |
 | **Python** | 1 | 0 | 0 | 1 | 1 | **3** |
 | **Ruby** | 1 | 0 | 0 | 1 | 1 | **3** |
+| **Ada** | 0.5 | 0.5 | 0.5 | 1 | 1 | **3.5** |
 | **Zig** | 0.5 | 0.5 | 0 | 1 | 1 | **3** |
 | **TypeScript** | 1 | 0.5 | 0 | 0 | 1 | **2.5** |
 | **Go** | 1 | 0 | 0 | 0 | 1 | **2** |
@@ -89,9 +100,46 @@ Score ranges from 0 (C) to 5 (Rust, Swift, Haskell, Elixir), normalized from the
 - **Race 1** (Haskell, Elixir): Haskell prevents shared mutable state by design — functions can't have side effects. Elixir uses isolated processes with immutable data, so threads can't accidentally access the same memory.
 - **Overflow 1** (Python, Ruby): Integers grow as large as needed (arbitrary precision), so overflow is impossible. Note: `float` arithmetic can still silently produce `inf`, and numpy arrays wrap.
 - **Swift Race 1**: Swift 6 (2024) checks for data races at compile time. New projects enforce this by default.
+- **Ada 0.5** (Memory, Null, Race): Ada has bounds checking and default-null initialization, but `Unchecked_Deallocation` creates dangling pointers. `not null` access types are opt-in. Protected objects enforce mutual exclusion at runtime, but the compiler doesn't prevent all data races.
 
 ### Ceremony
 **Ceremony ratio** — what fraction of your code is overhead rather than problem-solving logic. Counts: imports, main function wrappers, class/module boilerplate, `return 0`, lone braces, type-only declarations, and preprocessor directives. Lower = less boilerplate standing between you and the algorithm.
+
+### Surface Area
+**Keywords** — reserved words from the language specification. Objective, verifiable count. Sources: ISO C11, ISO C++20, Rust Reference, Go Spec, Python 3.13, Ruby 3.3, ES2024, TypeScript 5.x, Java SE 21 JLS, Kotlin 2.x, Swift 5.9, Haskell 2010, Elixir 1.19, Zig 0.14.
+
+**Concepts** — total distinct features a developer must learn to read arbitrary code written in the language. Curated across 13 categories: variables & binding, primitive types, compound types, type system features, control flow, functions, OOP & data abstraction, generics & polymorphism, error handling, memory management, concurrency, modules & visibility, and metaprogramming. Each concept represents something that would warrant its own section in a comprehensive language tutorial.
+
+This is a language-level property — it doesn't vary per solution. Higher = more to learn before you can fluently read other people's code.
+
+<div class="guardrail-table">
+
+| | Keywords | Concepts |
+|---|:---:|:---:|
+| **C++** | 92 | 135 |
+| **Rust** | 58 | 110 |
+| **Swift** | 98 | 110 |
+| **TypeScript** | 67 | 100 |
+| **Kotlin** | 78 | 85 |
+| **Ada** | 74 | 85 |
+| **Java** | 68 | 80 |
+| **Python** | 39 | 75 |
+| **Haskell** | 24 | 75 |
+| **Ruby** | 41 | 65 |
+| **JavaScript** | 46 | 65 |
+| **Zig** | 49 | 65 |
+| **Elixir** | 15 | 62 |
+| **C** | 44 | 60 |
+| **Go** | 25 | 58 |
+| **Milo** | 30 | 40 |
+
+</div>
+
+**Notes:**
+- **Keywords** includes all reserved words, contextual keywords, and modifier keywords that have special meaning. For languages with multiple keyword categories (e.g., Kotlin's hard + soft + modifier), all are counted.
+- **Elixir's** low keyword count (15) reflects that constructs like `def`, `if`, `case` are macros, not reserved words — but developers must still learn them (captured in Concepts).
+- **C++** at 135 concepts reflects templates, SFINAE, move semantics, rule of five, coroutines, modules, concepts, ranges, etc. — the full surface area that makes C++ notoriously difficult to master.
+- **Haskell** has only 24 keywords but 75 concepts because most complexity lives in the type system (type classes, monads, GADTs, kind system) rather than in reserved syntax.
 
 ## Dimensions not yet automated
 
