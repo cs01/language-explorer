@@ -28,6 +28,9 @@ const stats = {
   keywords: entries[0]?.langKeywords ?? 0,
   surface: entries[0]?.langConcepts ?? 0,
   keywordRatio: entries[0]?.keywordRatio ?? 0,
+  llmTokens: avg('llmTokens'),
+  llmTokensPerLine: avg('llmTokensPerLine'),
+  typeCoverage: entries[0]?.typeCoverage ?? 0,
 }
 
 const maxVals = {
@@ -40,6 +43,8 @@ const maxVals = {
     return e.reduce((s, x) => s + x.conceptCount, 0) / e.length
   })),
   tokensPerLine: Math.max(...allLangs.map(l => avgAll('tokensPerLine', l))),
+  llmTokens: Math.max(...allLangs.map(l => avgAll('llmTokens', l))),
+  llmTokensPerLine: Math.max(...allLangs.map(l => avgAll('llmTokensPerLine', l))),
 }
 
 const radarData = [
@@ -101,6 +106,7 @@ Microsoft's flagship language — dominant in enterprise, game development (Unit
 <ExpressivenessCard :lines="stats.lines" :tokens="stats.tokens" :complexity="stats.complexity" :ceremony="stats.ceremony" :maxLines="maxVals.lines" :maxComplexity="maxVals.complexity" :maxCeremony="maxVals.ceremony" />
 <SurfaceAreaCard :concepts="stats.surface" :keywords="stats.keywords" :keywordRatio="stats.keywordRatio" :categories="catData" />
 <ExplicitnessCard :concepts="stats.surface" :keywordRatio="stats.keywordRatio" />
+<AIReadinessCard :llmTokens="stats.llmTokens" :llmTokensPerLine="stats.llmTokensPerLine" :typeCoverage="stats.typeCoverage" :maxLlmTokens="maxVals.llmTokens" :maxLlmTokensPerLine="maxVals.llmTokensPerLine" />
 </div>
 
 ## Solutions

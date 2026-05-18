@@ -128,6 +128,35 @@ This is a language-level property — it doesn't vary per solution. Higher = mor
 - **Objective-C** inherits C's safety profile. Memory 0.5: ARC prevents manual memory bugs but retain cycles and raw C pointers remain. 48 concepts is lower than C++ because Obj-C adds message passing, categories, and protocols but not templates/SFINAE/move semantics.
 - **Zero** is a capability-based systems language. 32 keywords and 50 concepts for a language with `shape`, `choice`, `match`, explicit effects (`raises`/`check`), borrow tracking (`ref<T>`/`mutref<T>`), and `owned<T>` cleanup — all without hidden dispatch or runtime overhead.
 
+## AI Readiness
+
+Two metrics measuring how well a language works with AI coding tools.
+
+### LLM Token Count
+
+Each solution is tokenized using the cl100k_base encoding (used by GPT-4 and similar to Claude's tokenizer). This directly measures:
+- **API cost** — tokens are what you pay for
+- **Context window usage** — how much code fits in a single prompt
+- **Token density** — tokens per line shows how efficiently the language packs information
+
+Languages with high ceremony (Java, C++) burn tokens on boilerplate. Concise languages (Python, Ruby) use fewer tokens for equivalent logic.
+
+### Type Coverage
+
+A static per-language property scoring how much type information is available to tools reading the code:
+
+| Score | Level | Languages |
+|-------|-------|-----------|
+| 1.0 | Fully static | C, C++, Rust, Zig, Milo, Go, Java, Kotlin, Swift, Ada, C#, Zero |
+| 0.75 | Static + heavy inference | Haskell |
+| 0.5 | Gradual / optional | TypeScript, Python, Objective-C |
+| 0.25 | Mostly dynamic | Ruby, LLVM IR |
+| 0.0 | Dynamic | JavaScript, Elixir, Erlang, Clojure, x86_64 asm |
+
+Static types give AI more constraints — it can verify its output, catch errors, and make better suggestions. Dynamic languages require the AI to infer types from context, which is less reliable.
+
+Haskell scores 0.75 rather than 1.0 because while all types are known to the compiler, they're often omitted from source code. An AI reading the file doesn't see them.
+
 ## Dimensions not yet automated
 
 | Dimension | Why it's hard to automate |

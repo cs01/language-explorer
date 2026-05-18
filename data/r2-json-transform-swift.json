@@ -61,5 +61,12 @@
       "errorHandling": 12
     },
     "keywordRatio": 0.89
+  },
+  "llmTokens": {
+    "llmTokens": 168,
+    "llmTokensPerLine": 8
+  },
+  "typeCoverage": {
+    "typeCoverage": 1
   }
 }

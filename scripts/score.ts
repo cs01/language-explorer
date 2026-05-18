@@ -3,6 +3,7 @@
 
 import { readFileSync } from 'fs';
 import { basename } from 'path';
+import { encodingForModel } from 'js-tiktoken';
 
 const file = process.argv[2];
 if (!file) {
@@ -228,6 +229,17 @@ const surfaceArea: Record<string, SA> = {
   zero:       { keywords: 32,   concepts: 50,  categories: { types: 10, controlFlow: 8,  functions: 6,  oopData: 6,  memory: 8,  concurrency: 2,  metaprogramming: 2,  errorHandling: 8  } },
 }
 
+// How much type information is statically available to tools reading the code
+const typeCoverage: Record<string, number> = {
+  c: 1.0, cpp: 1.0, rust: 1.0, zig: 1.0, milo: 1.0,
+  go: 1.0, java: 1.0, kotlin: 1.0, swift: 1.0, ada: 1.0,
+  csharp: 1.0, zero: 1.0,
+  haskell: 0.75,
+  typescript: 0.5, python: 0.5, objc: 0.5,
+  ruby: 0.25, llvm: 0.25,
+  javascript: 0.0, elixir: 0.0, erlang: 0.0, clojure: 0.0, x86_64: 0.0,
+}
+
 const extToLang: Record<string, string> = {
   py: 'python', ts: 'typescript', rs: 'rust', js: 'javascript',
   rb: 'ruby', kt: 'kotlin', hs: 'haskell', exs: 'elixir',
@@ -321,6 +333,19 @@ function scoreSurfaceArea(filename: string) {
   return { ...s, keywordRatio }
 }
 
+const enc = encodingForModel('gpt-4o')
+
+function scoreLLMTokens(src: string, loc: number) {
+  const llmTokens = enc.encode(src).length
+  return { llmTokens, llmTokensPerLine: +(llmTokens / loc).toFixed(2) }
+}
+
+function scoreTypeCoverage(filename: string) {
+  const ext = filename.split('.').pop() || ''
+  const lang = extToLang[ext] || ext
+  return { typeCoverage: typeCoverage[lang] ?? 0 }
+}
+
 const conciseness = scoreConciseness(source, lines);
 const sigils = scoreSigils(lines);
 const readability = scoreReadability(lines);
@@ -328,6 +353,8 @@ const concepts = scoreConcepts(source, lines);
 const guardrailResult = scoreGuardrails(basename(file));
 const ceremony = scoreCeremony(source, lines);
 const surface = scoreSurfaceArea(basename(file));
+const llmTokenResult = scoreLLMTokens(source, conciseness.loc);
+const typeCoverageResult = scoreTypeCoverage(basename(file));
 
 const result = {
   file: basename(file),
@@ -338,6 +365,8 @@ const result = {
   guardrails: guardrailResult,
   ceremony,
   surfaceArea: surface,
+  llmTokens: llmTokenResult,
+  typeCoverage: typeCoverageResult,
 };
 
 console.log(JSON.stringify(result, null, 2));

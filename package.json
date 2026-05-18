@@ -9,6 +9,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "js-tiktoken": "^1.0.21",
     "vitepress": "^1.6.4"
   }
 }

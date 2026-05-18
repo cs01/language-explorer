@@ -36,12 +36,12 @@ const profileData = [
       guardrails: entries[0]?.guardrailScore ?? 0,
       keywords: entries[0]?.langKeywords ?? 0,
       surface: entries[0]?.langConcepts ?? 0,
+      typeCoverage: entries[0]?.typeCoverage ?? 0,
     }
   }),
-  // Languages with profile data but no benchmark solutions yet
-  { language: 'Ada', guardrails: 3.4, keywords: 74, surface: 85 },
-  { language: 'LLVM IR', guardrails: 0.1, keywords: 150, surface: 35 },
-  { language: 'Zero', guardrails: 5.0, keywords: 32, surface: 50 },
+  { language: 'Ada', guardrails: 3.4, keywords: 74, surface: 85, typeCoverage: 1.0 },
+  { language: 'LLVM IR', guardrails: 0.1, keywords: 150, surface: 35, typeCoverage: 0.25 },
+  { language: 'Zero', guardrails: 5.0, keywords: 32, surface: 50, typeCoverage: 1.0 },
 ]
 
 const expressColumns = [
@@ -54,6 +54,24 @@ const profileColumns = [
   { key: 'guardrails', label: 'Guardrails', lower: false },
   { key: 'keywords', label: 'Keywords' },
   { key: 'surface', label: 'Surface Area' },
+  { key: 'typeCoverage', label: 'Type Coverage', lower: false },
+]
+
+const aiData = languages.map(lang => {
+  const entries = data.metrics.filter(m => m.language === lang)
+  const avg = (key) => +(entries.reduce((s, e) => s + e[key], 0) / entries.length).toFixed(1)
+  return {
+    language: toDisplay(lang),
+    llmTokens: Math.round(entries.reduce((s, e) => s + e.llmTokens, 0) / entries.length),
+    'tok/line': avg('llmTokensPerLine'),
+    typeCoverage: entries[0]?.typeCoverage ?? 0,
+  }
+})
+
+const aiColumns = [
+  { key: 'llmTokens', label: 'LLM Tokens' },
+  { key: 'tok/line', label: 'Tok/Line' },
+  { key: 'typeCoverage', label: 'Type Coverage', lower: false },
 ]
 
 // Concept category radars for paired comparisons
@@ -123,6 +141,20 @@ Where does each language's complexity live? Same total concepts can mean radical
 </div>
 
 <small>Each axis shows one concept category, normalized across all languages. Bigger = more concepts in that area. See individual [language pages](/languages/python) for full breakdowns.</small>
+
+---
+
+## AI Readiness
+
+How efficiently can an LLM process this language? Averaged across 7 benchmark problems.
+
+- **LLM Tokens** — tokens consumed when feeding code to a language model (cl100k tokenizer). Lower = cheaper API calls, more code fits in context
+- **Tok/Line** — LLM token density per line of code
+- **Type Coverage** — how much type information is statically available (0–1). Higher = more for AI to verify and infer from
+
+<MetricsTable :data="aiData" :columns="aiColumns" />
+
+<small>LLM tokens measured with cl100k_base tokenizer (GPT-4/Claude class). Type coverage is a static language property.</small>
 
 ---
 

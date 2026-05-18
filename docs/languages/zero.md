@@ -11,6 +11,7 @@ const stats = {
   guardrails: 5.0,
   keywords: 32,
   surface: 50,
+  typeCoverage: 1.0,
 }
 
 const catKeys = ["catTypes","catControlFlow","catFunctions","catOopData","catMemory","catConcurrency","catMetaprogramming","catErrorHandling"] as const
@@ -47,6 +48,7 @@ An experimental language with maximum guardrails (5.0) from only 50 concepts —
 <GuardrailCard :score="stats.guardrails" :memory="gr.memory" :null="gr.null" :race="gr.race" :overflow="gr.overflow" :coercion="gr.coercion" :memoryWhen="gr.memoryWhen" :memoryActivation="gr.memoryActivation" :nullWhen="gr.nullWhen" :nullActivation="gr.nullActivation" :raceWhen="gr.raceWhen" :raceActivation="gr.raceActivation" :overflowWhen="gr.overflowWhen" :overflowActivation="gr.overflowActivation" :coercionWhen="gr.coercionWhen" :coercionActivation="gr.coercionActivation" :reasons="grReasons" />
 <SurfaceAreaCard :concepts="stats.surface" :keywords="stats.keywords" :keywordRatio="stats.keywordRatio" :categories="catData" />
 <ExplicitnessCard :concepts="stats.surface" :keywordRatio="stats.keywordRatio" />
+<AIReadinessCard :llmTokens="0" :llmTokensPerLine="0" :typeCoverage="stats.typeCoverage" :maxLlmTokens="1" :maxLlmTokensPerLine="1" />
 </div>
 
 <style>

@@ -50,6 +50,9 @@ export interface MetricsEntry {
   catConcurrency: number
   catMetaprogramming: number
   catErrorHandling: number
+  llmTokens: number
+  llmTokensPerLine: number
+  typeCoverage: number
 }
 
 export interface SolutionEntry {
@@ -111,6 +114,9 @@ function loadMetrics(): MetricsEntry[] {
       catConcurrency: raw.surfaceArea?.categories?.concurrency ?? 0,
       catMetaprogramming: raw.surfaceArea?.categories?.metaprogramming ?? 0,
       catErrorHandling: raw.surfaceArea?.categories?.errorHandling ?? 0,
+      llmTokens: raw.llmTokens?.llmTokens ?? 0,
+      llmTokensPerLine: raw.llmTokens?.llmTokensPerLine ?? 0,
+      typeCoverage: raw.typeCoverage?.typeCoverage ?? 0,
     }
   })
 }

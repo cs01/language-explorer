@@ -11,6 +11,7 @@ const stats = {
   guardrails: 0.1,
   keywords: 150,
   surface: 35,
+  typeCoverage: 0.25,
 }
 
 const catKeys = ["catTypes","catControlFlow","catFunctions","catOopData","catMemory","catConcurrency","catMetaprogramming","catErrorHandling"] as const
@@ -45,6 +46,7 @@ Not a programming language but a compiler intermediate representation — the as
 <GuardrailCard :score="stats.guardrails" :memory="gr.memory" :null="gr.null" :race="gr.race" :overflow="gr.overflow" :coercion="gr.coercion" :memoryWhen="gr.memoryWhen" :memoryActivation="gr.memoryActivation" :nullWhen="gr.nullWhen" :nullActivation="gr.nullActivation" :raceWhen="gr.raceWhen" :raceActivation="gr.raceActivation" :overflowWhen="gr.overflowWhen" :overflowActivation="gr.overflowActivation" :coercionWhen="gr.coercionWhen" :coercionActivation="gr.coercionActivation" :reasons="grReasons" />
 <SurfaceAreaCard :concepts="stats.surface" :keywords="stats.keywords" :keywordRatio="stats.keywordRatio" :categories="catData" />
 <ExplicitnessCard :concepts="stats.surface" :keywordRatio="stats.keywordRatio" />
+<AIReadinessCard :llmTokens="0" :llmTokensPerLine="0" :typeCoverage="stats.typeCoverage" :maxLlmTokens="1" :maxLlmTokensPerLine="1" />
 </div>
 
 <style>

@@ -7,6 +7,7 @@ import GuardrailCard from './components/GuardrailCard.vue'
 import ExpressivenessCard from './components/ExpressivenessCard.vue'
 import SurfaceAreaCard from './components/SurfaceAreaCard.vue'
 import ExplicitnessCard from './components/ExplicitnessCard.vue'
+import AIReadinessCard from './components/AIReadinessCard.vue'
 import './custom.css'
 
 export default {
@@ -20,5 +21,6 @@ export default {
     app.component('ExpressivenessCard', ExpressivenessCard)
     app.component('SurfaceAreaCard', SurfaceAreaCard)
     app.component('ExplicitnessCard', ExplicitnessCard)
+    app.component('AIReadinessCard', AIReadinessCard)
   }
 }
