@@ -76,7 +76,7 @@ function conceptRadarFor(lang: string) {
 const pairs = [
   { left: 'python', right: 'haskell', why: 'Same total concepts (75), opposite shapes' },
   { left: 'rust', right: 'go', why: 'Systems safety vs simplicity' },
-  { left: 'cpp', right: 'milo', why: 'Kitchen sink (135) vs minimal (49)' },
+  { left: 'c', right: 'zig', why: 'C successor — similar size (60 vs 65), more guardrails' },
 ]
 
 const pairRadars = pairs.map(p => ({
