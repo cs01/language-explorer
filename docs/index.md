@@ -24,15 +24,21 @@ const expressData = languages.map(lang => {
 })
 
 // Per-language metrics (static properties of the language itself)
-const profileData = languages.map(lang => {
-  const entries = data.metrics.filter(m => m.language === lang)
-  return {
-    language: lang.charAt(0).toUpperCase() + lang.slice(1),
-    guardrails: entries[0]?.guardrailScore ?? 0,
-    keywords: entries[0]?.langKeywords ?? 0,
-    surface: entries[0]?.langConcepts ?? 0,
-  }
-})
+const profileData = [
+  ...languages.map(lang => {
+    const entries = data.metrics.filter(m => m.language === lang)
+    return {
+      language: lang.charAt(0).toUpperCase() + lang.slice(1),
+      guardrails: entries[0]?.guardrailScore ?? 0,
+      keywords: entries[0]?.langKeywords ?? 0,
+      surface: entries[0]?.langConcepts ?? 0,
+    }
+  }),
+  // Languages with profile data but no benchmark solutions yet
+  { language: 'Ada', guardrails: 3.0, keywords: 74, surface: 85 },
+  { language: 'x86_64 asm', guardrails: 0, keywords: 1503, surface: 45 },
+  { language: 'LLVM IR', guardrails: 0.2, keywords: 150, surface: 35 },
+]
 
 const expressColumns = [
   { key: 'lines', label: 'Lines' },
