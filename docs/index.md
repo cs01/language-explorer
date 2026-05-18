@@ -20,7 +20,7 @@ const expressData = languages.map(lang => {
     lines: avg('loc'),
     tokens: avg('tokens'),
     'tok/line': avg('tokensPerLine'),
-    complexity: Math.round(entries.reduce((s, e) => s + e.halsteadVolume, 0) / entries.length),
+    verbosity: Math.round(entries.reduce((s, e) => s + e.halsteadVolume, 0) / entries.length),
     'symbols/line': avg('sigilsPerLine'),
     concepts: Math.round(entries.reduce((s, e) => s + e.conceptCount, 0) / entries.length),
     ceremony: avg('ceremonyRatio'),
@@ -29,7 +29,7 @@ const expressData = languages.map(lang => {
 
 const expressColumns = [
   { key: 'lines', label: 'Lines' },
-  { key: 'complexity', label: 'Complexity' },
+  { key: 'verbosity', label: 'Verbosity' },
   { key: 'ceremony', label: 'Ceremony' },
 ]
 
@@ -79,7 +79,7 @@ function heroStats(lang: string) {
   const avg = (key: string) => +(entries.reduce((s, e) => s + e[key], 0) / entries.length).toFixed(1)
   return {
     lines: avg('loc'),
-    complexity: Math.round(entries.reduce((s, e) => s + e.halsteadVolume, 0) / entries.length),
+    verbosity: Math.round(entries.reduce((s, e) => s + e.halsteadVolume, 0) / entries.length),
     ceremony: avg('ceremonyRatio'),
     concepts: entries[0]?.langConcepts ?? 0,
     keywords: entries[0]?.langKeywords ?? 0,
@@ -92,8 +92,7 @@ const rustStats = heroStats('rust')
 const heroMetrics = [
   { label: 'Concepts to Learn', zig: zigStats.concepts, rust: rustStats.concepts, unit: '', lower: true },
   { label: 'Keywords', zig: zigStats.keywords, rust: rustStats.keywords, unit: '', lower: true },
-  { label: 'Avg Lines', zig: zigStats.lines, rust: rustStats.lines, unit: '', lower: true },
-  { label: 'Complexity', zig: zigStats.complexity, rust: rustStats.complexity, unit: '', lower: true },
+  { label: 'Verbosity', zig: zigStats.verbosity, rust: rustStats.verbosity, unit: '', lower: true },
   { label: 'Ceremony', zig: +(zigStats.ceremony * 100).toFixed(0), rust: +(rustStats.ceremony * 100).toFixed(0), unit: '%', lower: true },
   { label: 'Guardrails', zig: zigStats.guardrails, rust: rustStats.guardrails, unit: ' / 5', lower: false },
 ]

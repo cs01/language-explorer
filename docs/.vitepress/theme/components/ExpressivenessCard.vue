@@ -2,10 +2,10 @@
 const props = defineProps<{
   lines: number
   tokens: number
-  complexity: number
+  verbosity: number
   ceremony: number
   maxLines: number
-  maxComplexity: number
+  maxVerbosity: number
   maxCeremony: number
 }>()
 
@@ -19,7 +19,7 @@ function barClass() {
 
 const metrics = [
   { label: 'Lines', desc: 'Avg non-blank lines', val: () => props.lines, max: () => props.maxLines },
-  { label: 'Complexity', desc: 'Halstead Volume', val: () => props.complexity, max: () => props.maxComplexity },
+  { label: 'Verbosity', desc: 'Halstead Volume', val: () => props.verbosity, max: () => props.maxVerbosity },
   { label: 'Ceremony', desc: 'Boilerplate ratio', val: () => props.ceremony, max: () => props.maxCeremony },
 ]
 </script>

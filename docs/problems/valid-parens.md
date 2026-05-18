@@ -12,7 +12,7 @@ const metrics = data.metrics
     language: m.language.charAt(0).toUpperCase() + m.language.slice(1),
     lines: m.loc,
     tokens: m.tokens,
-    complexity: m.halsteadVolume,
+    verbosity: m.halsteadVolume,
     'tok/line': m.tokensPerLine, 'symbols/line': m.sigilsPerLine, concepts: m.conceptCount,
     guardrails: m.guardrailScore, ceremony: m.ceremonyRatio,
   }))
@@ -20,7 +20,7 @@ const metrics = data.metrics
 const columns = [
   { key: 'lines', label: 'Lines' },
   { key: 'tokens', label: 'Tokens' },
-  { key: 'complexity', label: 'Complexity' },
+  { key: 'verbosity', label: 'Verbosity' },
   { key: 'tok/line', label: 'Tok/Line' }, { key: 'symbols/line', label: 'Sym/Line' }, { key: 'concepts', label: 'Concepts' },
   { key: 'guardrails', label: 'Guardrails', lower: false }, { key: 'ceremony', label: 'Ceremony' },
 ]
@@ -57,7 +57,7 @@ Tests: Stack operations, string iteration, match/switch, early return.
 
 **Zig explodes to 26 lines** — explicit stack array, manual indexing, nested switch statements. No collections library means doing everything by hand.
 
-**Ruby** wins on tokens (35) and complexity (172) — `each_char`, `push`/`pop`, and `empty?` are about as readable as pseudocode.
+**Ruby** wins on tokens (35) and verbosity (172) — `each_char`, `push`/`pop`, and `empty?` are about as readable as pseudocode.
 
 **Haskell** keeps symbol noise low (4.3) despite pattern matching — its symbols are few (`|`, `:`, `[]`) but meaningful.
 

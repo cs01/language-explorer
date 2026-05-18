@@ -19,7 +19,7 @@ const avgAll = (key: string, l: string) => {
 const stats = {
   lines: avg('loc'),
   tokens: avg('tokens'),
-  complexity: Math.round(entries.reduce((s, e) => s + e.halsteadVolume, 0) / entries.length),
+  verbosity: Math.round(entries.reduce((s, e) => s + e.halsteadVolume, 0) / entries.length),
   sigilsPerLine: avg('sigilsPerLine'),
   guardrails: entries[0]?.guardrailScore ?? 0,
   ceremony: avg('ceremonyRatio'),
@@ -36,7 +36,7 @@ const stats = {
 const maxVals = {
   lines: Math.max(...allLangs.map(l => avgAll('loc', l))),
   tokens: Math.max(...allLangs.map(l => avgAll('tokens', l))),
-  complexity: Math.max(...allLangs.map(l => {
+  verbosity: Math.max(...allLangs.map(l => {
     const e = data.metrics.filter(m => m.language === l)
     return e.reduce((s, x) => s + x.halsteadVolume, 0) / e.length
   })),
@@ -55,7 +55,7 @@ const maxVals = {
 // Radar: bigger polygon = better. Cost metrics inverted so high = good.
 const radarData = [
   { label: 'Fewer Lines', value: maxVals.lines - stats.lines, max: maxVals.lines },
-  { label: 'Low Complexity', value: maxVals.concepts - stats.concepts, max: maxVals.concepts },
+  { label: 'Concise', value: maxVals.concepts - stats.concepts, max: maxVals.concepts },
   { label: 'Low Noise', value: maxVals.sigilsPerLine - stats.sigilsPerLine, max: maxVals.sigilsPerLine },
   { label: 'Guardrails', value: stats.guardrails, max: maxVals.guardrails },
   { label: 'Lightweight', value: maxVals.ceremony - stats.ceremony, max: maxVals.ceremony },
@@ -97,7 +97,7 @@ const grReasons = {
   overflow: 'Silent wraparound — no detection',
   coercion: 'Widening conversions implicit (int→long), boxing issues',
 }
-const qualityLinks = { "Fewer Lines": "../metrics/code-size", "Low Complexity": "../metrics/complexity", "Low Noise": "../metrics/symbol-noise", Guardrails: "../metrics/guardrails", Lightweight: "../metrics/type-ceremony", "Info per Line": "../metrics/code-size" }
+const qualityLinks = { "Fewer Lines": "../metrics/code-size", "Concise": "../metrics/verbosity", "Low Noise": "../metrics/symbol-noise", Guardrails: "../metrics/guardrails", Lightweight: "../metrics/type-ceremony", "Info per Line": "../metrics/code-size" }
 const conceptLinks = { Types: "../metrics/concept-count", Control: "../metrics/concept-count", Functions: "../metrics/concept-count", "OOP/Data": "../metrics/concept-count", Memory: "../metrics/concept-count", Concurrency: "../metrics/concept-count", Metaprog: "../metrics/concept-count", Errors: "../metrics/concept-count" }
 </script>
 
@@ -112,7 +112,7 @@ The enterprise workhorse — runs on billions of devices, dominates Android and 
 <RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" :links="conceptLinks" />
 
 <GuardrailCard :score="stats.guardrails" :memory="gr.memory" :null="gr.null" :race="gr.race" :overflow="gr.overflow" :coercion="gr.coercion" :memoryWhen="gr.memoryWhen" :memoryActivation="gr.memoryActivation" :nullWhen="gr.nullWhen" :nullActivation="gr.nullActivation" :raceWhen="gr.raceWhen" :raceActivation="gr.raceActivation" :overflowWhen="gr.overflowWhen" :overflowActivation="gr.overflowActivation" :coercionWhen="gr.coercionWhen" :coercionActivation="gr.coercionActivation" :reasons="grReasons" />
-<ExpressivenessCard :lines="stats.lines" :tokens="stats.tokens" :complexity="stats.complexity" :ceremony="stats.ceremony" :maxLines="maxVals.lines" :maxComplexity="maxVals.complexity" :maxCeremony="maxVals.ceremony" />
+<ExpressivenessCard :lines="stats.lines" :tokens="stats.tokens" :verbosity="stats.verbosity" :ceremony="stats.ceremony" :maxLines="maxVals.lines" :maxVerbosity="maxVals.verbosity" :maxCeremony="maxVals.ceremony" />
 <SurfaceAreaCard :concepts="stats.surface" :keywords="stats.keywords" :keywordRatio="stats.keywordRatio" :categories="catData" />
 <ExplicitnessCard :concepts="stats.surface" :keywordRatio="stats.keywordRatio" />
 <AIReadinessCard :llmTokens="stats.llmTokens" :llmTokensPerLine="stats.llmTokensPerLine" :typeCoverage="stats.typeCoverage" :maxLlmTokens="maxVals.llmTokens" :maxLlmTokensPerLine="maxVals.llmTokensPerLine" />

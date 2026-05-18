@@ -6,7 +6,7 @@ interface LangData {
   lines: number
   tokens: number
   tokensPerLine: number
-  complexity: number
+  verbosity: number
   sigilsPerLine: number
   guardrails: number
   ceremony: number
@@ -92,30 +92,30 @@ const withData = computed(() => props.languages.filter(l => (l.lines as number) 
 const maxVals = computed(() => ({
   lines: Math.max(...withData.value.map(l => l.lines), 1),
   tokensPerLine: Math.max(...withData.value.map(l => l.tokensPerLine), 1),
-  complexity: Math.max(...withData.value.map(l => l.complexity), 1),
+  verbosity: Math.max(...withData.value.map(l => l.verbosity), 1),
   sigilsPerLine: Math.max(...withData.value.map(l => l.sigilsPerLine), 1),
   guardrails: Math.max(...props.languages.map(l => l.guardrails), 1),
   ceremony: Math.max(...withData.value.map(l => l.ceremony), 1),
 }))
 
-const metrics = ['lines', 'tokensPerLine', 'complexity', 'sigilsPerLine', 'guardrails', 'ceremony'] as const
+const metrics = ['lines', 'tokensPerLine', 'verbosity', 'sigilsPerLine', 'guardrails', 'ceremony'] as const
 const higherIsBetter = new Set(['guardrails', 'tokensPerLine'])
 const radarLabels: Record<string, string> = {
-  lines: 'Fewer Lines', tokensPerLine: 'Info per Line', complexity: 'Low Complexity',
+  lines: 'Fewer Lines', tokensPerLine: 'Info per Line', verbosity: 'Concise',
   sigilsPerLine: 'Low Noise', guardrails: 'Safe', ceremony: 'Lightweight',
 }
 const barLabels = radarLabels
 const barDescriptions: Record<string, string> = {
   lines: 'Fewer lines of code — Python\'s `two_sum` is 8 lines vs Java\'s 22',
   tokensPerLine: 'More information per line — higher means each line does more',
-  complexity: 'Lower Halstead Volume — less total information to process',
+  verbosity: 'Lower Halstead Volume — less total information to process',
   sigilsPerLine: 'Fewer special characters per line — { -> & :: * etc.',
   guardrails: 'More bugs caught by the language — memory, null, race, overflow, coercion',
   ceremony: 'Less boilerplate — imports, main wrappers, lone braces, type-only lines',
 }
 
 const expressLinks: Record<string, string> = {
-  'Fewer Lines': './metrics/code-size', 'Info per Line': './metrics/code-size', 'Low Complexity': './metrics/complexity',
+  'Fewer Lines': './metrics/code-size', 'Info per Line': './metrics/code-size', 'Concise': './metrics/verbosity',
   'Low Noise': './metrics/symbol-noise', Safe: './metrics/guardrails', Lightweight: './metrics/type-ceremony',
 }
 const conceptLabelLinks: Record<string, string> = {

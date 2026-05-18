@@ -49,7 +49,7 @@ We count three things: lines of code (LOC), tokens (whitespace-separated words),
 
 **The interesting middle**: Kotlin (18.5) matches JavaScript despite being statically typed. Extension functions and expression-bodied syntax eliminate the ceremony you'd expect from a JVM language.
 
-## The gap widens with complexity
+## The gap widens with verbosity
 
 On simple algorithmic problems, languages cluster within 2× of each other. On real-world problems with I/O, JSON, HTTP, and concurrency, the gap stretches to 3-5×. Real programs exercise the standard library, error model, and concurrency primitives — that's where languages diverge most.
 

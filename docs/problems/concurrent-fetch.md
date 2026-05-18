@@ -12,7 +12,7 @@ const metrics = data.metrics
     language: m.language.charAt(0).toUpperCase() + m.language.slice(1),
     lines: m.loc,
     tokens: m.tokens,
-    complexity: m.halsteadVolume,
+    verbosity: m.halsteadVolume,
     'tok/line': m.tokensPerLine, 'symbols/line': m.sigilsPerLine, concepts: m.conceptCount,
     guardrails: m.guardrailScore, ceremony: m.ceremonyRatio,
   }))
@@ -20,7 +20,7 @@ const metrics = data.metrics
 const columns = [
   { key: 'lines', label: 'Lines' },
   { key: 'tokens', label: 'Tokens' },
-  { key: 'complexity', label: 'Complexity' },
+  { key: 'verbosity', label: 'Verbosity' },
   { key: 'tok/line', label: 'Tok/Line' }, { key: 'symbols/line', label: 'Sym/Line' }, { key: 'concepts', label: 'Concepts' },
   { key: 'guardrails', label: 'Guardrails', lower: false }, { key: 'ceremony', label: 'Ceremony' },
 ]

@@ -38,8 +38,8 @@ Measured from actual code. Averaged across 7 benchmark problems for each languag
 
 **Unique symbol types** — how many *different* special characters appear. Fewer types = less to memorize when learning the language.
 
-### Complexity
-**[Halstead Volume](https://en.wikipedia.org/wiki/Halstead_complexity_measures)** — a classic software metric (1977) that measures total information content: how many things are in the code (`N` = total tokens) times how diverse they are (`log₂(n)` where `n` = unique tokens). More unique operations and variables = higher complexity. We use whitespace-delimited tokens as an approximation — this preserves relative ranking across languages without needing language-specific parsers.
+### Verbosity
+**[Halstead Volume](https://en.wikipedia.org/wiki/Halstead_complexity_measures)** — a classic software metric (1977) that measures total information content: how many things are in the code (`N` = total tokens) times how diverse they are (`log₂(n)` where `n` = unique tokens). More unique operations and variables = higher verbosity. We use whitespace-delimited tokens as an approximation — this preserves relative ranking across languages without needing language-specific parsers.
 
 ### Compression ratio
 **gzip ratio** — `compressed_size / original_size`. How much the code shrinks when compressed. Repetitive, formulaic code compresses well (low ratio). Dense, novel code doesn't (high ratio). A practical measure of how predictable the code is.

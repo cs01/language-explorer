@@ -14,7 +14,7 @@ const avgData = languages.map(lang => {
     language: lang.charAt(0).toUpperCase() + lang.slice(1),
     lines: avg('loc'),
     tokens: avg('tokens'),
-    complexity: Math.round(entries.reduce((s, e) => s + e.halsteadVolume, 0) / entries.length),
+    verbosity: Math.round(entries.reduce((s, e) => s + e.halsteadVolume, 0) / entries.length),
     'symbols/line': avg('sigilsPerLine'),
     'symbol types': Math.round(entries.reduce((s, e) => s + e.uniqueSigilTypes, 0) / entries.length),
   }
@@ -23,7 +23,7 @@ const avgData = languages.map(lang => {
 const columns = [
   { key: 'lines', label: 'Lines' },
   { key: 'tokens', label: 'Tokens' },
-  { key: 'complexity', label: 'Complexity' },
+  { key: 'verbosity', label: 'Verbosity' },
   { key: 'symbols/line', label: 'Sym/Line' },
   { key: 'symbol types', label: 'Sym Types' },
 ]
@@ -43,7 +43,7 @@ We implemented 7 programs in 14 languages and measured everything. Here's what t
 
 Zig and C require **~3× more code** than Python/Ruby for equivalent programs. On real-world tasks the gap widens — concurrent HTTP fetching takes 59-61 lines of Zig/C vs 19 lines of Python.
 
-**Ruby** ties Python for fewest tokens (41 avg) and actually beats Python on complexity (205 vs 212). Its regex-powered `scan` + `tally` idioms are remarkably dense.
+**Ruby** ties Python for fewest tokens (41 avg) and actually beats Python on verbosity (205 vs 212). Its regex-powered `scan` + `tally` idioms are remarkably dense.
 
 **Kotlin** surprises at 18.5 lines avg — same as JavaScript, far less than Java (24.8). Extension functions and scope functions eliminate ceremony.
 
@@ -68,7 +68,7 @@ Rust, TypeScript, Elixir, and Zig tie for highest **symbol noise** at 6.3-6.4 sy
 Low symbols + high LOC (Go) vs high symbols + low LOC (Rust). Ruby manages both low symbols AND low LOC. Python is close behind. Both give up compile-time safety for it.
 :::
 
-## 5× : The complexity explosion
+## 5× : The verbosity explosion
 
 [Halstead Volume](https://en.wikipedia.org/wiki/Halstead_complexity_measures) measures how much total information a program contains — think of it as "how much stuff does your brain have to process?"
 
@@ -97,7 +97,7 @@ Languages cluster tightly — 7-26 LOC. Ruby (8 lines) and Kotlin (9 lines) edge
 Languages **diverge dramatically**. Zig explodes to 50-59 LOC (rivaling C). Swift's concurrent-fetch is 46 lines — the actor-based semaphore adds overhead vs languages with built-in bounded concurrency. Elixir stays compact (19-20 lines) thanks to `Task.async_stream` and `Enum.frequencies`.
 
 ::: warning The real lesson
-For simple algorithms, language choice barely matters. For real programs with I/O, errors, and concurrency — **the language you pick determines how much code you write, how many symbols you juggle, and how much complexity you carry.**
+For simple algorithms, language choice barely matters. For real programs with I/O, errors, and concurrency — **the language you pick determines how much code you write, how many symbols you juggle, and how much verbosity you carry.**
 :::
 
 ## What's next
