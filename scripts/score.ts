@@ -167,12 +167,25 @@ const extToLang: Record<string, string> = {
   java: 'java', milo: 'milo',
 }
 
+// Weights derived from CVE/CWE data: Microsoft + Chrome found ~70% of CVEs are memory safety.
+// See: MSRC 2019, Chromium memory-safety project, CWE Top 25 (2025), CISA memory safety report.
+const guardrailWeights = { memory: 0.45, null: 0.20, race: 0.15, overflow: 0.12, coercion: 0.08 }
+
 function scoreGuardrails(filename: string) {
   const ext = filename.split('.').pop() || ''
   const lang = extToLang[ext] || ext
   const g = guardrails[lang] || { memory: 0, null: 0, race: 0, overflow: 0, coercion: 0 }
-  const score = g.memory + g.null + g.race + g.overflow + g.coercion
-  return { ...g, guardrailScore: score }
+  const unweighted = g.memory + g.null + g.race + g.overflow + g.coercion
+  const weighted = +(
+    g.memory * guardrailWeights.memory +
+    g.null * guardrailWeights.null +
+    g.race * guardrailWeights.race +
+    g.overflow * guardrailWeights.overflow +
+    g.coercion * guardrailWeights.coercion
+  ).toFixed(2)
+  // Normalize weighted to 0-5 scale (max raw weighted = 1.0 when all categories are 1)
+  const guardrailScore = +(weighted * 5).toFixed(1)
+  return { ...g, guardrailScore }
 }
 
 function scoreCeremony(src: string, nonBlankLines: string[]) {

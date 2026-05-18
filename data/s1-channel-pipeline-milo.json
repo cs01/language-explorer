@@ -31,7 +31,7 @@
     "race": 0,
     "overflow": 0,
     "coercion": 1,
-    "guardrailScore": 3
+    "guardrailScore": 3.6
   },
   "ceremony": {
     "ceremonyLines": 9,

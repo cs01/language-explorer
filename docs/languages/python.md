@@ -60,12 +60,11 @@ const radarData = [
 ]
 
 const perProblem = entries.map(e => ({
-  problem: e.problem,
+  language: e.problem,
   lines: e.loc,
   tokens: e.tokens,
   complexity: e.halsteadVolume,
   'symbols/line': e.sigilsPerLine,
-  guardrails: e.guardrailScore,
   ceremony: e.ceremonyRatio,
 }))
 
@@ -74,15 +73,9 @@ const columns = [
   { key: 'tokens', label: 'Tokens' },
   { key: 'complexity', label: 'Complexity' },
   { key: 'symbols/line', label: 'Sym/Line' },
-  { key: 'guardrails', label: 'Guardrails', lower: false },
   { key: 'ceremony', label: 'Ceremony' },
 ]
 
-// Rank among all languages (1 = best)
-const rankings = allLangs
-  .map(l => ({ lang: l, lines: avgAll('loc', l) }))
-  .sort((a, b) => a.lines - b.lines)
-const rank = rankings.findIndex(r => r.lang === lang) + 1
 </script>
 
 # Python
@@ -91,8 +84,6 @@ const rank = rankings.findIndex(r => r.lang === lang) + 1
 <RadarChart :data="radarData" :label="label" color="#3b82f6" />
 
 <div>
-
-**Overall rank: #{{ rank }} of {{ allLangs.length }}** (by avg lines)
 
 | Metric | Value |
 |--------|-------|
