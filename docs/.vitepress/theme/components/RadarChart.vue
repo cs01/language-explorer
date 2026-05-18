@@ -12,6 +12,7 @@ const props = withDefaults(defineProps<{
   label?: string
   color?: string
   size?: number
+  links?: Record<string, string>
 }>(), {
   label: '',
   color: '#3b82f6',
@@ -61,6 +62,7 @@ const dataPath = computed(() => {
 
 <template>
   <div class="radar-chart">
+    <div v-if="label" class="radar-title">{{ label }}</div>
     <svg :width="size" :height="size" :viewBox="`0 0 ${size} ${size}`">
       <!-- Grid -->
       <path
@@ -87,7 +89,10 @@ const dataPath = computed(() => {
         fill-opacity="0.2"
         :stroke="color"
         stroke-width="2"
-      />
+        class="radar-polygon"
+      >
+        <title>{{ label }}</title>
+      </path>
       <!-- Data points -->
       <circle
         v-for="(d, i) in data"
@@ -96,27 +101,41 @@ const dataPath = computed(() => {
         :cy="polarToCart((360 / data.length) * i, radius * Math.min(d.value / d.max, 1))[1]"
         r="3"
         :fill="color"
-      />
-      <!-- Labels -->
-      <text
-        v-for="axis in axes"
-        :key="'l-' + axis.label"
-        :x="axis.lx"
-        :y="axis.ly"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        class="radar-label"
+        class="radar-point"
       >
-        {{ axis.label }}
-      </text>
+        <title>{{ label }} — {{ d.label }}: {{ d.value }}</title>
+      </circle>
+      <!-- Labels -->
+      <template v-for="axis in axes" :key="'l-' + axis.label">
+        <a v-if="links?.[axis.label]" :href="links[axis.label]" class="radar-link">
+          <text
+            :x="axis.lx"
+            :y="axis.ly"
+            text-anchor="middle"
+            dominant-baseline="middle"
+            class="radar-label radar-label-link"
+          >
+            {{ axis.label }}
+          </text>
+        </a>
+        <text
+          v-else
+          :x="axis.lx"
+          :y="axis.ly"
+          text-anchor="middle"
+          dominant-baseline="middle"
+          class="radar-label"
+        >
+          {{ axis.label }}
+        </text>
+      </template>
     </svg>
-    <div v-if="label" class="radar-title">{{ label }}</div>
   </div>
 </template>
 
 <style scoped>
 .radar-chart {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
 }
@@ -124,9 +143,32 @@ const dataPath = computed(() => {
   font-size: 10px;
   fill: var(--vp-c-text-2);
 }
+.radar-label-link {
+  fill: var(--vp-c-brand-1);
+}
+.radar-label-link:hover {
+  text-decoration: underline;
+}
+.radar-link {
+  cursor: pointer;
+}
+.radar-polygon {
+  cursor: pointer;
+  transition: fill-opacity 0.15s;
+}
+.radar-polygon:hover {
+  fill-opacity: 0.35;
+}
+.radar-point {
+  cursor: pointer;
+  transition: r 0.15s;
+}
+.radar-point:hover {
+  r: 5;
+}
 .radar-title {
   font-weight: 600;
   font-size: 0.9rem;
-  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 </style>

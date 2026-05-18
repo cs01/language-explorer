@@ -34,6 +34,7 @@ const grReasons = {
   overflow: 'Constraint_Error raised on overflow — always checked',
   coercion: 'Strong typing — no implicit conversions between numeric types',
 }
+const conceptLinks = { Types: "../metrics/concept-count", Control: "../metrics/concept-count", Functions: "../metrics/concept-count", "OOP/Data": "../metrics/concept-count", Memory: "../metrics/concept-count", Concurrency: "../metrics/concept-count", Metaprog: "../metrics/concept-count", Errors: "../metrics/concept-count" }
 </script>
 
 # Ada
@@ -45,7 +46,7 @@ Designed for safety-critical systems — avionics, defense, railway signaling, a
 <small>Profile only — no benchmark solutions yet.</small>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
-<RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" />
+<RadarChart :data="conceptRadar" label="Concept Distribution" color="#f59e0b" :links="conceptLinks" />
 <GuardrailCard :score="stats.guardrails" :memory="gr.memory" :null="gr.null" :race="gr.race" :overflow="gr.overflow" :coercion="gr.coercion" :memoryWhen="gr.memoryWhen" :memoryActivation="gr.memoryActivation" :nullWhen="gr.nullWhen" :nullActivation="gr.nullActivation" :raceWhen="gr.raceWhen" :raceActivation="gr.raceActivation" :overflowWhen="gr.overflowWhen" :overflowActivation="gr.overflowActivation" :coercionWhen="gr.coercionWhen" :coercionActivation="gr.coercionActivation" :reasons="grReasons" />
 <SurfaceAreaCard :concepts="stats.surface" :keywords="stats.keywords" :keywordRatio="stats.keywordRatio" :categories="catData" />
 <ExplicitnessCard :concepts="stats.surface" :keywordRatio="stats.keywordRatio" />

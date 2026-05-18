@@ -2,8 +2,8 @@
 
 **What fraction of your code exists just to handle errors?**
 
-::: warning Coming soon
-This dimension requires manual tagging of which lines are error handling vs happy-path logic. Automated detection in progress.
+::: info Qualitative only
+Quantifying error overhead requires language-aware parsing to distinguish error-handling lines from happy-path logic. The analysis below is qualitative — no scored data yet.
 :::
 
 ## The spectrum

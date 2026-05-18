@@ -26,7 +26,7 @@ const maxVal = Math.max(...props.categories.map(c => c.value), 1)
       </div>
     </div>
     <div class="sa-footer">
-      <a href="/language-explorer/methodology#surface-area">How we measure</a>
+      <a href="../methodology#surface-area">How we measure</a>
     </div>
   </div>
 </template>
@@ -50,8 +50,8 @@ const maxVal = Math.max(...props.categories.map(c => c.value), 1)
 .sa-unit { font-size: 0.75rem; font-weight: 400; color: var(--vp-c-text-3); }
 .sa-kw { font-size: 0.8rem; color: var(--vp-c-text-3); margin-bottom: 0.6rem; }
 .sa-bars { display: flex; flex-direction: column; gap: 0.35rem; }
-.sa-row { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; }
-.sa-label { width: 70px; flex-shrink: 0; color: var(--vp-c-text-3); text-align: right; }
+.sa-row { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 0.4rem; font-size: 0.8rem; }
+.sa-label { white-space: nowrap; color: var(--vp-c-text-3); text-align: right; }
 .sa-bar-wrap { flex: 1; height: 6px; border-radius: 3px; background: var(--vp-c-divider); overflow: hidden; }
 .sa-bar { height: 100%; border-radius: 3px; background: #8b5cf6; transition: width 0.3s; }
 .sa-val { width: 24px; text-align: right; font-weight: 500; color: var(--vp-c-text-2); font-size: 0.75rem; }

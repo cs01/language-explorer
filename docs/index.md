@@ -27,34 +27,10 @@ const expressData = languages.map(lang => {
   }
 })
 
-// Per-language metrics (static properties of the language itself)
-const profileData = [
-  ...languages.map(lang => {
-    const entries = data.metrics.filter(m => m.language === lang)
-    return {
-      language: toDisplay(lang),
-      guardrails: entries[0]?.guardrailScore ?? 0,
-      keywords: entries[0]?.langKeywords ?? 0,
-      surface: entries[0]?.langConcepts ?? 0,
-      typeCoverage: entries[0]?.typeCoverage ?? 0,
-    }
-  }),
-  { language: 'Ada', guardrails: 3.4, keywords: 74, surface: 85, typeCoverage: 1.0 },
-  { language: 'LLVM IR', guardrails: 0.1, keywords: 150, surface: 35, typeCoverage: 0.25 },
-  { language: 'Zero', guardrails: 5.0, keywords: 32, surface: 50, typeCoverage: 1.0 },
-]
-
 const expressColumns = [
   { key: 'lines', label: 'Lines' },
   { key: 'complexity', label: 'Complexity' },
   { key: 'ceremony', label: 'Ceremony' },
-]
-
-const profileColumns = [
-  { key: 'guardrails', label: 'Guardrails', lower: false },
-  { key: 'keywords', label: 'Keywords' },
-  { key: 'surface', label: 'Surface Area' },
-  { key: 'typeCoverage', label: 'Type Coverage', lower: false },
 ]
 
 // Concept category radars for paired comparisons
@@ -123,10 +99,10 @@ const heroMetrics = [
 ]
 
 const pairs = [
+  { left: 'typescript', right: 'javascript', why: 'Types added — 100 vs 65 concepts, but stronger guardrails' },
   { left: 'python', right: 'haskell', why: 'Same total concepts (75), opposite shapes' },
   { left: 'rust', right: 'go', why: 'Systems safety vs simplicity' },
   { left: 'c', right: 'zig', why: 'C successor — similar size (60 vs 65), more guardrails' },
-  { left: 'typescript', right: 'javascript', why: 'Types added — 100 vs 65 concepts, but stronger guardrails' },
 ]
 
 const pairRadars = pairs.map(p => ({
@@ -137,7 +113,11 @@ const pairRadars = pairs.map(p => ({
   rightData: conceptRadarFor(p.right),
   leftGuardrails: guardrailBreakdown(p.left),
   rightGuardrails: guardrailBreakdown(p.right),
+  leftScore: data.metrics.find(m => m.language === p.left)?.guardrailScore ?? 0,
+  rightScore: data.metrics.find(m => m.language === p.right)?.guardrailScore ?? 0,
 }))
+
+const conceptLinks = { Types: './metrics/concept-count', Control: './metrics/concept-count', Functions: './metrics/concept-count', 'OOP/Data': './metrics/concept-count', Memory: './metrics/concept-count', Concurrency: './metrics/concept-count', Metaprog: './metrics/concept-count', Errors: './metrics/concept-count' }
 </script>
 
 # Language Explorer
@@ -151,8 +131,12 @@ Quantitative comparison of programming languages — measured from real code, no
 </div>
 
 <div class="hero-radars">
-<RadarChart :data="conceptRadarFor('zig')" label="Zig" color="#3b82f6" :size="220" />
-<RadarChart :data="conceptRadarFor('rust')" label="Rust" color="#f97316" :size="220" />
+<RadarChart :data="conceptRadarFor('zig')" label="Zig" color="#3b82f6" :size="220" :links="conceptLinks" />
+<RadarChart :data="conceptRadarFor('rust')" label="Rust" color="#f97316" :size="220" :links="conceptLinks" />
+</div>
+<div class="radar-legend">
+  <span class="radar-legend-item"><span class="radar-swatch" style="background: #3b82f6"></span> Zig</span>
+  <span class="radar-legend-item"><span class="radar-swatch" style="background: #f97316"></span> Rust</span>
 </div>
 
 <div class="matchup-insight">
@@ -194,6 +178,7 @@ Zig bets on <strong>simplicity</strong> — comptime, no hidden allocators, 65 c
 <div class="safety-row">
   <div class="safety-lang">
     <span class="safety-name" style="color: #3b82f6">Zig</span>
+    <span class="safety-score">{{ zigScore }} / 5</span>
   </div>
   <div class="safety-badges">
     <span v-for="g in zigGuardrails" :key="g.label" :class="['safety-badge', g.level]">{{ g.label }}</span>
@@ -202,6 +187,7 @@ Zig bets on <strong>simplicity</strong> — comptime, no hidden allocators, 65 c
 <div class="safety-row">
   <div class="safety-lang">
     <span class="safety-name" style="color: #f97316">Rust</span>
+    <span class="safety-score">{{ rustScore }} / 5</span>
   </div>
   <div class="safety-badges">
     <span v-for="g in rustGuardrails" :key="g.label" :class="['safety-badge', g.level]">{{ g.label }}</span>
@@ -215,11 +201,23 @@ Zig bets on <strong>simplicity</strong> — comptime, no hidden allocators, 65 c
 </div>
 </div>
 
+## Expressiveness
+
+How concise is the code? Averaged across 7 benchmark problems.
+
+<MetricsTable :data="expressData" :columns="expressColumns" />
+
+<small>Full metrics on the <a href="./compare">Compare</a> page. <a href="./methodology">Methodology →</a></small>
+
 <div v-for="pair in pairRadars" :key="pair.left" class="concept-pair">
 <div class="pair-header"><strong>{{ pair.leftLabel }}</strong> vs <strong>{{ pair.rightLabel }}</strong> — {{ pair.why }}</div>
 <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
-<RadarChart :data="pair.leftData" :label="pair.leftLabel" color="#3b82f6" :size="220" />
-<RadarChart :data="pair.rightData" :label="pair.rightLabel" color="#f97316" :size="220" />
+<RadarChart :data="pair.leftData" :label="pair.leftLabel" color="#3b82f6" :size="220" :links="conceptLinks" />
+<RadarChart :data="pair.rightData" :label="pair.rightLabel" color="#f97316" :size="220" :links="conceptLinks" />
+</div>
+<div class="radar-legend">
+  <span class="radar-legend-item"><span class="radar-swatch" style="background: #3b82f6"></span> {{ pair.leftLabel }}</span>
+  <span class="radar-legend-item"><span class="radar-swatch" style="background: #f97316"></span> {{ pair.rightLabel }}</span>
 </div>
 <div class="safety-comparison">
 <div class="safety-header">Safety Guardrails <a href="./methodology#guardrails" class="safety-link">how we score →</a></div>
@@ -231,6 +229,7 @@ Zig bets on <strong>simplicity</strong> — comptime, no hidden allocators, 65 c
 <div class="safety-row">
   <div class="safety-lang">
     <span class="safety-name" style="color: #3b82f6">{{ pair.leftLabel }}</span>
+    <span class="safety-score">{{ pair.leftScore }} / 5</span>
   </div>
   <div class="safety-badges">
     <span v-for="g in pair.leftGuardrails" :key="g.label" :class="['safety-badge', g.level]">{{ g.label }}</span>
@@ -239,6 +238,7 @@ Zig bets on <strong>simplicity</strong> — comptime, no hidden allocators, 65 c
 <div class="safety-row">
   <div class="safety-lang">
     <span class="safety-name" style="color: #f97316">{{ pair.rightLabel }}</span>
+    <span class="safety-score">{{ pair.rightScore }} / 5</span>
   </div>
   <div class="safety-badges">
     <span v-for="g in pair.rightGuardrails" :key="g.label" :class="['safety-badge', g.level]">{{ g.label }}</span>
@@ -248,28 +248,26 @@ Zig bets on <strong>simplicity</strong> — comptime, no hidden allocators, 65 c
 <div class="pair-cta"><a :href="`./compare?langs=${pair.left},${pair.right}`">Compare {{ pair.leftLabel }} & {{ pair.rightLabel }} →</a></div>
 </div>
 
----
-
-## Language Profile
-
-Properties of each language — guardrails, keyword count, surface area, and type coverage.
-
-<MetricsTable :data="profileData" :columns="profileColumns" />
-
-<small>Guardrails: higher is better. Keywords and Surface Area: lower means less to learn. <a href="./methodology#guardrails">Details →</a></small>
-
----
-
-## Expressiveness
-
-How concise is the code? Averaged across 7 benchmark problems. Lower is better.
-
-<MetricsTable :data="expressData" :columns="expressColumns" />
-
-<small>Full metrics on the <a href="./compare">Compare</a> page. <a href="./methodology">Methodology →</a></small>
-
-
 <style>
+.radar-legend {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  margin: 0.25rem 0 0.75rem;
+  font-size: 0.8rem;
+  color: var(--vp-c-text-2);
+}
+.radar-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.radar-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
 .hero-matchup {
   margin: 1.5rem 0 2rem;
   padding: 1.5rem;
@@ -396,18 +394,28 @@ How concise is the code? Averaged across 7 benchmark problems. Lower is better.
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 0.5rem;
+  padding: 0.5rem 0;
   flex-wrap: wrap;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+.safety-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 .safety-lang {
-  min-width: 60px;
+  min-width: 100px;
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  align-items: baseline;
+  gap: 0.4rem;
 }
 .safety-name {
   font-weight: 600;
   font-size: 0.85rem;
+}
+.safety-score {
+  font-size: 0.72rem;
+  color: var(--vp-c-text-3);
+  font-weight: 400;
 }
 .safety-badges {
   display: flex;
@@ -417,7 +425,9 @@ How concise is the code? Averaged across 7 benchmark problems. Lower is better.
 .safety-legend {
   display: flex;
   gap: 0.5rem;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--vp-c-divider);
   font-size: 0.7rem;
 }
 .safety-badge {

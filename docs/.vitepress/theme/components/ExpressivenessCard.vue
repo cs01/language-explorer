@@ -13,10 +13,8 @@ function pct(val: number, max: number) {
   return max > 0 ? Math.round((val / max) * 100) : 0
 }
 
-function barClass(pctVal: number) {
-  if (pctVal <= 33) return 'low'
-  if (pctVal <= 66) return 'mid'
-  return 'high'
+function barClass() {
+  return 'neutral'
 }
 
 const metrics = [
@@ -30,7 +28,7 @@ const metrics = [
   <div class="ex-card">
     <div class="ex-header">
       <span class="ex-title">Expressiveness</span>
-      <span class="ex-subtitle">lower is better</span>
+      <span class="ex-subtitle">avg across benchmarks</span>
     </div>
     <div class="ex-grid">
       <div v-for="m in metrics" :key="m.label" class="ex-row">
@@ -72,14 +70,14 @@ const metrics = [
   gap: 0.6rem;
 }
 .ex-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 0.5rem;
   font-size: 0.85rem;
 }
 .ex-label {
-  width: 80px;
-  flex-shrink: 0;
+  white-space: nowrap;
   color: var(--vp-c-text-2);
 }
 .ex-bar-wrap {
@@ -94,9 +92,7 @@ const metrics = [
   border-radius: 3px;
   transition: width 0.3s;
 }
-.ex-bar.low { background: #22c55e; }
-.ex-bar.mid { background: #f59e0b; }
-.ex-bar.high { background: #ef4444; }
+.ex-bar.neutral { background: var(--vp-c-brand-1); }
 .ex-val {
   width: 45px;
   text-align: right;

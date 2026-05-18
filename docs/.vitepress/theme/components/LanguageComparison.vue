@@ -5,6 +5,7 @@ interface LangData {
   language: string
   lines: number
   tokens: number
+  tokensPerLine: number
   complexity: number
   sigilsPerLine: number
   guardrails: number
@@ -90,27 +91,42 @@ function langColor(lang: string): string | null {
 const withData = computed(() => props.languages.filter(l => (l.lines as number) > 0))
 const maxVals = computed(() => ({
   lines: Math.max(...withData.value.map(l => l.lines), 1),
-  tokens: Math.max(...withData.value.map(l => l.tokens), 1),
+  tokensPerLine: Math.max(...withData.value.map(l => l.tokensPerLine), 1),
   complexity: Math.max(...withData.value.map(l => l.complexity), 1),
   sigilsPerLine: Math.max(...withData.value.map(l => l.sigilsPerLine), 1),
   guardrails: Math.max(...props.languages.map(l => l.guardrails), 1),
   ceremony: Math.max(...withData.value.map(l => l.ceremony), 1),
 }))
 
-const metrics = ['lines', 'tokens', 'complexity', 'sigilsPerLine', 'guardrails', 'ceremony'] as const
-const higherIsBetter = new Set(['guardrails'])
+const metrics = ['lines', 'tokensPerLine', 'complexity', 'sigilsPerLine', 'guardrails', 'ceremony'] as const
+const higherIsBetter = new Set(['guardrails', 'tokensPerLine'])
 const radarLabels: Record<string, string> = {
-  lines: 'Concise', tokens: 'Terse', complexity: 'Simple',
-  sigilsPerLine: 'Clear', guardrails: 'Safe', ceremony: 'Lightweight',
+  lines: 'Fewer Lines', tokensPerLine: 'Info per Line', complexity: 'Low Complexity',
+  sigilsPerLine: 'Low Noise', guardrails: 'Safe', ceremony: 'Lightweight',
 }
 const barLabels = radarLabels
 const barDescriptions: Record<string, string> = {
   lines: 'Fewer lines of code — Python\'s `two_sum` is 8 lines vs Java\'s 22',
-  tokens: 'Fewer words and symbols — less to type and read',
+  tokensPerLine: 'More information per line — higher means each line does more',
   complexity: 'Lower Halstead Volume — less total information to process',
   sigilsPerLine: 'Fewer special characters per line — { -> & :: * etc.',
   guardrails: 'More bugs caught by the language — memory, null, race, overflow, coercion',
   ceremony: 'Less boilerplate — imports, main wrappers, lone braces, type-only lines',
+}
+
+const expressLinks: Record<string, string> = {
+  'Fewer Lines': './metrics/code-size', 'Info per Line': './metrics/code-size', 'Low Complexity': './metrics/complexity',
+  'Low Noise': './metrics/symbol-noise', Safe: './metrics/guardrails', Lightweight: './metrics/type-ceremony',
+}
+const conceptLabelLinks: Record<string, string> = {
+  Types: './metrics/concept-count', Control: './metrics/concept-count', Functions: './metrics/concept-count',
+  'OOP/Data': './metrics/concept-count', Memory: './metrics/concept-count', Concurrency: './metrics/concept-count',
+  Metaprog: './metrics/concept-count', Errors: './metrics/concept-count',
+}
+
+function normalize(val: number, max: number, higher: boolean): number {
+  const raw = higher ? val / max : 1 - val / max
+  return Math.max(Math.min(raw, 1), 0.1)
 }
 
 function getBarWidth(lang: string, metric: string): number {
@@ -118,8 +134,7 @@ function getBarWidth(lang: string, metric: string): number {
   if (!entry || !hasExpressData(lang)) return 0
   const val = entry[metric as keyof LangData] as number
   const max = maxVals.value[metric as keyof typeof maxVals.value]
-  const normalized = higherIsBetter.has(metric) ? val / max : 1 - val / max
-  return Math.max(normalized, 0) * 100
+  return normalize(val, max, higherIsBetter.has(metric)) * 100
 }
 
 function getValue(lang: string, metric: string): number {
@@ -132,7 +147,7 @@ function getValue(lang: string, metric: string): number {
 const radarSize = 400
 const radarCx = radarSize / 2
 const radarCy = radarSize / 2
-const radarR = radarSize / 2 - 35
+const radarR = radarSize / 2 - 55
 
 function polarToCart(angle: number, r: number): [number, number] {
   const rad = (angle - 90) * (Math.PI / 180)
@@ -144,7 +159,7 @@ const radarAxes = computed(() => {
   return metrics.map((m, i) => {
     const angle = (360 / n) * i
     const [x, y] = polarToCart(angle, radarR)
-    const [lx, ly] = polarToCart(angle, radarR + 20)
+    const [lx, ly] = polarToCart(angle, radarR + 25)
     return { metric: m, label: radarLabels[m], angle, x, y, lx, ly }
   })
 })
@@ -172,8 +187,7 @@ function langRadarPath(lang: string): string {
   const points = metrics.map((m, i) => {
     const val = entry[m as keyof LangData] as number
     const max = maxVals.value[m as keyof typeof maxVals.value]
-    const normalized = higherIsBetter.has(m) ? val / max : 1 - val / max
-    const r = radarR * Math.max(Math.min(normalized, 1), 0)
+    const r = radarR * normalize(val, max, higherIsBetter.has(m))
     const angle = (360 / n) * i
     return polarToCart(angle, r)
   })
@@ -302,17 +316,22 @@ const hasGuardrailWhenData = computed(() =>
             :stroke="colors[idx]"
             stroke-width="2"
           />
-          <text
+          <a
             v-for="axis in catAxes"
             :key="'cl2-' + axis.metric"
-            :x="axis.lx"
-            :y="axis.ly"
-            text-anchor="middle"
-            dominant-baseline="middle"
-            class="radar-label"
+            :href="conceptLabelLinks[axis.label]"
+            class="radar-link"
           >
-            {{ axis.label }}
-          </text>
+            <text
+              :x="axis.lx"
+              :y="axis.ly"
+              text-anchor="middle"
+              dominant-baseline="middle"
+              class="radar-label radar-label-link"
+            >
+              {{ axis.label }}
+            </text>
+          </a>
         </svg>
       </div>
 
@@ -345,19 +364,30 @@ const hasGuardrailWhenData = computed(() =>
             :stroke="colors[idx]"
             stroke-width="2"
           />
-          <text
+          <a
             v-for="axis in radarAxes"
             :key="'rl-' + axis.metric"
-            :x="axis.lx"
-            :y="axis.ly"
-            text-anchor="middle"
-            dominant-baseline="middle"
-            class="radar-label"
+            :href="expressLinks[axis.label]"
+            class="radar-link"
           >
-            {{ axis.label }}
-          </text>
+            <text
+              :x="axis.lx"
+              :y="axis.ly"
+              text-anchor="middle"
+              dominant-baseline="middle"
+              class="radar-label radar-label-link"
+            >
+              {{ axis.label }}
+            </text>
+          </a>
         </svg>
       </div>
+    </div>
+
+    <div class="radar-legend">
+      <span v-for="(lang, idx) in selected" :key="'legend-' + lang" class="radar-legend-item">
+        <span class="radar-swatch" :style="{ background: colors[idx] }"></span> {{ lang }}
+      </span>
     </div>
 
     <div v-if="hasGuardrailWhenData" class="safety-comparison">
@@ -402,6 +432,25 @@ const hasGuardrailWhenData = computed(() =>
 </template>
 
 <style scoped>
+.radar-legend {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  margin: 0.5rem 0 1rem;
+  font-size: 0.85rem;
+  color: var(--vp-c-text-2);
+}
+.radar-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.radar-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
 .comparison { margin: 1.5rem 0; }
 .lang-picker {
   margin-bottom: 1.5rem;
@@ -542,6 +591,10 @@ const hasGuardrailWhenData = computed(() =>
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: visible;
+}
+.radar-overlay svg {
+  overflow: visible;
 }
 .radar-title {
   font-weight: 600;
@@ -552,6 +605,12 @@ const hasGuardrailWhenData = computed(() =>
 .radar-label {
   font-size: 13px;
   fill: var(--vp-c-text-2);
+}
+.radar-label-link {
+  fill: var(--vp-c-brand-1);
+}
+.radar-link {
+  cursor: pointer;
 }
 .safety-comparison {
   margin-bottom: 1.5rem;

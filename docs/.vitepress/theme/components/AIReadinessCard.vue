@@ -42,16 +42,14 @@ const tokenMetrics = [
     <div class="ai-header">
       <span class="ai-title">AI Readiness</span>
     </div>
-    <div class="ai-section">
-      <div class="ai-label">Type Coverage</div>
-      <div class="ai-coverage-row">
+    <div class="ai-grid">
+      <div class="ai-row">
+        <div class="ai-label">Type Coverage</div>
         <div class="ai-bar-wrap">
           <div class="ai-bar" :class="coverageClass(typeCoverage)" :style="{ width: Math.round(typeCoverage * 100) + '%' }"></div>
         </div>
-        <span class="ai-coverage-label">{{ coverageLabel(typeCoverage) }}</span>
+        <div class="ai-val ai-coverage-label">{{ coverageLabel(typeCoverage) }}</div>
       </div>
-    </div>
-    <div class="ai-grid">
       <div v-for="m in tokenMetrics" :key="m.label" class="ai-row">
         <div class="ai-label">{{ m.label }}</div>
         <div class="ai-bar-wrap">
@@ -74,34 +72,27 @@ const tokenMetrics = [
 }
 .ai-header { margin-bottom: 0.75rem; }
 .ai-title { font-weight: 600; font-size: 0.95rem; }
-.ai-section { margin-bottom: 0.6rem; }
-.ai-coverage-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.25rem;
-}
-.ai-coverage-label {
-  font-size: 0.75rem;
-  color: var(--vp-c-text-2);
-  white-space: nowrap;
-}
 .ai-grid {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
 }
 .ai-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 0.5rem;
   font-size: 0.85rem;
 }
 .ai-label {
-  width: 90px;
-  flex-shrink: 0;
+  white-space: nowrap;
   color: var(--vp-c-text-2);
   font-size: 0.85rem;
+}
+.ai-coverage-label {
+  font-size: 0.72rem;
+  width: auto;
+  text-align: right;
 }
 .ai-bar-wrap {
   flex: 1;
@@ -119,11 +110,11 @@ const tokenMetrics = [
 .ai-bar.mid { background: #f59e0b; }
 .ai-bar.high { background: #ef4444; }
 .ai-val {
-  width: 45px;
   text-align: right;
   font-weight: 500;
   font-size: 0.8rem;
   color: var(--vp-c-text-2);
+  white-space: nowrap;
 }
 .ai-context {
   margin-top: 0.5rem;

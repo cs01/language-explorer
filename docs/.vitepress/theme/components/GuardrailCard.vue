@@ -105,7 +105,7 @@ function reason(key: string): string {
       <span class="gr-leg-item"><span class="gr-dot none"></span>None</span>
     </div>
     <div class="gr-footer">
-      <a href="/language-explorer/methodology#guardrails">How we score</a>
+      <a href="../methodology#guardrails">How we score</a>
     </div>
   </div>
 </template>
