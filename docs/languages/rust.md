@@ -55,9 +55,9 @@ const maxVals = {
 // Radar: bigger polygon = better. Cost metrics inverted so high = good.
 const radarData = [
   { label: 'Fewer Lines', value: maxVals.lines - stats.lines, max: maxVals.lines },
-  { label: 'Concise', value: maxVals.concepts - stats.concepts, max: maxVals.concepts },
+  { label: 'Fewer Concepts', value: maxVals.concepts - stats.concepts, max: maxVals.concepts },
   { label: 'Low Noise', value: maxVals.sigilsPerLine - stats.sigilsPerLine, max: maxVals.sigilsPerLine },
-  { label: 'Guardrails', value: stats.guardrails, max: maxVals.guardrails },
+  { label: 'Safe', value: stats.guardrails, max: maxVals.guardrails },
   { label: 'Lightweight', value: maxVals.ceremony - stats.ceremony, max: maxVals.ceremony },
   { label: 'Info per Line', value: stats.tokensPerLine, max: maxVals.tokensPerLine },
 ]
@@ -97,7 +97,7 @@ const grReasons = {
   overflow: 'Panics in debug, wraps in release',
   coercion: 'No implicit conversions — explicit as/From required',
 }
-const qualityLinks = { "Fewer Lines": "../metrics/code-size", "Concise": "../metrics/verbosity", "Low Noise": "../metrics/symbol-noise", Guardrails: "../metrics/guardrails", Lightweight: "../metrics/type-ceremony", "Info per Line": "../metrics/code-size" }
+const qualityLinks = { "Fewer Lines": "../metrics/code-size", "Fewer Concepts": "../metrics/concept-count", "Low Noise": "../metrics/symbol-noise", Safe: "../metrics/safety", Lightweight: "../metrics/type-ceremony", "Info per Line": "../metrics/code-size" }
 const conceptLinks = { Types: "../metrics/concept-count", Control: "../metrics/concept-count", Functions: "../metrics/concept-count", "OOP/Data": "../metrics/concept-count", Memory: "../metrics/concept-count", Concurrency: "../metrics/concept-count", Metaprog: "../metrics/concept-count", Errors: "../metrics/concept-count" }
 </script>
 
@@ -105,7 +105,7 @@ const conceptLinks = { Types: "../metrics/concept-count", Control: "../metrics/c
 
 <div class="lang-tags"><span v-for="t in tags" class="lang-tag">{{ t }}</span></div>
 
-Memory safety without garbage collection — the ownership system prevents use-after-free, data races, and null pointer bugs at compile time. Growing rapidly in systems programming, WebAssembly, and CLI tools. High surface area (110 concepts) and more verbose than C or Go in benchmarks, but near-perfect guardrails (4.8/5) — overflow is caught at runtime rather than prevented at compile time, everything else is prevented.
+Memory safety without garbage collection — the ownership system prevents use-after-free, data races, and null pointer bugs at compile time. Growing rapidly in systems programming, WebAssembly, and CLI tools. High surface area (110 concepts) and more verbose than C or Go in benchmarks, but near-perfect safety (4.8/5) — overflow is caught at runtime rather than prevented at compile time, everything else is prevented.
 
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" :links="qualityLinks" />

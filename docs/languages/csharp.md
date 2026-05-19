@@ -49,9 +49,9 @@ const maxVals = {
 
 const radarData = [
   { label: 'Fewer Lines', value: maxVals.lines - stats.lines, max: maxVals.lines },
-  { label: 'Concise', value: maxVals.concepts - stats.concepts, max: maxVals.concepts },
+  { label: 'Fewer Concepts', value: maxVals.concepts - stats.concepts, max: maxVals.concepts },
   { label: 'Low Noise', value: maxVals.sigilsPerLine - stats.sigilsPerLine, max: maxVals.sigilsPerLine },
-  { label: 'Guardrails', value: stats.guardrails, max: maxVals.guardrails },
+  { label: 'Safe', value: stats.guardrails, max: maxVals.guardrails },
   { label: 'Lightweight', value: maxVals.ceremony - stats.ceremony, max: maxVals.ceremony },
   { label: 'Info per Line', value: stats.tokensPerLine, max: maxVals.tokensPerLine },
 ]
@@ -90,7 +90,7 @@ const grReasons = {
   overflow: 'checked keyword available, unchecked by default',
   coercion: 'Implicit widening (int→long), explicit narrowing required',
 }
-const qualityLinks = { "Fewer Lines": "../metrics/code-size", "Concise": "../metrics/verbosity", "Low Noise": "../metrics/symbol-noise", Guardrails: "../metrics/guardrails", Lightweight: "../metrics/type-ceremony", "Info per Line": "../metrics/code-size" }
+const qualityLinks = { "Fewer Lines": "../metrics/code-size", "Fewer Concepts": "../metrics/concept-count", "Low Noise": "../metrics/symbol-noise", Safe: "../metrics/safety", Lightweight: "../metrics/type-ceremony", "Info per Line": "../metrics/code-size" }
 const conceptLinks = { Types: "../metrics/concept-count", Control: "../metrics/concept-count", Functions: "../metrics/concept-count", "OOP/Data": "../metrics/concept-count", Memory: "../metrics/concept-count", Concurrency: "../metrics/concept-count", Metaprog: "../metrics/concept-count", Errors: "../metrics/concept-count" }
 </script>
 
@@ -98,7 +98,7 @@ const conceptLinks = { Types: "../metrics/concept-count", Control: "../metrics/c
 
 <div class="lang-tags"><span v-for="t in tags" class="lang-tag">{{ t }}</span></div>
 
-Microsoft's flagship language — dominant in enterprise, game development (Unity), and Windows desktop applications. Similar to Java but with more modern features: LINQ, async/await, nullable reference types. Benchmarks show moderate verbosity with decent guardrails from GC and optional null checking.
+Microsoft's flagship language — dominant in enterprise, game development (Unity), and Windows desktop applications. Similar to Java but with more modern features: LINQ, async/await, nullable reference types. Benchmarks show moderate verbosity with decent safety from GC and optional null checking.
 
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; align-items: start;">
 <RadarChart :data="radarData" label="Quality" color="#3b82f6" :links="qualityLinks" />

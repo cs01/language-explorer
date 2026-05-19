@@ -22,7 +22,7 @@ const columns = [
   { key: 'tokens', label: 'Tokens' },
   { key: 'verbosity', label: 'Verbosity' },
   { key: 'tok/line', label: 'Tok/Line' }, { key: 'symbols/line', label: 'Sym/Line' }, { key: 'concepts', label: 'Concepts' },
-  { key: 'guardrails', label: 'Guardrails', lower: false }, { key: 'ceremony', label: 'Ceremony' },
+  { key: 'guardrails', label: 'Safety', lower: false }, { key: 'ceremony', label: 'Ceremony' },
 ]
 
 const langLabels: Record<string, string> = {

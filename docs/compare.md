@@ -74,5 +74,5 @@ Bigger polygon = more of that quality. Whether that's good depends on what you v
 - **Info per Line** — tokens per line (each line does more work)
 - **Concise** — lower [Halstead Volume](https://en.wikipedia.org/wiki/Halstead_complexity_measures) (less total information to process)
 - **Low Noise** — fewer special characters per line (`{`, `->`, `&`, etc.)
-- **Safe** — more bugs prevented by the language (0–5, [details](./methodology#guardrails))
+- **Safe** — more bugs prevented by the language (0–5, [details](./methodology#safety))
 - **Lightweight** — less ceremony (imports, boilerplate) vs actual logic

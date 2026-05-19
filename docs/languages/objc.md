@@ -49,9 +49,9 @@ const maxVals = {
 
 const radarData = [
   { label: 'Fewer Lines', value: maxVals.lines - stats.lines, max: maxVals.lines },
-  { label: 'Concise', value: maxVals.concepts - stats.concepts, max: maxVals.concepts },
+  { label: 'Fewer Concepts', value: maxVals.concepts - stats.concepts, max: maxVals.concepts },
   { label: 'Low Noise', value: maxVals.sigilsPerLine - stats.sigilsPerLine, max: maxVals.sigilsPerLine },
-  { label: 'Guardrails', value: stats.guardrails, max: maxVals.guardrails },
+  { label: 'Safe', value: stats.guardrails, max: maxVals.guardrails },
   { label: 'Lightweight', value: maxVals.ceremony - stats.ceremony, max: maxVals.ceremony },
   { label: 'Info per Line', value: stats.tokensPerLine, max: maxVals.tokensPerLine },
 ]
@@ -90,7 +90,7 @@ const grReasons = {
   overflow: 'Inherits C silent wraparound',
   coercion: 'Inherits C implicit promotions, id type bypasses checks',
 }
-const qualityLinks = { "Fewer Lines": "../metrics/code-size", "Concise": "../metrics/verbosity", "Low Noise": "../metrics/symbol-noise", Guardrails: "../metrics/guardrails", Lightweight: "../metrics/type-ceremony", "Info per Line": "../metrics/code-size" }
+const qualityLinks = { "Fewer Lines": "../metrics/code-size", "Fewer Concepts": "../metrics/concept-count", "Low Noise": "../metrics/symbol-noise", Safe: "../metrics/safety", Lightweight: "../metrics/type-ceremony", "Info per Line": "../metrics/code-size" }
 const conceptLinks = { Types: "../metrics/concept-count", Control: "../metrics/concept-count", Functions: "../metrics/concept-count", "OOP/Data": "../metrics/concept-count", Memory: "../metrics/concept-count", Concurrency: "../metrics/concept-count", Metaprog: "../metrics/concept-count", Errors: "../metrics/concept-count" }
 </script>
 

@@ -39,7 +39,7 @@ const conceptLinks = { Types: "../metrics/concept-count", Control: "../metrics/c
 
 # LLVM IR
 
-Not a programming language but a compiler intermediate representation — the assembly language of the LLVM toolchain. Included as a baseline: high keyword count (150 instructions) but tiny conceptual surface (35) since it has no OOP, error handling, or concurrency abstractions. Near-zero guardrails — it's one step above raw machine code.
+Not a programming language but a compiler intermediate representation — the assembly language of the LLVM toolchain. Included as a baseline: high keyword count (150 instructions) but tiny conceptual surface (35) since it has no OOP, error handling, or concurrency abstractions. Near-zero safety — it's one step above raw machine code.
 
 <small>Profile only — no benchmark solutions yet.</small>
 

@@ -72,11 +72,11 @@ The full inventory of distinct ideas a developer must learn. Curated across 8 ca
 
 <MetricsTable :data="surfaceData" :columns="surfaceColumns" />
 
-**Keyword ratio** = keywords / concepts. High ratio (Zig 0.75) means most concepts have dedicated syntax. Low ratio (Haskell 0.32) means complexity lives in the type system, not reserved words.
+**Keyword ratio** = keywords / concepts. High ratio (Zig 0.75) means most concepts have dedicated syntax. Low ratio (Haskell 0.32) means concepts live in the type system, not reserved words.
 
 ## Concept Distribution
 
-Same total can mean very different things. Where does each language's complexity live?
+Same total can mean very different things. Where do each language's concepts live?
 
 <div class="cat-table">
 <table>
@@ -105,7 +105,7 @@ How many concepts does a typical program actually exercise? Averaged across 7 be
 
 **C++ (135)** is the outlier — templates, SFINAE, move semantics, rule of five, coroutines, modules, concepts, ranges. The full surface area that makes C++ notoriously difficult to master.
 
-**Haskell (75) vs Python (75)** — same total, opposite shapes. Python's complexity lives in OOP & metaprogramming (classes, decorators, metaclasses). Haskell's lives in types & functions (typeclasses, monads, higher-kinded types).
+**Haskell (75) vs Python (75)** — same total, opposite shapes. Python's concepts live in OOP & metaprogramming (classes, decorators, metaclasses). Haskell's live in types & functions (typeclasses, monads, higher-kinded types).
 
 **Go (58)** — deliberately minimal. 25 keywords, no generics until recently, no exceptions, no inheritance. The language bets that a small surface area makes codebases more readable across large teams.
 

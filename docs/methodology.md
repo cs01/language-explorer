@@ -20,7 +20,7 @@ We measure two things: **what the language is** (language-level properties that 
 
 ### Language-level metrics
 
-These are static properties of the language itself — they don't vary per solution. See [Guardrails](#guardrails), [Surface Area](#surface-area).
+These are static properties of the language itself — they don't vary per solution. See [Safety](#safety), [Surface Area](#surface-area).
 
 ### Per-program metrics
 
@@ -47,8 +47,8 @@ Measured from actual code. Averaged across 7 benchmark problems for each languag
 ### Concept Count
 **Keywords** — distinct language keywords used in the solution (`fn`, `let`, `match`, `async`, etc.). **Syntax patterns** — distinct features like generics, closures, pattern matching, channels. **Concept count** = keywords + patterns. Measures how many different language features you need to know to read the code.
 
-### Guardrails
-**Guardrail score** — rates 5 safety categories on a 4-level scale:
+### Safety
+**Safety score** — rates 5 categories on a 4-level scale:
 
 | Category | What it prevents | Weight |
 |----------|-----------------|--------|
@@ -71,7 +71,7 @@ Each category is scored on a **4-level enforcement scale**:
 
 Categories are **weighted by real-world impact**. Memory safety dominates because [Microsoft](https://msrc.microsoft.com/blog/2019/07/a-proactive-approach-to-more-secure-code/) and [Google Chrome](https://www.chromium.org/Home/chromium-security/memory-safety/) independently found ~70% of high-severity CVEs are memory safety bugs. Null dereference is the [#1 logged error](https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/) in most Java production environments. Race conditions account for [~44% of concurrency bugs](https://jisajournal.springeropen.com/articles/10.1186/s13174-017-0055-2) and 39% of patches are themselves incorrect. Integer overflow ([CWE-190](https://cwe.mitre.org/data/definitions/190.html)) dropped out of the [CWE Top 25 in 2025](https://cwe.mitre.org/top25/archive/2025/2025_cwe_top25.html). Type coercion bugs are mostly logic errors, not security vulnerabilities.
 
-Score ranges from 0 (C) to 5 (Rust, Swift, Haskell, Elixir). Each language page has a detailed guardrail card showing per-category scores with explanations. This is a language-level property — it doesn't vary per solution.
+Score ranges from 0 (C) to 5 (Rust, Swift, Haskell, Elixir). Each language page has a detailed safety card showing per-category scores with explanations. This is a language-level property — it doesn't vary per solution.
 
 ### Ceremony
 **Ceremony ratio** — what fraction of your code is overhead rather than problem-solving logic. Counts: imports, main function wrappers, class/module boilerplate, `return 0`, lone braces, type-only declarations, and preprocessor directives. Lower = less boilerplate standing between you and the algorithm.

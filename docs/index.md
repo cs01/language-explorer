@@ -94,14 +94,14 @@ const heroMetrics = [
   { label: 'Keywords', zig: zigStats.keywords, rust: rustStats.keywords, unit: '', lower: true },
   { label: 'Verbosity', zig: zigStats.verbosity, rust: rustStats.verbosity, unit: '', lower: true },
   { label: 'Ceremony', zig: +(zigStats.ceremony * 100).toFixed(0), rust: +(rustStats.ceremony * 100).toFixed(0), unit: '%', lower: true },
-  { label: 'Guardrails', zig: zigStats.guardrails, rust: rustStats.guardrails, unit: ' / 5', lower: false },
+  { label: 'Safety', zig: zigStats.guardrails, rust: rustStats.guardrails, unit: ' / 5', lower: false },
 ]
 
 const pairs = [
-  { left: 'typescript', right: 'javascript', why: 'Types added — 100 vs 65 concepts, but stronger guardrails' },
+  { left: 'typescript', right: 'javascript', why: 'Types added — 100 vs 65 concepts, but stronger safety' },
   { left: 'python', right: 'haskell', why: 'Same total concepts (75), opposite shapes' },
   { left: 'rust', right: 'go', why: 'Systems safety vs simplicity' },
-  { left: 'c', right: 'zig', why: 'C successor — similar size (60 vs 65), more guardrails' },
+  { left: 'c', right: 'zig', why: 'C successor — similar size (60 vs 65), more safety' },
 ]
 
 const pairRadars = pairs.map(p => ({
@@ -168,7 +168,7 @@ Zig bets on <strong>simplicity</strong> — comptime, no hidden allocators, 65 c
 </div>
 
 <div class="safety-comparison">
-<div class="safety-header">Safety Guardrails <a href="./methodology#guardrails" class="safety-link">how we score →</a></div>
+<div class="safety-header">Safety <a href="./methodology#safety" class="safety-link">how we score →</a></div>
 <div class="safety-legend">
   <span class="safety-badge compile">compile-time</span>
   <span class="safety-badge runtime">runtime</span>
@@ -219,7 +219,7 @@ How concise is the code? Averaged across 7 benchmark problems.
   <span class="radar-legend-item"><span class="radar-swatch" style="background: #f97316"></span> {{ pair.rightLabel }}</span>
 </div>
 <div class="safety-comparison">
-<div class="safety-header">Safety Guardrails <a href="./methodology#guardrails" class="safety-link">how we score →</a></div>
+<div class="safety-header">Safety <a href="./methodology#safety" class="safety-link">how we score →</a></div>
 <div class="safety-legend">
   <span class="safety-badge compile">compile-time</span>
   <span class="safety-badge runtime">runtime</span>

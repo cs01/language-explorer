@@ -116,7 +116,7 @@ const barDescriptions: Record<string, string> = {
 
 const expressLinks: Record<string, string> = {
   'Fewer Lines': './metrics/code-size', 'Info per Line': './metrics/code-size', 'Concise': './metrics/verbosity',
-  'Low Noise': './metrics/symbol-noise', Safe: './metrics/guardrails', Lightweight: './metrics/type-ceremony',
+  'Low Noise': './metrics/symbol-noise', Safe: './metrics/safety', Lightweight: './metrics/type-ceremony',
 }
 const conceptLabelLinks: Record<string, string> = {
   Types: './metrics/concept-count', Control: './metrics/concept-count', Functions: './metrics/concept-count',
@@ -289,7 +289,7 @@ const hasGuardrailWhenData = computed(() =>
     <div class="radar-row">
       <div v-if="hasCatData" class="radar-overlay">
         <div class="radar-title">Concept Distribution</div>
-        <div class="concept-subtitle">Where complexity lives — not good or bad, just the shape.</div>
+        <div class="concept-subtitle">Where the concepts live — not good or bad, just the shape.</div>
         <svg :width="radarSize" :height="radarSize" :viewBox="`0 0 ${radarSize} ${radarSize}`">
           <path
             v-for="level in gridLevels"
@@ -391,7 +391,7 @@ const hasGuardrailWhenData = computed(() =>
     </div>
 
     <div v-if="hasGuardrailWhenData" class="safety-comparison">
-      <div class="safety-header">Safety Guardrails</div>
+      <div class="safety-header">Safety</div>
       <div class="safety-legend">
         <span class="safety-badge compile">compile-time</span>
         <span class="safety-badge runtime">runtime</span>
@@ -400,6 +400,7 @@ const hasGuardrailWhenData = computed(() =>
       <div v-for="(lang, idx) in selected" :key="'gr-' + lang" class="safety-row">
         <div class="safety-lang">
           <span class="safety-name" :style="{ color: colors[idx] }">{{ lang }}</span>
+          <span class="safety-score">{{ getValue(lang, 'guardrails') }} / 5</span>
         </div>
         <div class="safety-badges">
           <span
@@ -643,6 +644,11 @@ const hasGuardrailWhenData = computed(() =>
 .safety-name {
   font-weight: 600;
   font-size: 0.8rem;
+}
+.safety-score {
+  font-size: 0.72rem;
+  color: var(--vp-c-text-3);
+  font-weight: 400;
 }
 .safety-badges {
   display: flex;

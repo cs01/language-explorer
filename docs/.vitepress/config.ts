@@ -51,7 +51,7 @@ export default defineConfig({
       {
         text: 'Metrics',
         items: [
-          { text: 'Safety Guardrails', link: '/metrics/guardrails' },
+          { text: 'Safety', link: '/metrics/safety' },
           { text: 'Code Size', link: '/metrics/code-size' },
           { text: 'Symbol Noise', link: '/metrics/symbol-noise' },
           { text: 'Verbosity', link: '/metrics/verbosity' },

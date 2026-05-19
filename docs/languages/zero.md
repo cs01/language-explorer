@@ -41,7 +41,7 @@ const conceptLinks = { Types: "../metrics/concept-count", Control: "../metrics/c
 
 <div class="lang-tags"><span v-for="t in tags" class="lang-tag">{{ t }}</span></div>
 
-An experimental language with maximum guardrails (5.0) from only 50 concepts — less than half of Rust's 110. Achieves this through capability-based effects, a borrow checker, and Maybe types for absence instead of null. No exceptions, no implicit dispatch, no OOP — a deliberately narrow design that proves safety doesn't require complexity.
+An experimental language with maximum safety (5.0) from only 50 concepts — less than half of Rust's 110. Achieves this through capability-based effects, a borrow checker, and Maybe types for absence instead of null. No exceptions, no implicit dispatch, no OOP — a deliberately narrow design that proves safety doesn't require complexity.
 
 <small>Profile only — no benchmark solutions yet.</small>
 

@@ -81,7 +81,7 @@ function reason(key: string): string {
 <template>
   <div class="gr-card">
     <div class="gr-header">
-      <span class="gr-title">Guardrails</span>
+      <span class="gr-title">Safety</span>
       <span class="gr-score">{{ score }} <span class="gr-max">/ 5</span></span>
     </div>
     <div class="gr-grid">
@@ -105,7 +105,7 @@ function reason(key: string): string {
       <span class="gr-leg-item"><span class="gr-dot none"></span>None</span>
     </div>
     <div class="gr-footer">
-      <a href="../methodology#guardrails">How we score</a>
+      <a href="../methodology#safety">How we score</a>
     </div>
   </div>
 </template>
